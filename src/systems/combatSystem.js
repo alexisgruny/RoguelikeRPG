@@ -1,5 +1,5 @@
 import { loadBiomes, findBiomeByName } from '../components/biome.js';
-import { loadMonsters, getMonstersForBiome, selectRandomMonsters } from '../components/monsters.js';
+import { loadMonsters, getMonstersFromBiome, selectRandomMonsters } from '../components/monsters.js';
 import { player } from '../components/player.js';
 
 export async function startCombat(currentBiomeName) {
@@ -9,7 +9,7 @@ export async function startCombat(currentBiomeName) {
         const monsters = await loadMonsters();
 
         // Obtenir les monstres pour le biome actuel
-        const availableMonsters = getMonstersForBiome(biomes, currentBiomeName, monsters);
+        const availableMonsters = getMonstersFromBiome(biomes, currentBiomeName, monsters);
         if (availableMonsters.length === 0) {
             throw new Error(`No monsters found for biome '${currentBiomeName}'`);
         }
@@ -33,10 +33,12 @@ export function initializeCombat(monster) {
     const playerAttackElem = document.getElementById('player-attack');
     const playerDefenseElem = document.getElementById('player-defense');
     // valeur d'affichage du monstre
-    const monsterNameElem = document.getElementById('monster-name')
+    const monsterNameElem = document.getElementById('monster-name');
     const monsterHealthElem = document.getElementById('monster-health');
-    const monsterattackElem = document.getElementById('monster-attack')
-    const monsterdefenseElem = document.getElementById('monster-defense')
+    const monsterattackElem = document.getElementById('monster-attack');
+    const monsterdefenseElem = document.getElementById('monster-defense');
+    // valeur d'affichage du biome
+    const biomeNameElem = document.getElementById('biome-name');
     // Combat Log
     const logOutputElem = document.getElementById('log-output');
 
@@ -52,6 +54,8 @@ export function initializeCombat(monster) {
         monsterHealthElem.textContent = monster.health;
         monsterattackElem.textContent = monster.attack;
         monsterdefenseElem.textContent = monster.defense;
+        // biome name
+        biomeNameElem.textContent = biome.name;
     }
 
     // Log des actions dans la zone de combat

@@ -8,10 +8,10 @@ export async function loadMonsters() {
 }
 
 // récupére les monstres du biome actuel
-export function getMonstersForBiome(biomes, biomeName, monsters) {
+export function getMonstersFromBiome(biomes, biomeName, monsters) {
     const currentBiome = biomes.find(biome => biome.name === biomeName);
     if (!currentBiome) {
-        throw new Error(`Biome '${biomeName}' not found`);
+       throw new Error(`Biome '${biomeName}' not found`);
     }
     return monsters.filter(monster =>
         currentBiome.monsters.includes(monster.name)

@@ -10,4 +10,5 @@ export async function loadBiomes() {
 // exporte la fonction pour avoir les valeurs du biome
 export function findBiomeByName(biomes, biomeName) {
     return biomes.find(biome => biome.name === biomeName);
+    
 }
