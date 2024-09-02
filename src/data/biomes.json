@@ -1,0 +1,14 @@
+[
+    {
+        "id": "foret",
+        "name": "Foret",
+        "description": "Proute",
+        "monsters": [
+            "Ecureuil",
+            "Hibou",
+            "Sanglier",
+            "renard"
+        ],
+        "boss": "Cerf"
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "id": "gland",
+        "name": "Gland",
+        "description": "Un petit gland",
+        "type": "consumable",
+        "effects": {
+            "damage": 10
+        },
+        "rarity": "common"
+    }
+]

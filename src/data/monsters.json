@@ -1,0 +1,15 @@
+[
+    {
+        "id": "ecureuil",
+        "name": "Ecureuil",
+        "health": 10,
+        "attack": 5,
+        "defense": 2,
+        "abilities": [
+            {"name": "Lancer de gland", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "Gland", "chance": 0.4}
+        ]
+    }
+]
