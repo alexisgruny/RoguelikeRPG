@@ -13,10 +13,49 @@
         ]
     },
     {
-        "id": "hibou",
-        "name": "Hibou",
-        "health": 15,
+        "id": "meduse",
+        "name": "Meduse",
+        "health": 50,
+        "attack": 10,
+        "defense": 1,
+        "abilities": [
+            {"name": "choc", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "proute", "chance": 0.4}
+        ]
+    },
+    {
+        "id": "crevette",
+        "name": "Crevette",
+        "health": 30,
         "attack": 5,
+        "defense": 6,
+        "abilities": [
+            {"name": "Picotement", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "Plume", "chance": 0.4}
+        ]
+    },
+    {
+        "id": "caribou",
+        "name": "Caribou",
+        "health": 30,
+        "attack": 10,
+        "defense": 3,
+        "abilities": [
+            {"name": "Picotement", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "Plume", "chance": 0.4}
+        ]
+    },
+    {
+        "id": "chevreuil",
+        "name": "Chevreuil",
+        "health": 30,
+        "attack": 10,
         "defense": 3,
         "abilities": [
             {"name": "Picotement", "damage": 1, "chance": 1}

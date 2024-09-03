@@ -1,24 +1,24 @@
 {
-  "devDependencies": {
-    "@types/node": "^22.5.2",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.5.4",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.4"
-  },
-  "name": "roguelikerpg",
+  "name": "roguelike",
   "version": "1.0.0",
-  "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
-  "dependencies": {
-    "undici-types": "^6.19.8"
-  },
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch",
-    "start": "webpack serve --open"
+    "start": "webpack serve"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^6.0.0",
+    "html-webpack-plugin": "^5.0.0",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.0.0",
+    "typescript": "^4.0.0",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.0.0",
+    "webpack-dev-server": "^4.0.0"
+  },
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "tests"
   },
   "keywords": [],
   "author": "",

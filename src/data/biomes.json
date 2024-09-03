@@ -10,5 +10,29 @@
             "renard"
         ],
         "boss": "Cerf"
+    },
+    {
+        "id": "plage",
+        "name": "Plage",
+        "description": "Proute",
+        "monsters": [
+            "Meduse",
+            "Crevette",
+            "Sanglier",
+            "renard"
+        ],
+        "boss": "crabe"
+    },
+    {
+        "id": "montagne",
+        "name": "Montagne",
+        "description": "Proute",
+        "monsters": [
+            "Chevreuil",
+            "caribou",
+            "Sanglier",
+            "renard"
+        ],
+        "boss": "Ours"
     }
 ]

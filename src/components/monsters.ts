@@ -2,7 +2,7 @@ import { Biome, Monster } from '../types';
 
 // Charge les informations du fichier monsters.json
 export async function loadMonsters(): Promise<Monster[]> {
-    const response = await fetch('/src/data/monsters.json');
+    const response = await fetch('/data/monsters.json');
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
