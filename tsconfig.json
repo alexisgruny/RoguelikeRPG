@@ -6,8 +6,24 @@
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "./src", // Définit le point de départ pour les chemins absolus
+    "paths": {
+      "*": [
+        "*"
+      ],
+      "components/*": [
+        "components/*"
+      ],
+      "systems/*": [
+        "systems/*"
+      ]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
