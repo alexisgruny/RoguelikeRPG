@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roguelike Combat Interface</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="biome-menu" class="menu-container">
         <h2>Choose a Biome</h2>
@@ -17,17 +19,17 @@
             <p>combat: <span id="combat"></span></p>
         </div>
         <div id="player-info">
-            <h2>Player</h2>
-            <p>Health: <span id="player-health"></span></p>
-            <p>Attack: <span id="player-attack"></span></p>
-            <p>Defense: <span id="player-defense"></span></p>
+            <h2></h2>
+            <p><span id="player-health"></span></p>
+            <p><span id="player-attack"></span></p>
+            <p><span id="player-defense"></span></p>
         </div>
 
         <div id="monster-info">
-            <h2>monstre: <span id="monster-name"></span></h2>
-            <p>Health: <span id="monster-health"></span></p>
-            <p>Attack: <span id="monster-attack"></span></p>
-            <p>Defense: <span id="monster-defense"></span></p>
+            <h2><span id="monster-name"></span></h2>
+            <p><span id="monster-health"></span></p>
+            <p><span id="monster-attack"></span></p>
+            <p><span id="monster-defense"></span></p>
         </div>
 
         <div id="combat-log">
@@ -45,4 +47,5 @@
     <!-- Inclusion des fichiers JavaScript -->
     <script src="dist/bundle.js" type="module"></script> <!-- Point d'entrée principal -->
 </body>
+
 </html>
