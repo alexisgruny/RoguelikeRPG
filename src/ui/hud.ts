@@ -1,5 +1,5 @@
 import { Monster, Biome } from '../types';
-import { player } from '../components/player';
+import { player } from '../components/classe';
 import { CombatSystem } from '../systems/combatSystem';
 
 export class HUD {

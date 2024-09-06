@@ -1,4 +1,5 @@
-export interface Player {
+export interface Classe {
+    name:string;
     health: number;
     attack: number;
     defense: number;

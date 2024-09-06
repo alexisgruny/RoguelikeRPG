@@ -1,0 +1,23 @@
+[
+    {
+    "id": "voyageur",
+    "name": "Voyageur",
+    "health": "100",
+    "attack": "10",
+    "defense": "5"
+},
+{
+    "id": "braconnier",
+    "name": "Braconnier",
+    "health": "150",
+    "attack": "15",
+    "defense": "0"
+},
+{
+    "id": "protecteur",
+    "name": "Protecteur",
+    "health": "100",
+    "attack": "5",
+    "defense": "10"
+}
+]
