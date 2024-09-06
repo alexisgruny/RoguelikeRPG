@@ -8,13 +8,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (biomes.length < 2) {
             throw new Error('Not enough biomes available to display options.');
         }
-
+        const startMenu = document.getElementById('start-menu')!;
+        const startButton = document.getElementById('start-button') as HTMLButtonElement;
         const biome1Button = document.getElementById('biome1-button') as HTMLButtonElement;
         const biome2Button = document.getElementById('biome2-button') as HTMLButtonElement;
         const biomeMenu = document.getElementById('biome-menu')!;
         const combatSection = document.getElementById('combat-section')!;
 
         combatSection.classList.add('hidden'); // Cacher la section de combat au début
+
+        startButton.addEventListener('click', async() => {
+            startMenu.classList.add('hidden');
+            biomeMenu.classList.remove('hidden');
+        })
 
         const [biome1, biome2] = getRandomBiomes(biomes, 2);
         biome1Button.textContent = biome1.name;
