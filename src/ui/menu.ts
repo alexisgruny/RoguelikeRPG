@@ -1,8 +1,8 @@
-// Chargement des fonctions/classes depuis les autres fichiers
-import { Classe, Monster, Biome } from '../types';
+// Chargement des fonctions/roles depuis les autres fichiers
+import { Role, Monster, Biome } from '../types';
 import { CombatSystem } from '../systems/combatSystem';
 import { BiomeService } from '../components/biome';
-import { ClasseService } from '../components/classe';
+import { RoleService } from '../components/role';
 
 // Fonction principale exécutée une fois le DOM chargé
 document.addEventListener('DOMContentLoaded', async () => {
@@ -11,14 +11,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const biomes = await BiomeService.loadBiomes();
         if (biomes.length < 2) throw new Error('Not enough biomes available to display options.'); 
 
-        // Charger les classes et vérifier qu'il y en a suffisamment
-        const classes = await ClasseService.loadClasses();
-        if (classes.length < 2) throw new Error('Not enough classes available to display options.');
+        // Charger les roles et vérifier qu'il y en a suffisamment
+        const roles = await RoleService.loadRoles();
+        if (roles.length < 2) throw new Error('Not enough roles available to display options.');
 
         // Initialisation des éléments du DOM
         const startMenu = document.getElementById('start-menu')!;
         const startButton = document.getElementById('start-button') as HTMLButtonElement;
-        const classeMenu = document.getElementById('classe-menu')!;
+        const roleMenu = document.getElementById('role-menu')!;
         const biomeMenu = document.getElementById('biome-menu')!;
         const combatSection = document.getElementById('combat-section')!;
         const biome1Button = document.getElementById('biome1-button') as HTMLButtonElement;
@@ -27,26 +27,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Cacher la section de combat au départ
         combatSection.classList.add('hidden');
 
-        // Afficher le menu des classes une fois que le joueur clique sur "Jouer"
+        // Afficher le menu des roles une fois que le joueur clique sur "Jouer"
         startButton.addEventListener('click', () => {
             startMenu.classList.add('hidden'); // Masquer le menu de démarrage
-            classeMenu.classList.remove('hidden'); // Afficher le menu des classes
+            roleMenu.classList.remove('hidden'); // Afficher le menu des roles
         });
 
-        // Construction dynamique des boutons de classes
-        classes.forEach(classe => {
+        // Construction dynamique des boutons de roles
+        roles.forEach(role => {
             const button = document.createElement('button');
-            button.textContent = classe.name;
-            button.id = classe.name;
+            button.textContent = role.name;
+            button.id = role.name;
             
-            // Lorsqu'une classe est sélectionnée, cacher le menu des classes et afficher le menu des biomes
+            // Lorsqu'une role est sélectionnée, cacher le menu des roles et afficher le menu des biomes
             button.addEventListener('click', () => {
-                ClasseService.pickClass(classes, classe.name); // Enregistrer la classe choisie
-                classeMenu.classList.add('hidden'); // Masquer le menu des classes
+                RoleService.pickRole(roles, role.name); // Enregistrer la role choisie
+                roleMenu.classList.add('hidden'); // Masquer le menu des roles
                 biomeMenu.classList.remove('hidden'); // Afficher le menu des biomes
             });
 
-            classeMenu.appendChild(button); // Ajouter le bouton au menu des classes
+            roleMenu.appendChild(button); // Ajouter le bouton au menu des roles
         });
 
         // Sélection de deux biomes aléatoires et affichage des boutons correspondants

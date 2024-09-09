@@ -1,4 +1,4 @@
-export interface Classe {
+export interface Role {
     name:string;
     health: number;
     attack: number;
