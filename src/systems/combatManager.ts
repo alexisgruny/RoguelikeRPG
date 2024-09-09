@@ -44,17 +44,12 @@ export class CombatManager {
     // Lance la prochaine bataille avec un monstre du biome
     private static async startNextBattle(biome: Biome, monsters: Monster[]): Promise<void> {
         const availableMonsters = MonsterService.getMonstersFromBiome(biome, monsters);
-        this.currentMonster = this.selectRandomMonster(availableMonsters);
+        this.currentMonster = MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
 
         HUD.updatePlayerStats(); // Met à jour l'interface avec les stats du joueur
         HUD.updateMonsterStats(this.currentMonster); // Met à jour l'interface avec les stats du monstre
 
         this.setupAttack(biome); // Configure le bouton d'attaque
-    }
-
-    // Sélectionne un monstre aléatoire
-    private static selectRandomMonster(monsters: Monster[]): Monster {
-        return monsters[Math.floor(Math.random() * monsters.length)];
     }
 
     // Prépare le bouton d'attaque pour lancer le combat

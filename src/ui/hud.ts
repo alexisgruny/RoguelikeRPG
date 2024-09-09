@@ -3,6 +3,7 @@ import { player } from '../components/role';
 
 export class HUD {
     public static updatePlayerStats() {
+        const playerRole = document.getElementById('player-role')!;
         const playerHealthElem = document.getElementById('player-health') as HTMLDivElement;
         playerHealthElem.textContent = `Vie: ${player.health}`;
         const playerAttackElem = document.getElementById('player-attack') as HTMLDivElement;
@@ -12,6 +13,7 @@ export class HUD {
     }
 
     public static updateMonsterStats(monster: Monster) {
+        const MonsterNameElem = document.getElementById('monster-name')!;
         const monsterHealthElem = document.getElementById('monster-health') as HTMLDivElement;
         monsterHealthElem.textContent = `Vie: ${monster.health}`;
         const monsterAttackElem = document.getElementById('monster-attack') as HTMLDivElement;
