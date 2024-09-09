@@ -1,29 +1,34 @@
 import { Biome, Monster } from '../types';
 
 export class MonsterService {
-    // Charge les informations du fichier monsters.json
+
+    // Charge les informations depuis un fichier JSON contenant les monstres
     public static async loadMonsters(): Promise<Monster[]> {
-        const response = await fetch('/data/monsters.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        try {
+            const response = await fetch('/data/monsters.json');
+            if (!response.ok) {
+                throw new Error(`Failed to load monsters: ${response.statusText}`);
+            }
+            return await response.json() as Monster[];
+        } catch (error) {
+            console.error("Error loading monsters:", error);
+            throw error;
         }
-        return await response.json() as Monster[];
     }
 
-    // Récupère les monstres d'un biome
-    public static getMonstersFromBiome(biomes: Biome[], biomeName: string, monsters: Monster[]): Monster[] {
-        const currentBiome = biomes.find(biome => biome.name === biomeName);
-        if (!currentBiome) {
-            throw new Error(`Biome '${biomeName}' not found`);
-        }
+    // Récupère les monstres associés à un biome spécifique
+    public static getMonstersFromBiome(biome: Biome, monsters: Monster[]): Monster[] {
+        const currentBiome = biome; // `biome` est déjà le biome actuel, pas besoin de chercher
         return monsters.filter(monster => currentBiome.monsters.includes(monster.name));
     }
 
-    // Sélectionne des monstres aléatoires
+    // Sélectionne des monstres aléatoires (sans répétition)
     public static selectRandomMonsters(monsters: Monster[], numberOfMonsters: number = 1): Monster[] {
-        return Array.from({ length: numberOfMonsters }, () => {
-            const randomIndex = Math.floor(Math.random() * monsters.length);
-            return monsters[randomIndex];
-        });
+        const shuffledMonsters = [...monsters]; // Crée une copie des monstres pour éviter de modifier l'original
+        for (let i = shuffledMonsters.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledMonsters[i], shuffledMonsters[j]] = [shuffledMonsters[j], shuffledMonsters[i]]; // Mélange le tableau
+        }
+        return shuffledMonsters.slice(0, numberOfMonsters); // Prend les premiers éléments après le mélange
     }
 }

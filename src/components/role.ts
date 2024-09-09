@@ -22,13 +22,13 @@ export class RoleService {
     }
 
     // Récupère la Role sélectionnée pour l'utiliser dans les combats
-    public static getSelectedRole(): Role | null {
+    public static getSelectedRole(): Role | null {    
         return this.selectedRole;
     }
 }
 
 export const player = {
-    health: 0,
-    attack: 0,
-    defense: 0
+    health: 100,
+    attack: 10,
+    defense: 10
 };

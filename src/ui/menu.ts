@@ -1,6 +1,6 @@
 // Chargement des fonctions/roles depuis les autres fichiers
 import { Role, Monster, Biome } from '../types';
-import { CombatSystem } from '../systems/combatSystem';
+import { CombatManager } from '../systems/combatManager';
 import { BiomeService } from '../components/biome';
 import { RoleService } from '../components/role';
 
@@ -9,11 +9,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Charger les biomes et vérifier qu'il y en a suffisamment
         const biomes = await BiomeService.loadBiomes();
-        if (biomes.length < 2) throw new Error('Not enough biomes available to display options.'); 
 
         // Charger les roles et vérifier qu'il y en a suffisamment
         const roles = await RoleService.loadRoles();
-        if (roles.length < 2) throw new Error('Not enough roles available to display options.');
 
         // Initialisation des éléments du DOM
         const startMenu = document.getElementById('start-menu')!;
@@ -76,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function startCombatForBiome(biomeMenu: HTMLElement, combatSection: HTMLElement, biomeName: string) {
     biomeMenu.classList.add('hidden'); // Masquer le menu des biomes
     combatSection.classList.remove('hidden'); // Afficher la section de combat
-    await CombatSystem.startCombat(biomeName); // Démarrer le combat dans le biome sélectionné
+    await CombatManager.startCombat(biomeName); // Démarrer le combat dans le biome sélectionné
 }
 
 /**
