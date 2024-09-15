@@ -7,9 +7,9 @@
             "Ecureuil",
             "Hibou",
             "Sanglier",
-            "renard"
-        ],
-        "boss": "Cerf"
+            "Renard",
+            "Cerf"
+        ]
     },
     {
         "id": "plage",
@@ -19,9 +19,9 @@
             "Meduse",
             "Crevette",
             "Sanglier",
-            "renard"
-        ],
-        "boss": "crabe"
+            "renard",
+            "Crabe"
+        ]
     },
     {
         "id": "montagne",
@@ -31,8 +31,8 @@
             "Chevreuil",
             "caribou",
             "Sanglier",
-            "renard"
-        ],
-        "boss": "Ours"
+            "renard",
+            "Ours"
+        ]
     }
 ]

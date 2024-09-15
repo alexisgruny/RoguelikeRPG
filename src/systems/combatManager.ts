@@ -1,4 +1,4 @@
-import { Monster, Biome } from '../types';
+import { Monster, Biome, PlayerStats } from '../types';
 import { CombatSystem } from './combatSystem';
 import { HUD } from '../ui/HUD';
 import { MonsterService } from '../components/monsters';
@@ -34,8 +34,8 @@ export class CombatManager {
 
     // Met à jour le HUD avec les stats du joueur
     private static updateHUD(): void {
-        const { health, maxHealth, attack, defense } = PlayerStatsService.getPlayerStats();
-        HUD.updatePlayerStats(health, maxHealth, attack, defense);
+        const playerStats = PlayerStatsService.getPlayerStats();
+        HUD.updatePlayerStats(playerStats);
     }
 
     // Lance la prochaine bataille avec un monstre du biome
@@ -62,6 +62,7 @@ export class CombatManager {
 
     // Gère l'attaque du joueur et met à jour le combat
     private static handlePlayerAttack(biome: Biome): void {
+        HUD.logRemove();
         if (!this.currentMonster) return;
 
         const { damageToMonster, monsterDefeated } = CombatSystem.playerAttack(this.currentMonster);
@@ -69,7 +70,9 @@ export class CombatManager {
 
         if (monsterDefeated) {
             this.handleVictory(biome);
+            HUD.logAction(`${this.currentMonster.name} est MORT !`);
             this.currentMonster = null;
+            
         } else {
             this.handleMonsterAttack(biome);
         }
@@ -95,17 +98,45 @@ export class CombatManager {
         this.victoryCount++;
         this.EvenementCount++;
 
-        if (this.victoryCount >= this.maxVictories) {
-            HUD.showModal('final-victory'); // Affiche la victoire finale
-        } else if (this.EvenementCount === 5) {
-            this.EvenementCount = 0;
-            PlayerStatsService.campFire();// evenement qui soigne le joueur
-            HUD.showModal('heal'); 
-            const monsters = await MonsterService.loadMonsters();
-            this.startNextBattle(biome, monsters); 
-        } else {
-            const monsters = await MonsterService.loadMonsters();
-            this.startNextBattle(biome, monsters); // Lance la prochaine bataille
+        let eventType: 'final-victory' | 'heal' | 'boss-battle' | null = null;
+        let isBossBattle = false;
+
+        // Utilisation d'un switch pour déterminer l'événement en fonction des victoires ou événements
+        switch (true) {
+            case (this.victoryCount >= this.maxVictories):
+                eventType = 'final-victory'; // Victoire finale
+                break;
+            case (this.victoryCount === 9):
+                isBossBattle = true; // Le 10e combat est contre un boss
+                eventType = 'boss-battle'; // Spécifie que c'est un combat de boss
+                break;
+            case (this.EvenementCount === 5):
+                this.EvenementCount = 0;
+                PlayerStatsService.campFire(); // Soin du joueur lors de l'événement du feu de camp
+                eventType = 'heal'; // Événement de guérison
+                break;
+            default:
+                break;
         }
+
+        if (eventType) {
+            HUD.showModal(eventType); // Affiche le bon modal selon l'événement
+        }
+
+        // Sélection du prochain monstre : si c'est un combat de boss, on sélectionne un boss du biome
+        const monsters = await MonsterService.loadMonsters();
+        if (isBossBattle) {
+            this.startBossBattle(biome, monsters); // Lance la bataille contre un boss
+        } else {
+            this.startNextBattle(biome, monsters); // Lance la prochaine bataille contre un monstre normal
+        }
+    }
+
+    // Fonction pour lancer un combat contre un boss
+    private static startBossBattle(biome: Biome, monsters: Monster[]): void {
+        const boss = MonsterService.selectBossFromBiome(biome, monsters); // Sélectionne un boss du biome
+        this.currentMonster = boss;
+        HUD.updateMonsterStats(this.currentMonster); // Met à jour les stats du boss
+        this.setupAttack(biome); // Configure le bouton d'attaque
     }
 }

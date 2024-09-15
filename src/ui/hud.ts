@@ -1,25 +1,34 @@
-import { Monster, Biome, Role } from '../types';
+import { Monster, Biome, Role, PlayerStats } from '../types';
+import { RoleService } from '../components/role';
 
 export class HUD {
     // Mise à jour des stats du joueur à l'écran
-    public static updatePlayerStats(health: number, maxHealth: number, attack: number, defense: number): void {
+    public static updatePlayerStats(playerStats: PlayerStats): void{
+        const nameElement = document.getElementById('player-role');
         const healthElement = document.getElementById('player-health');
         const attackElement = document.getElementById('player-attack');
         const defenseElement = document.getElementById('player-defense');
+        const lvlElement = document.getElementById('player-lvl');
+        const xpElement = document.getElementById('player-xp');
 
-        if (healthElement) healthElement.textContent = `Health: ${health}/${maxHealth}`;
-        if (attackElement) attackElement.textContent = `Attack: ${attack}`;
-        if (defenseElement) defenseElement.textContent = `Defense: ${defense}`;
+        if (nameElement) nameElement.textContent = `${playerStats.name}`;
+        if (healthElement) healthElement.textContent = `Health: ${playerStats.health}/${playerStats.maxHealth}`;
+        if (attackElement) attackElement.textContent = `Attack: ${playerStats.attack}`;
+        if (defenseElement) defenseElement.textContent = `Defense: ${playerStats.defense}`;
+        if (lvlElement) lvlElement.textContent = `Niveau: ${playerStats.level}`;
+        if (xpElement) xpElement.textContent = `expérience: ${playerStats.experience}/${playerStats.experienceToNextLevel}`;
     }
 
     public static updateMonsterStats(monster: Monster) {
-        const MonsterNameElem = document.getElementById('monster-name')!;
+        const monsterNameElem = document.getElementById('monster-name')!;
         const monsterHealthElem = document.getElementById('monster-health') as HTMLDivElement;
-        monsterHealthElem.textContent = `Vie: ${monster.health}`;
         const monsterAttackElem = document.getElementById('monster-attack') as HTMLDivElement;
-        monsterAttackElem.textContent = `Attaque: ${monster.attack}`;
         const monsterDefenseElem = document.getElementById('monster-defense') as HTMLDivElement;
-        monsterDefenseElem.textContent = `Défense: ${monster.defense}`;
+
+        if (monsterNameElem) monsterNameElem.textContent = `${monster.name}`;
+        if (monsterHealthElem) monsterHealthElem.textContent = `Vie: ${monster.health}`;
+        if (monsterAttackElem) monsterAttackElem.textContent = `Attaque: ${monster.attack}`;
+        if (monsterDefenseElem) monsterDefenseElem.textContent = `Défense: ${monster.defense}`;
     }
 
     public static logAction(action: string) {
@@ -28,8 +37,14 @@ export class HUD {
         logOutputElem.scrollTop = logOutputElem.scrollHeight;
     }
 
+    public static logRemove() {
+       const logRemover = document.getElementById('log-output') as HTMLDivElement;
+       logRemover.textContent = "";
+
+    }
+
     public static showModal(
-        result: 'victory' | 'defeat' | 'final-victory' | 'heal' | 'merchant' | 'upgrade'
+        eventType: 'victory' | 'defeat' | 'final-victory' | 'heal' | 'merchant' | 'upgrade' | 'boss-battle'
     ) {
         const modal = document.getElementById(`modal`) as HTMLDivElement;
         const title = document.getElementById(`modal-title`) as HTMLHeadingElement;
@@ -40,7 +55,7 @@ export class HUD {
         closeButton.removeEventListener('click', this.closeModal);
 
         // Configurer le contenu en fonction du type et du résultat
-        switch (result) {
+        switch (eventType) {
             case 'victory':
                 title.textContent = 'Victoire!';
                 message.textContent = 'Vous avez tué le monstre!';
@@ -66,6 +81,10 @@ export class HUD {
             case 'upgrade':
                 title.textContent = 'Vous trouvez un marteau au sol';
                 message.textContent = 'Vous pouvez utiliser le marteau pour améliorer un équipement.';
+                break;
+            case 'boss-battle':
+                title.textContent = 'Une entité Mystique vous attaque';
+                message.textContent = 'Vous affrontez le roi de la zone bonne chance.';
                 break;
         }
 

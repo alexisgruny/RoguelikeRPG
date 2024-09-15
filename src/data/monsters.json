@@ -3,27 +3,57 @@
         "id": "ecureuil",
         "name": "Ecureuil",
         "health": 10,
-        "attack": 8,
+        "attack": 5,
         "defense": 2,
         "abilities": [
             {"name": "Lancer de gland", "damage": 1, "chance": 1}
         ],
         "loot": [
             {"item": "Gland", "chance": 0.4}
-        ]
+        ],
+        "boss": false
+    },
+    {
+        "id": "hibou",
+        "name": "Hibou",
+        "health": 20,
+        "attack": 4,
+        "defense": 5,
+        "abilities": [
+            {"name": "Lancer de gland", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "Gland", "chance": 0.4}
+        ],
+        "boss": false
+    },
+    {
+        "id": "cerf",
+        "name": "Cerf",
+        "health": 125,
+        "attack": 10,
+        "defense": 8,
+        "abilities": [
+            {"name": "Lancer de gland", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "Gland", "chance": 0.4}
+        ],
+        "boss": true
     },
     {
         "id": "meduse",
         "name": "Meduse",
         "health": 50,
-        "attack": 10,
+        "attack": 8,
         "defense": 1,
         "abilities": [
             {"name": "choc", "damage": 1, "chance": 1}
         ],
         "loot": [
             {"item": "proute", "chance": 0.4}
-        ]
+        ],
+        "boss": false
     },
     {
         "id": "crevette",
@@ -36,32 +66,63 @@
         ],
         "loot": [
             {"item": "Plume", "chance": 0.4}
-        ]
+        ],
+        "boss": false
+    },
+    {
+        "id": "crabe",
+        "name": "Crabe",
+        "health": 50,
+        "attack": 10,
+        "defense": 20,
+        "abilities": [
+            {"name": "Picotement", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "Plume", "chance": 0.4}
+        ],
+        "boss": true
     },
     {
         "id": "caribou",
         "name": "Caribou",
-        "health": 30,
-        "attack": 10,
+        "health": 40,
+        "attack": 8,
         "defense": 3,
         "abilities": [
             {"name": "Picotement", "damage": 1, "chance": 1}
         ],
         "loot": [
             {"item": "Plume", "chance": 0.4}
-        ]
+        ],
+        "boss": false
     },
     {
         "id": "chevreuil",
         "name": "Chevreuil",
         "health": 30,
-        "attack": 10,
-        "defense": 3,
+        "attack": 8,
+        "defense": 5,
         "abilities": [
             {"name": "Picotement", "damage": 1, "chance": 1}
         ],
         "loot": [
             {"item": "Plume", "chance": 0.4}
-        ]
+        ],
+        "boss": false
+    },
+    {
+        "id": "ours",
+        "name": "Ours",
+        "health": 250,
+        "attack": 15,
+        "defense": 0,
+        "abilities": [
+            {"name": "Picotement", "damage": 1, "chance": 1}
+        ],
+        "loot": [
+            {"item": "Plume", "chance": 0.4}
+        ],
+        "boss": true
     }
 ]

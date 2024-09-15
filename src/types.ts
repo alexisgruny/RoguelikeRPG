@@ -16,6 +16,7 @@ export interface Monster {
     defense: number;
     health: number;
     maxHealth: number;
+    boss: boolean;
 }
 
 export interface Items {
@@ -24,4 +25,15 @@ export interface Items {
     defense: number;
     health: number;
     effect: Text;
+}
+
+export interface PlayerStats {
+    name: string;
+    health: number;
+    maxHealth: number;
+    attack: number;
+    defense: number;
+    experience: number;
+    level: number;
+    experienceToNextLevel: number;
 }

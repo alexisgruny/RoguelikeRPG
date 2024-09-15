@@ -19,8 +19,19 @@ export class MonsterService {
     // Récupère les monstres associés à un biome spécifique
     public static getMonstersFromBiome(biome: Biome, monsters: Monster[]): Monster[] {
         const currentBiome = biome; // `biome` est déjà le biome actuel, pas besoin de chercher
-        return monsters.filter(monster => currentBiome.monsters.includes(monster.name));
+        return monsters.filter(monster => currentBiome.monsters.includes(monster.name)&& monster.boss === false);
     }
+
+    public static selectBossFromBiome(biome: Biome, monsters: Monster[]): Monster {
+        const currentBiome = biome; // Utilise le biome actuel
+        const bosses = monsters.filter(monster => currentBiome.monsters.includes(monster.name) && monster.boss === true);// Filtrer les monstres du biome actuel qui sont des boss
+        if (bosses.length > 0) {// Si un boss est trouvé, retourner le premier boss trouvé, sinon retourner un monstre par défaut
+            return bosses[0]; // Sélectionne le premier boss dans la liste
+        } else {
+            throw new Error('Aucun boss trouvé dans ce biome');
+        }
+    }
+    
 
     // Sélectionne des monstres aléatoires (sans répétition)
     public static selectRandomMonsters(monsters: Monster[], numberOfMonsters: number = 1): Monster[] {
