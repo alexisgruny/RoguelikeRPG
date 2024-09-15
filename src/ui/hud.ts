@@ -1,15 +1,15 @@
 import { Monster, Biome, Role } from '../types';
-import { player } from '../components/role';
 
 export class HUD {
-    public static updatePlayerStats() {
-        const playerRole = document.getElementById('player-role')!;
-        const playerHealthElem = document.getElementById('player-health') as HTMLDivElement;
-        playerHealthElem.textContent = `Vie: ${player.health}`;
-        const playerAttackElem = document.getElementById('player-attack') as HTMLDivElement;
-        playerAttackElem.textContent = `Attaque: ${player.attack}`;
-        const playerDefenseElem = document.getElementById('player-defense') as HTMLDivElement;
-        playerDefenseElem.textContent = `Défense: ${player.defense}`;
+    // Mise à jour des stats du joueur à l'écran
+    public static updatePlayerStats(health: number, maxHealth: number, attack: number, defense: number): void {
+        const healthElement = document.getElementById('player-health');
+        const attackElement = document.getElementById('player-attack');
+        const defenseElement = document.getElementById('player-defense');
+
+        if (healthElement) healthElement.textContent = `Health: ${health}/${maxHealth}`;
+        if (attackElement) attackElement.textContent = `Attack: ${attack}`;
+        if (defenseElement) defenseElement.textContent = `Defense: ${defense}`;
     }
 
     public static updateMonsterStats(monster: Monster) {
@@ -28,28 +28,61 @@ export class HUD {
         logOutputElem.scrollTop = logOutputElem.scrollHeight;
     }
 
-    public static showResult(result: 'victory' | 'defeat' | 'final-victory') {
-        const resultModal = document.getElementById('result-modal') as HTMLDivElement;
-        const resultTitle = document.getElementById('result-title') as HTMLHeadingElement;
-        const resultMessage = document.getElementById('result-message') as HTMLParagraphElement;
+    public static showModal(
+        result: 'victory' | 'defeat' | 'final-victory' | 'heal' | 'merchant' | 'upgrade'
+    ) {
+        const modal = document.getElementById(`modal`) as HTMLDivElement;
+        const title = document.getElementById(`modal-title`) as HTMLHeadingElement;
+        const message = document.getElementById(`modal-message`) as HTMLParagraphElement;
+        const closeButton = document.getElementById(`close-modal-button`)!;
 
-        if (result === 'victory') {
-            resultTitle.textContent = "Victory!";
-            resultMessage.textContent = "You have defeated the monster!";
-        } else if (result === 'defeat') {
-            resultTitle.textContent = "Defeat...";
-            resultMessage.textContent = "You have been defeated.";
-        } else if (result === 'final-victory') {
-            resultTitle.textContent = "Final Victory!";
-            resultMessage.textContent = "Congratulations! You've defeated all the monsters!";
-            const closeModal = document.getElementById('close-modal-button')!;
-            closeModal.addEventListener('click',() => {
-                window.location.reload();
-            })
+        // Supprimer l'écouteur précédent pour éviter les doublons
+        closeButton.removeEventListener('click', this.closeModal);
+
+        // Configurer le contenu en fonction du type et du résultat
+        switch (result) {
+            case 'victory':
+                title.textContent = 'Victoire!';
+                message.textContent = 'Vous avez tué le monstre!';
+                break;
+            case 'defeat':
+                title.textContent = 'Perdu...';
+                message.textContent = 'Vous êtes mort';
+                closeButton.addEventListener('click', () => window.location.reload());
+                break;
+            case 'final-victory':
+                title.textContent = 'Final Victory!';
+                message.textContent = 'Bien joué! Vous avez tué tous les monstres!';
+                closeButton.addEventListener('click', () => window.location.reload());
+                break;
+            case 'heal':
+                title.textContent = 'Vous faites un feu de camp';
+                message.textContent = 'Vous sentez la chaleur du feu de camp vous revigorer.';
+                break;
+            case 'merchant':
+                title.textContent = 'Vous rencontrez un marchand';
+                message.textContent = 'Vous avez rencontré un marchand vous pouvez lui acheter des objets.';
+                break;
+            case 'upgrade':
+                title.textContent = 'Vous trouvez un marteau au sol';
+                message.textContent = 'Vous pouvez utiliser le marteau pour améliorer un équipement.';
+                break;
         }
 
-        resultModal.classList.remove('hidden');
-        resultModal.style.display = 'flex';
+        // Ajouter l'écouteur pour fermer la modal
+        closeButton.addEventListener('click', this.closeModal);
+
+        // Afficher la modal
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+    }
+    // ferme la modal
+    private static closeModal() {
+        const modals = document.querySelectorAll('.modal') as NodeListOf<HTMLDivElement>;
+        modals.forEach((modal) => {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        });
     }
 }
 

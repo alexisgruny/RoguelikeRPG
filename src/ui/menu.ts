@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function startCombatForBiome(biomeMenu: HTMLElement, combatSection: HTMLElement, biomeName: string) {
     biomeMenu.classList.add('hidden'); // Masquer le menu des biomes
     combatSection.classList.remove('hidden'); // Afficher la section de combat
-    await CombatManager.startCombat(biomeName); // Démarrer le combat dans le biome sélectionné
+    await CombatManager.InitialyzeGame(biomeName); // Démarrer le combat dans le biome sélectionné
 }
 
 /**

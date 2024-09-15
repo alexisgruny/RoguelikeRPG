@@ -1,5 +1,5 @@
 export interface Role {
-    name:string;
+    name: string;
     health: number;
     attack: number;
     defense: number;
@@ -15,4 +15,13 @@ export interface Monster {
     attack: number;
     defense: number;
     health: number;
+    maxHealth: number;
+}
+
+export interface Items {
+    name: string;
+    attack: number;
+    defense: number;
+    health: number;
+    effect: Text;
 }

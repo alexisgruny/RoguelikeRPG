@@ -3,67 +3,62 @@ import { CombatSystem } from './combatSystem';
 import { HUD } from '../ui/HUD';
 import { MonsterService } from '../components/monsters';
 import { BiomeService } from '../components/biome';
-import { RoleService, player } from '../components/role';
+import { RoleService } from '../components/role';
+import { PlayerStatsService } from '../systems/playerStatsManager';
+
 
 export class CombatManager {
     private static currentMonster: Monster | null = null;
     private static victoryCount: number = 0;
-    private static maxVictories: number = 5;
+    private static maxVictories: number = 10;
+    private static EvenementCount: number = 0;
+    private static handleAttackBound: (event: Event) => void; // Garde une référence à l'écouteur d'événements
 
     // Fonction principale pour démarrer le combat
-    public static async startCombat(biomeName: string): Promise<void> {
+    public static async InitialyzeGame(biomeName: string): Promise<void> {
         try {
-            const biomes = await BiomeService.loadBiomes();
-            const monsters = await MonsterService.loadMonsters();
+            const [biomes, monsters] = await Promise.all([BiomeService.loadBiomes(), MonsterService.loadMonsters()]);
             const selectedBiome = BiomeService.findBiomeByName(biomes, biomeName);
-            const selectedClass = RoleService.getSelectedRole();
 
-            if (!selectedClass) {
-                throw new Error('No class selected for the player');
-            }
+            if (!selectedBiome) throw new Error(`Biome '${biomeName}' non trouvé`);
 
-            this.assignPlayerAttributes(selectedClass); // Applique les attributs de la classe sélectionnée au joueur
+            PlayerStatsService.initializePlayerStats();
+            this.updateHUD();
 
-            // Lance le premier combat si le biome est trouvé
-            if (selectedBiome) {
-                this.startNextBattle(selectedBiome, monsters);
-            }
-
+            // Lance la première bataille
+            this.startNextBattle(selectedBiome, monsters);
         } catch (error) {
             console.error('Failed to start combat:', error);
         }
     }
 
-    // Affecte les attributs de la classe sélectionnée au joueur
-    private static assignPlayerAttributes(selectedClass: { health: number, attack: number, defense: number }): void {
-        player.health = selectedClass.health;
-        player.attack = selectedClass.attack;
-        player.defense = selectedClass.defense;
+    // Met à jour le HUD avec les stats du joueur
+    private static updateHUD(): void {
+        const { health, maxHealth, attack, defense } = PlayerStatsService.getPlayerStats();
+        HUD.updatePlayerStats(health, maxHealth, attack, defense);
     }
 
     // Lance la prochaine bataille avec un monstre du biome
     private static async startNextBattle(biome: Biome, monsters: Monster[]): Promise<void> {
         const availableMonsters = MonsterService.getMonstersFromBiome(biome, monsters);
-        this.currentMonster = MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
+        if (!availableMonsters.length) throw new Error(`Aucun monstre trouvé dans le biome '${biome.name}'`);
 
-        HUD.updatePlayerStats(); // Met à jour l'interface avec les stats du joueur
-        HUD.updateMonsterStats(this.currentMonster); // Met à jour l'interface avec les stats du monstre
+        this.currentMonster = MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
+        this.updateHUD(); // Met à jour les stats du joueur
+        HUD.updateMonsterStats(this.currentMonster); // Met à jour les stats du monstre
 
         this.setupAttack(biome); // Configure le bouton d'attaque
     }
 
-    // Prépare le bouton d'attaque pour lancer le combat
+    // Prépare le bouton d'attaque
     private static setupAttack(biome: Biome): void {
         const attackButton = document.getElementById('attack-button');
         if (attackButton) {
-            attackButton.removeEventListener('click', this.handleAttackBound);// Nettoie les anciens écouteurs pour éviter les duplications
-            this.handleAttackBound = this.handlePlayerAttack.bind(this, biome);// Associe le contexte du biome et la fonction d'attaque
-            attackButton.addEventListener('click', this.handleAttackBound);// Ajoute l'écouteur d'événement
+            attackButton.removeEventListener('click', this.handleAttackBound); // Retire l'ancien événement
+            this.handleAttackBound = this.handlePlayerAttack.bind(this, biome);
+            attackButton.addEventListener('click', this.handleAttackBound); // Associe l'événement
         }
     }
-
-    // Garde une référence à l'écouteur pour pouvoir le supprimer
-    private static handleAttackBound: (event: Event) => void;
 
     // Gère l'attaque du joueur et met à jour le combat
     private static handlePlayerAttack(biome: Biome): void {
@@ -74,7 +69,7 @@ export class CombatManager {
 
         if (monsterDefeated) {
             this.handleVictory(biome);
-            this.currentMonster = null; // Réinitialise le monstre actuel
+            this.currentMonster = null;
         } else {
             this.handleMonsterAttack(biome);
         }
@@ -87,18 +82,27 @@ export class CombatManager {
         const { damageToPlayer, playerDefeated } = CombatSystem.monsterAttack(this.currentMonster);
         HUD.logAction(`${this.currentMonster.name} attacks for ${damageToPlayer} damage!`);
 
+        PlayerStatsService.updatePlayerHealth(-damageToPlayer); // Met à jour la santé du joueur
+        this.updateHUD(); // Met à jour les stats du joueur après les dégâts
+
         if (playerDefeated) {
-            HUD.showResult('defeat'); // Si le joueur est vaincu, afficher la défaite
-        } else {
-            HUD.updatePlayerStats(); // Sinon, mettre à jour les stats du joueur
+            HUD.showModal('defeat'); // Affiche la défaite si le joueur est vaincu
         }
     }
 
     // Gère la victoire du joueur et enchaîne sur le prochain combat
     private static async handleVictory(biome: Biome): Promise<void> {
         this.victoryCount++;
+        this.EvenementCount++;
+
         if (this.victoryCount >= this.maxVictories) {
-            HUD.showResult('final-victory'); // Si le joueur atteint le maximum de victoires
+            HUD.showModal('final-victory'); // Affiche la victoire finale
+        } else if (this.EvenementCount === 5) {
+            this.EvenementCount = 0;
+            PlayerStatsService.campFire();// evenement qui soigne le joueur
+            HUD.showModal('heal'); 
+            const monsters = await MonsterService.loadMonsters();
+            this.startNextBattle(biome, monsters); 
         } else {
             const monsters = await MonsterService.loadMonsters();
             this.startNextBattle(biome, monsters); // Lance la prochaine bataille

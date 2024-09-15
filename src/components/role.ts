@@ -32,10 +32,3 @@ export class RoleService {
         return this.selectedRole;
     }
 }
-
-// Objet joueur contenant ses attributs (modifiable selon la classe sélectionnée)
-export const player = {
-    health: 100,
-    attack: 10,
-    defense: 10
-};
