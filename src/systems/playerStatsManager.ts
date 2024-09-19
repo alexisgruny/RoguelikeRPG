@@ -1,10 +1,10 @@
 import { HUD } from '../ui/HUD';
-import { RoleService} from '../components/role';
+import { RoleService } from '../components/role';
 import { PlayerStats } from '../types';
 
 export class PlayerStatsService {
 
-    private static playerStats: PlayerStats = {
+    public static playerStats: PlayerStats = {
         name: 'default',
         health: 100,
         maxHealth: 100,
@@ -36,7 +36,7 @@ export class PlayerStatsService {
     }
 
     // Récupère les stats actuelles du joueur
-    public static getPlayerStats(){
+    public static getPlayerStats() {
         return this.playerStats;
     }
 
@@ -47,19 +47,19 @@ export class PlayerStatsService {
     }
 
     // evenement de soin met a jour les Hp du joueurs ( + 30% des Hp max)
-    public static campFire():void {
-        this.playerStats.health = Math.min(this.playerStats.maxHealth, this.playerStats.health + (this.playerStats.maxHealth*0.30));
+    public static campFire(): void {
+        this.playerStats.health = Math.min(this.playerStats.maxHealth, this.playerStats.health + (this.playerStats.maxHealth * 0.30));
         HUD.updatePlayerStats(this.playerStats);
     }
 
-    public static addExperience():void {
+    public static addExperience(): void {
         const playerStats = this.getPlayerStats();
-        playerStats.experience + 1;    
+        playerStats.experience += 1;
         while (playerStats.experience >= playerStats.experienceToNextLevel) {// Vérifiez si le joueur a suffisamment d'expérience pour monter de niveau
             playerStats.experience -= playerStats.experienceToNextLevel;
-            
+            playerStats.level += 1;
+            // Afficher les modales pour le choix de la statistique
+            HUD.levelUp(this.playerStats);
         }
-
-       HUD.updatePlayerStats(playerStats);
     }
 }

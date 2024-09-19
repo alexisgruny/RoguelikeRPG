@@ -89,7 +89,7 @@ export class CombatManager {
         this.updateHUD(); // Met à jour les stats du joueur après les dégâts
 
         if (playerDefeated) {
-            HUD.showModal('defeat'); // Affiche la défaite si le joueur est vaincu
+            HUD.showEventModal('defeat'); // Affiche la défaite si le joueur est vaincu
         }
     }
 
@@ -98,17 +98,18 @@ export class CombatManager {
         this.victoryCount++;
         this.EvenementCount++;
 
-        let eventType: 'final-victory' | 'heal' | 'boss-battle' | null = null;
+        let eventType: 'end' | 'heal' | 'boss' | null = null;
         let isBossBattle = false;
+        PlayerStatsService.addExperience();
 
         // Utilisation d'un switch pour déterminer l'événement en fonction des victoires ou événements
         switch (true) {
             case (this.victoryCount >= this.maxVictories):
-                eventType = 'final-victory'; // Victoire finale
+                eventType = 'end'; // Victoire finale
                 break;
             case (this.victoryCount === 9):
                 isBossBattle = true; // Le 10e combat est contre un boss
-                eventType = 'boss-battle'; // Spécifie que c'est un combat de boss
+                eventType = 'boss'; // Spécifie que c'est un combat de boss
                 break;
             case (this.EvenementCount === 5):
                 this.EvenementCount = 0;
@@ -120,7 +121,7 @@ export class CombatManager {
         }
 
         if (eventType) {
-            HUD.showModal(eventType); // Affiche le bon modal selon l'événement
+            HUD.showEventModal(eventType); // Affiche le bon modal selon l'événement
         }
 
         // Sélection du prochain monstre : si c'est un combat de boss, on sélectionne un boss du biome

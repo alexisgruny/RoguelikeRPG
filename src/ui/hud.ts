@@ -1,113 +1,155 @@
 import { Monster, Biome, Role, PlayerStats } from '../types';
 import { RoleService } from '../components/role';
+import { PlayerStatsService } from '../systems/playerStatsManager'
+import { CombatManager } from 'systems/combatManager';
 
 export class HUD {
+    // Fonction générique pour mettre à jour un élément HTML
+    private static updateElementText(elementId: string, text: string) {
+        const element = document.getElementById(elementId);
+        if (element) element.textContent = text;
+    }
+
     // Mise à jour des stats du joueur à l'écran
-    public static updatePlayerStats(playerStats: PlayerStats): void{
-        const nameElement = document.getElementById('player-role');
-        const healthElement = document.getElementById('player-health');
-        const attackElement = document.getElementById('player-attack');
-        const defenseElement = document.getElementById('player-defense');
-        const lvlElement = document.getElementById('player-lvl');
-        const xpElement = document.getElementById('player-xp');
-
-        if (nameElement) nameElement.textContent = `${playerStats.name}`;
-        if (healthElement) healthElement.textContent = `Health: ${playerStats.health}/${playerStats.maxHealth}`;
-        if (attackElement) attackElement.textContent = `Attack: ${playerStats.attack}`;
-        if (defenseElement) defenseElement.textContent = `Defense: ${playerStats.defense}`;
-        if (lvlElement) lvlElement.textContent = `Niveau: ${playerStats.level}`;
-        if (xpElement) xpElement.textContent = `expérience: ${playerStats.experience}/${playerStats.experienceToNextLevel}`;
+    public static updatePlayerStats(playerStats: PlayerStats): void {
+        this.updateElementText('player-role', playerStats.name);
+        this.updateElementText('player-health', `Health: ${playerStats.health}/${playerStats.maxHealth}`);
+        this.updateElementText('player-attack', `Attack: ${playerStats.attack}`);
+        this.updateElementText('player-defense', `Defense: ${playerStats.defense}`);
+        this.updateElementText('player-lvl', `Niveau: ${playerStats.level}`);
+        this.updateElementText('player-xp', `expérience: ${playerStats.experience}/${playerStats.experienceToNextLevel}`);
     }
 
+    // Mise à jour des stats du monstre à l'écran
     public static updateMonsterStats(monster: Monster) {
-        const monsterNameElem = document.getElementById('monster-name')!;
-        const monsterHealthElem = document.getElementById('monster-health') as HTMLDivElement;
-        const monsterAttackElem = document.getElementById('monster-attack') as HTMLDivElement;
-        const monsterDefenseElem = document.getElementById('monster-defense') as HTMLDivElement;
-
-        if (monsterNameElem) monsterNameElem.textContent = `${monster.name}`;
-        if (monsterHealthElem) monsterHealthElem.textContent = `Vie: ${monster.health}`;
-        if (monsterAttackElem) monsterAttackElem.textContent = `Attaque: ${monster.attack}`;
-        if (monsterDefenseElem) monsterDefenseElem.textContent = `Défense: ${monster.defense}`;
+        this.updateElementText('monster-name', monster.name);
+        this.updateElementText('monster-health', `Vie: ${monster.health}`);
+        this.updateElementText('monster-attack', `Attaque: ${monster.attack}`);
+        this.updateElementText('monster-defense', `Défense: ${monster.defense}`);
     }
 
+    // affichage des log de combat
     public static logAction(action: string) {
         const logOutputElem = document.getElementById('log-output') as HTMLDivElement;
         logOutputElem.textContent += action + "\n";
         logOutputElem.scrollTop = logOutputElem.scrollHeight;
     }
 
+    // reset les log de combat a chaque pression de l'attaque
     public static logRemove() {
-       const logRemover = document.getElementById('log-output') as HTMLDivElement;
-       logRemover.textContent = "";
+        const logRemover = document.getElementById('log-output') as HTMLDivElement;
+        logRemover.textContent = "";
 
     }
 
-    public static showModal(
-        eventType: 'victory' | 'defeat' | 'final-victory' | 'heal' | 'merchant' | 'upgrade' | 'boss-battle'
-    ) {
-        const modal = document.getElementById(`modal`) as HTMLDivElement;
-        const title = document.getElementById(`modal-title`) as HTMLHeadingElement;
-        const message = document.getElementById(`modal-message`) as HTMLParagraphElement;
-        const closeButton = document.getElementById(`close-modal-button`)!;
+    // Fonction générique pour afficher une modale avec un contenu personnalisé
+    public static showModal(modalId: string, titleText: string, messageText: string, callback?: Function) {
+        const modal = document.getElementById(modalId) as HTMLDivElement;
+        const title = modal.querySelector('#modal-title') as HTMLHeadingElement;
+        const message = modal.querySelector('#modal-message') as HTMLParagraphElement;
+        const closeButton = modal.querySelector('#close-modal-button') as HTMLButtonElement;
 
-        // Supprimer l'écouteur précédent pour éviter les doublons
-        closeButton.removeEventListener('click', this.closeModal);
+        title.textContent = titleText;
+        message.textContent = messageText;
 
-        // Configurer le contenu en fonction du type et du résultat
-        switch (eventType) {
-            case 'victory':
-                title.textContent = 'Victoire!';
-                message.textContent = 'Vous avez tué le monstre!';
-                break;
-            case 'defeat':
-                title.textContent = 'Perdu...';
-                message.textContent = 'Vous êtes mort';
-                closeButton.addEventListener('click', () => window.location.reload());
-                break;
-            case 'final-victory':
-                title.textContent = 'Final Victory!';
-                message.textContent = 'Bien joué! Vous avez tué tous les monstres!';
-                closeButton.addEventListener('click', () => window.location.reload());
-                break;
-            case 'heal':
-                title.textContent = 'Vous faites un feu de camp';
-                message.textContent = 'Vous sentez la chaleur du feu de camp vous revigorer.';
-                break;
-            case 'merchant':
-                title.textContent = 'Vous rencontrez un marchand';
-                message.textContent = 'Vous avez rencontré un marchand vous pouvez lui acheter des objets.';
-                break;
-            case 'upgrade':
-                title.textContent = 'Vous trouvez un marteau au sol';
-                message.textContent = 'Vous pouvez utiliser le marteau pour améliorer un équipement.';
-                break;
-            case 'boss-battle':
-                title.textContent = 'Une entité Mystique vous attaque';
-                message.textContent = 'Vous affrontez le roi de la zone bonne chance.';
-                break;
+        // Ajouter un callback optionnel lors de la fermeture
+        if (callback) {
+            closeButton.addEventListener('click', () => {
+                callback();
+                this.hideAllModals();
+            });
+        } else {
+            closeButton.addEventListener('click', this.hideAllModals);
         }
 
-        // Ajouter l'écouteur pour fermer la modal
-        closeButton.addEventListener('click', this.closeModal);
-
-        // Afficher la modal
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
+        modal.style.display = 'flex';  // Affiche la modal
     }
-    // ferme la modal
-    private static closeModal() {
+
+    // Fonction générique pour les événements
+    public static showEventModal(eventType: string): void {
+        const eventMessages: { [key: string]: { title: string; message: string } } = {
+            victory: { title: 'Victoire!', message: 'Vous avez tué le monstre!' },
+            defeat: { title: 'Défaite', message: 'Vous êtes mort.' },
+            heal: { title: 'Repos', message: 'Vous faites un feu de camp.' },
+            merchant: { title: 'Marchand', message: 'Vous rencontrez un marchand.' },
+            boss: { title: 'Boss', message: 'Le boss vous attaque.' },
+            end: { title: 'Fin', message: 'Vous avez fini le jeu' },
+        };
+
+        const { title, message } = eventMessages[eventType] || { title: 'Événement', message: 'Événement inconnu' };
+        this.showModal('modal', title, message);
+    }
+
+    // Fonction pour créer la modale de montée de niveau
+    public static levelUp(playerStats: PlayerStats): void {
+        const stats = [
+            { name: 'Attaque', bonus: Math.floor(Math.random() * 5) + 1 },
+            { name: 'Défense', bonus: Math.floor(Math.random() * 5) + 1 },
+            { name: 'Points de vie', bonus: Math.floor(Math.random() * 20) + 10 }
+        ];
+
+        this.createStatModal(stats, (selectedStat: string, bonusValue: number) => {
+            switch (selectedStat) {
+                case 'Attaque':
+                    playerStats.attack = Number(playerStats.attack);
+                    playerStats.attack += bonusValue;
+                    break;
+                case 'Défense':
+                    playerStats.defense = Number(playerStats.defense);
+                    playerStats.defense += bonusValue;
+                    break;
+                case 'Points de vie':
+                    playerStats.maxHealth = Number(playerStats.maxHealth);
+                    playerStats.maxHealth += bonusValue;
+                    playerStats.health += bonusValue;
+                    break;
+            }
+            this.updatePlayerStats(playerStats);
+        });
+    }
+
+    // Fonction pour créer une modale pour la sélection de stats
+    public static createStatModal(stats: { name: string, bonus: number }[], onSelect: Function): void {
+        let modalContainer = document.getElementById('stat-modal-container') as HTMLDivElement;
+        if (!modalContainer) {
+            modalContainer = document.createElement('div');
+            modalContainer.id = 'stat-modal-container';
+            modalContainer.style.display = 'flex';
+            modalContainer.classList.add('modal-container');
+            document.body.appendChild(modalContainer);
+        }
+
+        modalContainer.innerHTML = '';  // Clear previous modals
+        stats.forEach((stat, index) => {
+            const modal = document.createElement('div');
+            modal.classList.add('modal');
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>${stat.name}</h2>
+                    <p>Augmentation: ${stat.bonus}</p>
+                    <button id="select-button-${index}">Sélectionner</button>
+                </div>`;
+
+            const selectButton = modal.querySelector(`#select-button-${index}`);
+            if (selectButton) {
+                selectButton.addEventListener('click', () => {
+                    onSelect(stat.name, stat.bonus);
+                    HUD.hideAllModals();  // Masquer toutes les modales après la sélection
+                });
+            }
+            modalContainer.appendChild(modal);
+        });
+    }
+
+     // Fonction pour cacher toutes les modales
+     public static hideAllModals() {
         const modals = document.querySelectorAll('.modal') as NodeListOf<HTMLDivElement>;
-        modals.forEach((modal) => {
-            modal.classList.add('hidden');
+        const modalContainer = document.getElementById('stat-modal-container');
+        if (modalContainer) {
+            modalContainer.style.display = 'none';
+        }
+        modals.forEach(modal => {
             modal.style.display = 'none';
         });
     }
 }
-
-
-
-
-
-
-
