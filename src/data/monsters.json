@@ -3,13 +3,15 @@
         "id": "ecureuil",
         "name": "Ecureuil",
         "health": 10,
+        "maxHealth": 10,
         "attack": 5,
         "defense": 2,
         "abilities": [
-            {"name": "Lancer de gland", "damage": 1, "chance": 1}
+            {"name": "Lancer de gland", "damage": 1, "probabilities": 1, "effect": "damage"}
         ],
         "loot": [
-            {"item": "Gland", "chance": 0.4}
+            {"item": "gland", "probabilities": 0.3},
+            {"item": "noix", "probabilities": 0.2}
         ],
         "boss": false
     },
@@ -17,13 +19,32 @@
         "id": "hibou",
         "name": "Hibou",
         "health": 20,
+        "maxHealth": 20,
         "attack": 4,
         "defense": 5,
         "abilities": [
-            {"name": "Lancer de gland", "damage": 1, "chance": 1}
+            {"name": "Picotement", "damage": 1, "probabilities": 0.7, "effect": "damage"},
+            {"name": "Voile de plume", "damage": 0, "probabilities": 0.3, "effect": "defense", "defenseValue": "2"}
         ],
         "loot": [
-            {"item": "Gland", "chance": 0.4}
+            {"item": "plume", "probabilities": 0.3}
+        ],
+        "boss": false
+    },
+    {
+        "id": "renard",
+        "name": "Renard",
+        "health": 25,
+        "maxHealth": 25,
+        "attack": 8,
+        "defense": 3,
+        "abilities": [
+            {"name": "Griffure", "damage": 1.5, "probabilities": 0.2, "effect": "damage"},
+            {"name": "Charge", "damage": 1, "probabilities": 0.5, "effect": "damage"},
+            {"name": "Aiguisage", "damage": 0, "probabilities": 0.3, "effect": "attack", "attackValue": "3"}
+        ],
+        "loot": [
+            {"item": "griffe", "probabilities": 0.15}
         ],
         "boss": false
     },
@@ -31,16 +52,19 @@
         "id": "cerf",
         "name": "Cerf",
         "health": 125,
+        "maxHealth": 125,
         "attack": 10,
         "defense": 8,
         "abilities": [
-            {"name": "Lancer de gland", "damage": 1, "chance": 1}
+            {"name": "Charge", "damage": 1, "probabilities": 0.6, "effect": "damage"},
+            {"name": "Appel de la foudre", "damage": 1.5, "probabilities": 0.3, "effect": "damage"},
+            {"name": "Appel de la Forêt", "damage": 0, "probabilities": 0.1, "effect": "heal", "healValue": 40}
         ],
         "loot": [
-            {"item": "Gland", "chance": 0.4}
+            {"item": "boisCerf", "probabilities": 1}
         ],
         "boss": true
-    },
+    },    
     {
         "id": "meduse",
         "name": "Meduse",
@@ -48,10 +72,10 @@
         "attack": 8,
         "defense": 1,
         "abilities": [
-            {"name": "choc", "damage": 1, "chance": 1}
+            {"name": "choc", "damage": 1, "probabilities": 1}
         ],
         "loot": [
-            {"item": "proute", "chance": 0.4}
+            {"item": "proute", "probabilities": 0.4}
         ],
         "boss": false
     },
@@ -62,10 +86,10 @@
         "attack": 5,
         "defense": 6,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "chance": 1}
+            {"name": "Picotement", "damage": 1, "probabilities": 1}
         ],
         "loot": [
-            {"item": "Plume", "chance": 0.4}
+            {"item": "Plume", "probabilities": 0.4}
         ],
         "boss": false
     },
@@ -76,10 +100,10 @@
         "attack": 10,
         "defense": 20,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "chance": 1}
+            {"name": "Picotement", "damage": 1, "probabilities": 1}
         ],
         "loot": [
-            {"item": "Plume", "chance": 0.4}
+            {"item": "Plume", "probabilities": 0.4}
         ],
         "boss": true
     },
@@ -90,10 +114,10 @@
         "attack": 8,
         "defense": 3,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "chance": 1}
+            {"name": "Picotement", "damage": 1, "probabilities": 1}
         ],
         "loot": [
-            {"item": "Plume", "chance": 0.4}
+            {"item": "Plume", "probabilities": 0.4}
         ],
         "boss": false
     },
@@ -104,10 +128,10 @@
         "attack": 8,
         "defense": 5,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "chance": 1}
+            {"name": "Picotement", "damage": 1, "probabilities": 1}
         ],
         "loot": [
-            {"item": "Plume", "chance": 0.4}
+            {"item": "Plume", "probabilities": 0.4}
         ],
         "boss": false
     },
@@ -118,10 +142,10 @@
         "attack": 15,
         "defense": 0,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "chance": 1}
+            {"name": "Picotement", "damage": 1, "probabilities": 1}
         ],
         "loot": [
-            {"item": "Plume", "chance": 0.4}
+            {"item": "Plume", "probabilities": 0.4}
         ],
         "boss": true
     }

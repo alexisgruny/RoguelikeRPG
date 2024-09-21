@@ -114,7 +114,6 @@ export class HUD {
         if (!modalContainer) {
             modalContainer = document.createElement('div');
             modalContainer.id = 'stat-modal-container';
-            modalContainer.style.display = 'flex';
             modalContainer.classList.add('modal-container');
             document.body.appendChild(modalContainer);
         }
@@ -137,6 +136,7 @@ export class HUD {
                     HUD.hideAllModals();  // Masquer toutes les modales après la sélection
                 });
             }
+            modalContainer.style.display = 'flex';
             modalContainer.appendChild(modal);
         });
     }

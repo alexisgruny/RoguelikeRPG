@@ -4,9 +4,39 @@
         "name": "Gland",
         "description": "Un petit gland",
         "type": "consumable",
-        "effects": {
-            "damage": 10
-        },
+        "effects": "Jete un gland",
         "rarity": "common"
+    },
+    {
+        "id": "noix",
+        "name": "Noix",
+        "description": "Une petite noix",
+        "type": "consumable",
+        "effects": "Jete une noix",
+        "rarity": "common"
+    },
+    {
+        "id": "plume",
+        "name": "Plume",
+        "description": "Une petite plume",
+        "type": "equipement",
+        "effects": "Attaque + 1",
+        "rarity": "common"
+    },
+    {
+        "id": "griffe",
+        "name": "Griffe",
+        "description": "Des griffe de renard",
+        "type": "equipement",
+        "effects": "Attaque + 3",
+        "rarity": "rare"
+    },
+    {
+        "id": "boisCerf",
+        "name": "Bois de cerf",
+        "description": "Les bois d'un cerf majestueux",
+        "type": "equipement",
+        "effects": "soigne de 5% des hp max tout les tours",
+        "rarity": "Boss"
     }
 ]

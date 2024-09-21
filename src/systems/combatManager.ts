@@ -81,16 +81,7 @@ export class CombatManager {
     // Gère l'attaque du monstre contre le joueur
     private static handleMonsterAttack(biome: Biome): void {
         if (!this.currentMonster) return;
-
-        const { damageToPlayer, playerDefeated } = CombatSystem.monsterAttack(this.currentMonster);
-        HUD.logAction(`${this.currentMonster.name} attacks for ${damageToPlayer} damage!`);
-
-        PlayerStatsService.updatePlayerHealth(-damageToPlayer); // Met à jour la santé du joueur
-        this.updateHUD(); // Met à jour les stats du joueur après les dégâts
-
-        if (playerDefeated) {
-            HUD.showEventModal('defeat'); // Affiche la défaite si le joueur est vaincu
-        }
+        CombatSystem.monsterAttack(this.currentMonster);
     }
 
     // Gère la victoire du joueur et enchaîne sur le prochain combat
@@ -139,5 +130,17 @@ export class CombatManager {
         this.currentMonster = boss;
         HUD.updateMonsterStats(this.currentMonster); // Met à jour les stats du boss
         this.setupAttack(biome); // Configure le bouton d'attaque
+    }
+
+    public static chooseAbility(monster: Monster) {
+        const roll = Math.random();
+        let cumulativeProb = 0;
+        for (const ability of monster.abilities) {
+            cumulativeProb += ability.probabilities;
+            if (roll <= cumulativeProb) {
+                return ability;
+            }
+        }
+        return null; // Aucun pouvoir choisi (cas rare)
     }
 }

@@ -11,12 +11,25 @@ export interface Biome {
 }
 
 export interface Monster {
+    id: string;
     name: string;
-    attack: number;
-    defense: number;
     health: number;
     maxHealth: number;
-    boss: boolean;
+    attack: number;
+    defense: number;
+    abilities: Ability[];   // Liste des compétences (abilities)
+    loot: { item: string; chance: number }[];  // Butin avec une chance d'apparition
+    boss?: boolean;         // Indique si le monstre est un boss
+}
+
+export interface Ability {
+    name: string;  
+    damage: number;  
+    probabilities: number;  
+    effect: 'damage' | 'heal' | 'defense' | 'attack';  
+    healValue: number; 
+    defenseValue: number;
+    attackValue: number;     
 }
 
 export interface Items {
