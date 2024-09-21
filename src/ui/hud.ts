@@ -77,7 +77,7 @@ export class HUD {
         };
 
         const { title, message } = eventMessages[eventType] || { title: 'Événement', message: 'Événement inconnu' };
-        this.showModal('modal', title, message);
+        this.showModal('modal-victory-defeat', title, message);
     }
 
     // Fonction pour créer la modale de montée de niveau
