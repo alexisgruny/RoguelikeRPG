@@ -4,20 +4,26 @@
     "name": "Voyageur",
     "health": "100",
     "attack": "10",
-    "defense": "5"
+    "defense": "5",
+    "skillPoint": "10"
+    
 },
 {
     "id": "braconnier",
     "name": "Braconnier",
     "health": "150",
     "attack": "15",
-    "defense": "0"
+    "defense": "0",
+    "skillPoint": "5"
+    
 },
 {
     "id": "protecteur",
     "name": "Protecteur",
     "health": "100",
     "attack": "5",
-    "defense": "10"
+    "defense": "10",
+    "skillPoint": "15"
+    
 }
 ]

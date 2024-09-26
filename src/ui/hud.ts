@@ -1,4 +1,4 @@
-import { Monster, Biome, Role, PlayerStats } from '../types';
+import { Monster, Biome, Role, PlayerStats, Items } from '../types';
 import { RoleService } from '../components/role';
 import { PlayerStatsService } from '../systems/playerStatsManager'
 import { CombatManager } from 'systems/combatManager';
@@ -80,34 +80,6 @@ export class HUD {
         this.showModal('modal-victory-defeat', title, message);
     }
 
-    // Fonction pour créer la modale de montée de niveau
-    public static levelUp(playerStats: PlayerStats): void {
-        const stats = [
-            { name: 'Attaque', bonus: Math.floor(Math.random() * 5) + 1 },
-            { name: 'Défense', bonus: Math.floor(Math.random() * 5) + 1 },
-            { name: 'Points de vie', bonus: Math.floor(Math.random() * 20) + 10 }
-        ];
-
-        this.createStatModal(stats, (selectedStat: string, bonusValue: number) => {
-            switch (selectedStat) {
-                case 'Attaque':
-                    playerStats.attack = Number(playerStats.attack);
-                    playerStats.attack += bonusValue;
-                    break;
-                case 'Défense':
-                    playerStats.defense = Number(playerStats.defense);
-                    playerStats.defense += bonusValue;
-                    break;
-                case 'Points de vie':
-                    playerStats.maxHealth = Number(playerStats.maxHealth);
-                    playerStats.maxHealth += bonusValue;
-                    playerStats.health += bonusValue;
-                    break;
-            }
-            this.updatePlayerStats(playerStats);
-        });
-    }
-
     // Fonction pour créer une modale pour la sélection de stats
     public static createStatModal(stats: { name: string, bonus: number }[], onSelect: Function): void {
         let modalContainer = document.getElementById('stat-modal-container') as HTMLDivElement;
@@ -133,6 +105,41 @@ export class HUD {
             if (selectButton) {
                 selectButton.addEventListener('click', () => {
                     onSelect(stat.name, stat.bonus);
+                    HUD.hideAllModals();  // Masquer toutes les modales après la sélection
+                });
+            }
+            modalContainer.style.display = 'flex';
+            modalContainer.appendChild(modal);
+        });
+    }
+
+    // Fonction pour créer une modale pour la sélection de d'objet
+    public static createItemSelectionModal(items: Items[], onSelect: (itemId: string) => void): void {
+        let modalContainer = document.getElementById('stat-modal-container') as HTMLDivElement;
+        if (!modalContainer) {
+            modalContainer = document.createElement('div');
+            modalContainer.id = 'stat-modal-container';
+            modalContainer.classList.add('modal-container');
+            document.body.appendChild(modalContainer);
+        }
+    
+        modalContainer.innerHTML = '';
+        items.forEach((item, index) => {
+            const modal = document.createElement('div');
+            modal.classList.add('modal');
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>${item.name}</h2>
+                    <p>${item.description}</p>
+                    <p>Type: ${item.type}</p>
+                    <p>Poid: ${item.weight}</p>
+                    <button id="select-button-${index}">Sélectionner ${item.name}</button>
+                </div>`;
+    
+            const selectButton = modal.querySelector(`#select-button-${index}`);
+            if (selectButton) {
+                selectButton.addEventListener('click', () => {
+                    onSelect(item.id);  // Pass the item ID to the callback
                     HUD.hideAllModals();  // Masquer toutes les modales après la sélection
                 });
             }

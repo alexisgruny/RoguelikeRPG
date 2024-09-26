@@ -59,7 +59,36 @@ export class PlayerStatsService {
             playerStats.experience -= playerStats.experienceToNextLevel;
             playerStats.level += 1;
             // Afficher les modales pour le choix de la statistique
-            HUD.levelUp(this.playerStats);
+            this.levelUp(this.playerStats);
         }
+    }
+
+    
+    // Fonction pour créer la modale de montée de niveau
+    public static levelUp(playerStats: PlayerStats): void {
+        const stats = [
+            { name: 'Attaque', bonus: Math.floor(Math.random() * 5) + 1 },
+            { name: 'Défense', bonus: Math.floor(Math.random() * 5) + 1 },
+            { name: 'Points de vie', bonus: Math.floor(Math.random() * 20) + 10 }
+        ];
+
+        HUD.createStatModal(stats, (selectedStat: string, bonusValue: number) => {
+            switch (selectedStat) {
+                case 'Attaque':
+                    playerStats.attack = Number(playerStats.attack);
+                    playerStats.attack += bonusValue;
+                    break;
+                case 'Défense':
+                    playerStats.defense = Number(playerStats.defense);
+                    playerStats.defense += bonusValue;
+                    break;
+                case 'Points de vie':
+                    playerStats.maxHealth = Number(playerStats.maxHealth);
+                    playerStats.maxHealth += bonusValue;
+                    playerStats.health += bonusValue;
+                    break;
+            }
+            HUD.updatePlayerStats(playerStats);
+        });
     }
 }

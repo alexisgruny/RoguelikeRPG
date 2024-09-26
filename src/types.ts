@@ -17,27 +17,19 @@ export interface Monster {
     maxHealth: number;
     attack: number;
     defense: number;
-    abilities: Ability[];   // Liste des compétences (abilities)
-    loot: { item: string; chance: number }[];  // Butin avec une chance d'apparition
-    boss?: boolean;         // Indique si le monstre est un boss
+    abilities: Ability[];
+    loot: { item: string; chance: number }[];
+    boss?: boolean;
 }
 
 export interface Ability {
-    name: string;  
-    damage: number;  
-    probabilities: number;  
-    effect: 'damage' | 'heal' | 'defense' | 'attack';  
-    healValue: number; 
-    defenseValue: number;
-    attackValue: number;     
-}
-
-export interface Items {
     name: string;
-    attack: number;
-    defense: number;
-    health: number;
-    effect: Text;
+    damage: number;
+    probabilities: number;
+    effect?: 'damage' | 'heal' | 'defense' | 'attack';
+    healValue?: number;
+    defenseValue?: number;
+    attackValue?: number;
 }
 
 export interface PlayerStats {
@@ -49,4 +41,26 @@ export interface PlayerStats {
     experience: number;
     level: number;
     experienceToNextLevel: number;
+}
+
+export interface ItemEffect {
+    tier: number;
+    abilityName?: string;
+    damage?: number;
+    healValue?: number;
+    effectType?: "damage" | "heal";
+    statsType?: "Attaque" | "Défense" | "Santé";
+    amount?: number;
+    explanation: string;
+}
+
+export interface Items {
+    id: string;
+    name: string;
+    description: string;
+    type: "compétence" | "équipement" | "consommable";
+    skillPoint?: number;
+    weight: number;
+    effects: ItemEffect[];
+    rarity: "commun" | "rare" | "epic" | "légendaire" | "boss";
 }
