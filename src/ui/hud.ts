@@ -56,10 +56,10 @@ export class HUD {
         if (callback) {
             closeButton.addEventListener('click', () => {
                 callback();
-                this.hideAllModals();
+                this.hideEventModal();
             });
         } else {
-            closeButton.addEventListener('click', this.hideAllModals);
+            closeButton.addEventListener('click', this.hideEventModal);
         }
 
         modal.style.display = 'flex';  // Affiche la modal
@@ -82,10 +82,10 @@ export class HUD {
 
     // Fonction pour créer une modale pour la sélection de stats
     public static createStatModal(stats: { name: string, bonus: number }[], onSelect: Function): void {
-        let modalContainer = document.getElementById('stat-modal-container') as HTMLDivElement;
+        let modalContainer = document.getElementById('level-modal-container') as HTMLDivElement;
         if (!modalContainer) {
             modalContainer = document.createElement('div');
-            modalContainer.id = 'stat-modal-container';
+            modalContainer.id = 'level-modal-container';
             modalContainer.classList.add('modal-container');
             document.body.appendChild(modalContainer);
         }
@@ -105,7 +105,7 @@ export class HUD {
             if (selectButton) {
                 selectButton.addEventListener('click', () => {
                     onSelect(stat.name, stat.bonus);
-                    HUD.hideAllModals();  // Masquer toutes les modales après la sélection
+                    HUD.hideLevelModal();  // Masquer toutes les modales après la sélection
                 });
             }
             modalContainer.style.display = 'flex';
@@ -115,10 +115,10 @@ export class HUD {
 
     // Fonction pour créer une modale pour la sélection de d'objet
     public static createItemSelectionModal(items: Items[], onSelect: (selectedItem: Items) => void) {
-        let modalContainer = document.getElementById('stat-modal-container') as HTMLDivElement;
+        let modalContainer = document.getElementById('item-modal-container') as HTMLDivElement;
         if (!modalContainer) {
             modalContainer = document.createElement('div');
-            modalContainer.id = 'stat-modal-container';
+            modalContainer.id = 'item-modal-container';
             modalContainer.classList.add('modal-container');
             document.body.appendChild(modalContainer);
         }
@@ -140,65 +140,72 @@ export class HUD {
             if (selectButton) {
                 selectButton.addEventListener('click', () => {
                     onSelect(item);
-                    HUD.hideAllModals();  // Masquer toutes les modales après la sélection
+                    HUD.hideItemModal();  // Masquer toutes les modales après la sélection
                 });
             }
             modalContainer.style.display = 'flex';
             modalContainer.appendChild(modal);
         });
     }
-
     // Fonction pour cacher toutes les modales
-    public static hideAllModals() {
-        const modals = document.querySelectorAll('.modal') as NodeListOf<HTMLDivElement>;
-        const modalContainer = document.getElementById('stat-modal-container');
-        if (modalContainer) {
-            modalContainer.style.display = 'none';
+    public static hideItemModal() {
+        const itemModalContainer = document.getElementById('item-modal-container',);
+        if (itemModalContainer) {
+            itemModalContainer.style.display = 'none';
         }
-        modals.forEach(modal => {
-            modal.style.display = 'none';
-        });
+    }
+    public static hideLevelModal() {
+        const levelModalContainer = document.getElementById('level-modal-container');
+        if (levelModalContainer) {
+            levelModalContainer.style.display = 'none';
+        }
+    }
+    public static hideEventModal() {
+        const eventModalContainer = document.getElementById('modal-victory-defeat');
+        if (eventModalContainer) {
+            eventModalContainer.style.display = 'none';
+        }
     }
 
     public static skillMenu() {
-    
+
         document.getElementById('skill-button')?.addEventListener('click', () => {
-    
+
             const mainMenu = document.getElementById('combat-actions');
             const skillsMenu = document.getElementById('skill-menu'); // Assurez-vous d'utiliser le bon ID
             const skillsList = document.getElementById('skills-list');
-    
+
             if (mainMenu && skillsMenu && skillsList) {
                 // Cache le menu principal
                 mainMenu.style.display = 'none';
                 skillsMenu.style.display = 'block';
-    
+
                 // Vide la liste des compétences à chaque fois avant d'ajouter les boutons
                 skillsList.innerHTML = '';
-    
+
                 // Boucle sur les compétences du joueur pour créer les boutons dynamiquement
                 PlayerStatsService.playerSkills.forEach((skill) => {
                     const skillButton = document.createElement('button');
                     skillButton.textContent = skill.name;
                     skillButton.classList.add('skill-button'); // Ajoute une classe CSS si besoin
-    
+
                     // Ajoute un évènement pour chaque bouton
                     skillButton.addEventListener('click', () => {
                         const effect = skill.effects.find(e => e.tier === 1)
                         alert(`Vous avez sélectionné la compétence: ${skill.name}\nDescription: ${effect?.explanation}`);
                     });
-    
+
                     // Ajoute le bouton au conteneur de la liste
                     skillsList.appendChild(skillButton);
                 });
             }
         });
-    
+
         // Retour au menu principal
         document.getElementById('back-to-main')?.addEventListener('click', () => {
             const mainMenu = document.getElementById('combat-actions');
             const skillsMenu = document.getElementById('skill-menu');
-    
+
             if (mainMenu && skillsMenu) {
                 mainMenu.style.display = 'block';
                 skillsMenu.style.display = 'none';

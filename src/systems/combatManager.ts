@@ -88,7 +88,6 @@ export class CombatManager {
     // Gère la victoire du joueur et enchaîne sur le prochain combat
     private static async handleVictory(biome: Biome): Promise<void> {
         this.victoryCount++;
-        this.EvenementCount++;
         let eventType: 'end' | 'heal' | 'boss' | null = null;
         let isBossBattle = false;
         PlayerStatsService.addExperience();
@@ -103,7 +102,7 @@ export class CombatManager {
                 isBossBattle = true; // Le 10e combat est contre un boss
                 eventType = 'boss'; // Spécifie que c'est un combat de boss
                 break;
-            case (this.EvenementCount === 5):
+            case (this.victoryCount === 5):
                 this.EvenementCount = 0;
                 PlayerStatsService.campFire(); // Soin du joueur lors de l'événement du feu de camp
                 eventType = 'heal'; // Événement de guérison
