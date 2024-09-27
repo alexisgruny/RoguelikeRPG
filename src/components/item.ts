@@ -50,6 +50,7 @@ export class itemService {
             switch (selectedItem.type) {
                 case 'compétence':
                     // Gestion des compétences
+                    PlayerStatsService.addSkill(selectedItem);
                     break;
                 case 'consommable':
                     // Gestion des consommables
