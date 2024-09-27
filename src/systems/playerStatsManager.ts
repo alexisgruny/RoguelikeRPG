@@ -1,9 +1,11 @@
 import { HUD } from '../ui/HUD';
 import { RoleService } from '../components/role';
-import { PlayerStats } from '../types';
+import { PlayerStats, Skills, Items, ItemEffect } from '../types';
 
 export class PlayerStatsService {
 
+    public static playerSkills: Skills[] = [];
+    
     public static playerStats: PlayerStats = {
         name: 'default',
         health: 100,
@@ -91,4 +93,27 @@ export class PlayerStatsService {
             HUD.updatePlayerStats(playerStats);
         });
     }
+
+    public static addSkill(item: Items): void {
+
+        // Vérifiez si l'item est de type compétence
+        if (item.type === 'compétence') {
+            const newSkill: Skills = {
+                id: item.id,
+                name: item.name,
+                skillPoint: item.skillPoint || 0,
+                effects: item.effects.map(effect => ({
+                    tier: effect.tier,
+                    abilityName: effect.abilityName,
+                    damage: effect.damage,
+                    effectType: effect.effectType,
+                    explanation: effect.explanation
+                }))
+            };
+    
+            // Ajoutez la compétence au tableau des compétences du joueur
+            this.playerSkills.push(newSkill);
+        }
+    }
+
 }

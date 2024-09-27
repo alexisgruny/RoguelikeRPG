@@ -3,6 +3,7 @@ import { Role, Monster, Biome } from '../types';
 import { CombatManager } from '../systems/combatManager';
 import { BiomeService } from '../components/biome';
 import { RoleService } from '../components/role';
+import { HUD } from './HUD';
 
 // Fonction principale exécutée une fois le DOM chargé
 document.addEventListener('DOMContentLoaded', async () => {
@@ -21,9 +22,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const combatSection = document.getElementById('combat-section')!;
         const biome1Button = document.getElementById('biome1-button') as HTMLButtonElement;
         const biome2Button = document.getElementById('biome2-button') as HTMLButtonElement;
-
         // Cacher la section de combat au départ
         combatSection.classList.add('hidden');
+
+        // appel de la fonction d'affichage du menu de compétence
+        HUD.skillMenu();
 
         // Afficher le menu des roles une fois que le joueur clique sur "Jouer"
         startButton.addEventListener('click', () => {

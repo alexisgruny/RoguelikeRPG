@@ -64,3 +64,11 @@ export interface Items {
     effects: ItemEffect[];
     rarity: "commun" | "rare" | "epic" | "légendaire" | "boss";
 }
+
+export interface Skills {
+    id: string;
+    name: string;
+    skillPoint?: number
+    effectType?: "damage" | "heal";
+    effects: ItemEffect[];
+}

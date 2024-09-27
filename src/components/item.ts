@@ -5,6 +5,8 @@ import { PlayerStatsService } from '../systems/playerStatsManager';
 export class itemService {
     // Charge les informations du fichier items.json
 
+
+
     public static async loadItems(): Promise<Items[]> {
         const response = await fetch('/data/items.json');
         if (!response.ok) {
@@ -25,33 +27,38 @@ export class itemService {
     }
 
     public static async chooseItems(battleCount: number) {
-        const droppedItems = await this.loadItems();
-        const itemsToChooseFrom = droppedItems.filter(item => {
+        const droppedItems: Items[] = await this.loadItems();
+        const itemsToChooseFrom: Items[] = droppedItems.filter(item => {
             const dropChance = this.getDropChance(item.rarity, battleCount);
-            return Math.random() < dropChance; // Retourne vrai si l'objet est récupérable
+            return Math.random() < dropChance;
         });
 
-        // Choisissez deux objets parmi les items récupérables
+        // Limiter à deux objets récupérables
+        const selectedItems: Items[] = [];
         for (let i = 0; i < 2; i++) {
-            if (itemsToChooseFrom.length === 0) break; // S'il n'y a plus d'objets, sortez
-
+            if (itemsToChooseFrom.length === 0) break;
             const randomIndex = Math.floor(Math.random() * itemsToChooseFrom.length);
-            droppedItems.push(itemsToChooseFrom[randomIndex]);
-            itemsToChooseFrom.splice(randomIndex, 1); // Enlever l'objet choisi pour éviter les doublons
+            selectedItems.push(itemsToChooseFrom[randomIndex]);
+            itemsToChooseFrom.splice(randomIndex, 1);
         }
 
-        HUD.createItemSelectionModal(itemsToChooseFrom, (selectedItems) => {
-            const playerStats = PlayerStatsService.playerStats
-            switch (selectedItems) {
+        // Appel de la modal
+        HUD.createItemSelectionModal(selectedItems, (selectedItem: Items) => {
+            const playerStats = PlayerStatsService.playerStats;
+            const playerItems: Items[] = []
+            playerItems.push(selectedItem)
+            switch (selectedItem.type) {
                 case 'compétence':
+                    // Gestion des compétences
                     break;
                 case 'consommable':
+                    // Gestion des consommables
                     break;
                 case 'équipement':
+                    // Gestion des équipements
                     break;
             }
             HUD.updatePlayerStats(playerStats);
         });
-        itemsToChooseFrom.length = 0;
     }
 }
