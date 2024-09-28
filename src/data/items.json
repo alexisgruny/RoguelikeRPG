@@ -6,11 +6,13 @@
         "type": "compétence",
         "skillPoint": 1,
         "weight": 1,
+        "effectType": "damage", 
         "effects": [
-            {"tier": 1, "abilityName": "Lancer de noix", "damage": 1.1, "effectType": "damage", "explanation": "Lancer de noix applique 110% des dommages à l'ennemi."},
-            {"tier": 2, "abilityName": "Lancer de noix II", "damage": 1.15, "effectType": "damage", "explanation": "Lancer de noix applique 115% des dommages à l'ennemi."},
-            {"tier": 3, "abilityName": "Lancer de noix III", "damage": 1.2, "effectType": "damage", "explanation": "Lancer de noix applique 120% des dommages à l'ennemi."}
+            {"tier": 1, "abilityName": "Lancer de noix", "damage": 1.1, "explanation": "Lancer de noix applique 110% des dommages à l'ennemi."},
+            {"tier": 2, "abilityName": "Lancer de noix II", "damage": 1.15, "explanation": "Lancer de noix applique 115% des dommages à l'ennemi."},
+            {"tier": 3, "abilityName": "Lancer de noix III", "damage": 1.2, "explanation": "Lancer de noix applique 120% des dommages à l'ennemi."}
         ],
+        
         "rarity": "common"
     },
     {
@@ -20,10 +22,11 @@
         "type": "compétence",
         "skillPoint": 1,
         "weight": 2,
+        "effectType": "heal",
         "effects": [
-            {"tier": 1, "abilityName": "Soin léger", "heal": 25, "effectType": "heal", "explanation": "Restaure 25 points de vie."},
-            {"tier": 2, "abilityName": "Soin modéré", "heal": 50, "effectType": "heal", "explanation": "Restaure 50 points de vie."},
-            {"tier": 3, "abilityName": "Soin majeur", "heal": 100, "effectType": "heal", "explanation": "Restaure 100 points de vie."}
+            {"tier": 1, "abilityName": "Soin léger", "heal": 25, "explanation": "Restaure 25 points de vie."},
+            {"tier": 2, "abilityName": "Soin modéré", "heal": 50, "explanation": "Restaure 50 points de vie."},
+            {"tier": 3, "abilityName": "Soin majeur", "heal": 100, "explanation": "Restaure 100 points de vie."}
         ],
         "rarity": "rare"
     },
@@ -34,10 +37,11 @@
         "type": "compétence",
         "skillPoint": 1,
         "weight": 1.5,
+        "effectType": "damage",
         "effects": [
-            {"tier": 1, "abilityName": "Flamme ardente", "damage": 1.2, "effectType": "damage", "explanation": "Inflige 120% des dommages à l'ennemi."},
-            {"tier": 2, "abilityName": "Brasier", "damage": 1.4, "effectType": "damage", "explanation": "Inflige 140% des dommages à l'ennemi."},
-            {"tier": 3, "abilityName": "Explosion de feu", "damage": 1.6, "effectType": "damage", "explanation": "Inflige 160% des dommages à l'ennemi."}
+            {"tier": 1, "abilityName": "Flamme ardente", "damage": 1.2,  "explanation": "Inflige 120% des dommages à l'ennemi."},
+            {"tier": 2, "abilityName": "Brasier", "damage": 1.4, "explanation": "Inflige 140% des dommages à l'ennemi."},
+            {"tier": 3, "abilityName": "Explosion de feu", "damage": 1.6, "explanation": "Inflige 160% des dommages à l'ennemi."}
         ],
         "rarity": "uncommon"
     },
@@ -48,10 +52,11 @@
         "type": "compétence",
         "skillPoint": 1,
         "weight": 1,
+        "effectType": "heal",
         "effects": [
-            {"tier": 1, "abilityName": "Petite régénération", "heal": 30, "effectType": "heal", "explanation": "Régénère 30 points de vie."},
-            {"tier": 2, "abilityName": "Moyenne régénération", "heal": 60, "effectType": "heal", "explanation": "Régénère 60 points de vie."},
-            {"tier": 3, "abilityName": "Grande régénération", "heal": 90, "effectType": "heal", "explanation": "Régénère 90 points de vie."}
+            {"tier": 1, "abilityName": "Petite régénération", "heal": 30, "explanation": "Régénère 30 points de vie."},
+            {"tier": 2, "abilityName": "Moyenne régénération", "heal": 60, "explanation": "Régénère 60 points de vie."},
+            {"tier": 3, "abilityName": "Grande régénération", "heal": 90, "explanation": "Régénère 90 points de vie."}
         ],
         "rarity": "common"
     },
@@ -61,10 +66,11 @@
         "description": "Une cape légère qui semble se mouvoir avec le vent.",
         "type": "équipement",
         "weight": 3,
+        "statsType": "Défense",
         "effects": [
-            {"tier": 1, "statsType": "Défense", "amount": 3, "explanation": "Augmente la défense de +3."},
-            {"tier": 2, "statsType": "Défense", "amount": 5, "explanation": "Augmente la défense de +5."},
-            {"tier": 3, "statsType": "Défense", "amount": 7, "explanation": "Augmente la défense de +7."}
+            {"tier": 1, "amount": 3, "explanation": "Augmente la défense de +3."},
+            {"tier": 2, "amount": 5, "explanation": "Augmente la défense de +5."},
+            {"tier": 3, "amount": 7, "explanation": "Augmente la défense de +7."}
         ],
         "rarity": "uncommon"
     },
@@ -74,10 +80,11 @@
         "description": "Une armure légère faite de cuir résistant.",
         "type": "équipement",
         "weight": 5,
+        "statsType": "Défense",
         "effects": [
-            {"tier": 1, "statsType": "Défense", "amount": 5, "explanation": "Augmente la défense de +5."},
-            {"tier": 2, "statsType": "Défense", "amount": 8, "explanation": "Augmente la défense de +8."},
-            {"tier": 3, "statsType": "Défense", "amount": 12, "explanation": "Augmente la défense de +12."}
+            {"tier": 1, "amount": 5, "explanation": "Augmente la défense de +5."},
+            {"tier": 2, "amount": 8, "explanation": "Augmente la défense de +8."},
+            {"tier": 3, "amount": 12, "explanation": "Augmente la défense de +12."}
         ],
         "rarity": "common"
     },
@@ -87,10 +94,11 @@
         "description": "Une amulette ancienne qui améliore la vitalité.",
         "type": "équipement",
         "weight": 1,
+        "statsType": "Santé",
         "effects": [
-            {"tier": 1, "statsType": "PDV", "amount": 50, "explanation": "Augmente les points de vie de +50."},
-            {"tier": 2, "statsType": "PDV", "amount": 100, "explanation": "Augmente les points de vie de +100."},
-            {"tier": 3, "statsType": "PDV", "amount": 150, "explanation": "Augmente les points de vie de +150."}
+            {"tier": 1, "amount": 50, "explanation": "Augmente les points de vie de +50."},
+            {"tier": 2, "amount": 100, "explanation": "Augmente les points de vie de +100."},
+            {"tier": 3, "amount": 150, "explanation": "Augmente les points de vie de +150."}
         ],
         "rarity": "rare"
     },
@@ -100,10 +108,11 @@
         "description": "Un bouclier massif taillé dans la pierre.",
         "type": "équipement",
         "weight": 6,
+        "statsType": "Défense",
         "effects": [
-            {"tier": 1, "statsType": "Défense", "amount": 7, "explanation": "Augmente la défense de +7."},
-            {"tier": 2, "statsType": "Défense", "amount": 10, "explanation": "Augmente la défense de +10."},
-            {"tier": 3, "statsType": "Défense", "amount": 15, "explanation": "Augmente la défense de +15."}
+            {"tier": 1, "amount": 7, "explanation": "Augmente la défense de +7."},
+            {"tier": 2, "amount": 10, "explanation": "Augmente la défense de +10."},
+            {"tier": 3, "amount": 15, "explanation": "Augmente la défense de +15."}
         ],
         "rarity": "uncommon"
     },
@@ -113,10 +122,11 @@
         "description": "Un bracelet qui améliore légèrement la santé.",
         "type": "équipement",
         "weight": 1.5,
+        "statsType": "Santé",
         "effects": [
-            {"tier": 1, "statsType": "PDV", "amount": 30, "explanation": "Augmente les points de vie de +30."},
-            {"tier": 2, "statsType": "PDV", "amount": 60, "explanation": "Augmente les points de vie de +60."},
-            {"tier": 3, "statsType": "PDV", "amount": 90, "explanation": "Augmente les points de vie de +90."}
+            {"tier": 1, "amount": 30, "explanation": "Augmente les points de vie de +30."},
+            {"tier": 2, "amount": 60, "explanation": "Augmente les points de vie de +60."},
+            {"tier": 3, "amount": 90, "explanation": "Augmente les points de vie de +90."}
         ],
         "rarity": "common"
     },
@@ -126,10 +136,11 @@
         "description": "Un anneau qui renforce la puissance physique.",
         "type": "équipement",
         "weight": 1,
+        "statsType": "Attaque",
         "effects": [
-            {"tier": 1, "statsType": "Attaque", "amount": 5, "explanation": "Augmente l'attaque de +5."},
-            {"tier": 2, "statsType": "Attaque", "amount": 8, "explanation": "Augmente l'attaque de +8."},
-            {"tier": 3, "statsType": "Attaque", "amount": 12, "explanation": "Augmente l'attaque de +12."}
+            {"tier": 1, "amount": 5, "explanation": "Augmente l'attaque de +5."},
+            {"tier": 2, "amount": 8, "explanation": "Augmente l'attaque de +8."},
+            {"tier": 3, "amount": 12, "explanation": "Augmente l'attaque de +12."}
         ],
         "rarity": "rare"
     },
@@ -139,10 +150,11 @@
         "description": "Des gants qui amplifient la force du porteur.",
         "type": "équipement",
         "weight": 2.5,
+        "statsType": "Attaque",
         "effects": [
-            {"tier": 1, "statsType": "Attaque", "amount": 6, "explanation": "Augmente l'attaque de +6."},
-            {"tier": 2, "statsType": "Attaque", "amount": 10, "explanation": "Augmente l'attaque de +10."},
-            {"tier": 3, "statsType": "Attaque", "amount": 15, "explanation": "Augmente l'attaque de +15."}
+            {"tier": 1, "amount": 6, "explanation": "Augmente l'attaque de +6."},
+            {"tier": 2, "amount": 10, "explanation": "Augmente l'attaque de +10."},
+            {"tier": 3, "amount": 15, "explanation": "Augmente l'attaque de +15."}
         ],
         "rarity": "uncommon"
     },
@@ -152,10 +164,11 @@
         "description": "Une ceinture qui confère la puissance des anciens guerriers.",
         "type": "équipement",
         "weight": 3,
+        "statsType": "Attaque",
         "effects": [
-            {"tier": 1, "statsType": "Attaque", "amount": 7, "explanation": "Augmente l'attaque de +7."},
-            {"tier": 2, "statsType": "Attaque", "amount": 11, "explanation": "Augmente l'attaque de +11."},
-            {"tier": 3, "statsType": "Attaque", "amount": 16, "explanation": "Augmente l'attaque de +16."}
+            {"tier": 1, "amount": 7, "explanation": "Augmente l'attaque de +7."},
+            {"tier": 2, "amount": 11, "explanation": "Augmente l'attaque de +11."},
+            {"tier": 3, "amount": 16, "explanation": "Augmente l'attaque de +16."}
         ],
         "rarity": "uncommon"
     },
@@ -165,10 +178,11 @@
         "description": "Une amulette qui confère une puissance brute.",
         "type": "équipement",
         "weight": 1.5,
+        "statsType": "Attaque",
         "effects": [
-            {"tier": 1, "statsType": "Attaque", "amount": 4, "explanation": "Augmente l'attaque de +4."},
-            {"tier": 2, "statsType": "Attaque", "amount": 6, "explanation": "Augmente l'attaque de +6."},
-            {"tier": 3, "statsType": "Attaque", "amount": 10, "explanation": "Augmente l'attaque de +10."}
+            {"tier": 1, "amount": 4, "explanation": "Augmente l'attaque de +4."},
+            {"tier": 2, "amount": 6, "explanation": "Augmente l'attaque de +6."},
+            {"tier": 3, "amount": 10, "explanation": "Augmente l'attaque de +10."}
         ],
         "rarity": "common"
     },
@@ -178,10 +192,11 @@
         "description": "Des bottes solides, idéales pour des attaques puissantes.",
         "type": "équipement",
         "weight": 2,
+        "statsType": "Attaque",
         "effects": [
-            {"tier": 1, "statsType": "Attaque", "amount": 3, "explanation": "Augmente l'attaque de +3."},
-            {"tier": 2, "statsType": "Attaque", "amount": 5, "explanation": "Augmente l'attaque de +5."},
-            {"tier": 3, "statsType": "Attaque", "amount": 8, "explanation": "Augmente l'attaque de +8."}
+            {"tier": 1, "amount": 3, "explanation": "Augmente l'attaque de +3."},
+            {"tier": 2, "amount": 5, "explanation": "Augmente l'attaque de +5."},
+            {"tier": 3, "amount": 8, "explanation": "Augmente l'attaque de +8."}
         ],
         "rarity": "common"
     }

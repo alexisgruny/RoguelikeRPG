@@ -48,8 +48,6 @@ export interface ItemEffect {
     abilityName?: string;
     damage?: number;
     healValue?: number;
-    effectType?: "damage" | "heal";
-    statsType?: "Attaque" | "Défense" | "Santé";
     amount?: number;
     explanation: string;
 }
@@ -61,6 +59,8 @@ export interface Items {
     type: "compétence" | "équipement" | "consommable";
     skillPoint?: number;
     weight: number;
+    effectType?: "damage" | "heal";
+    statsType?: "Attaque" | "Défense" | "Santé";
     effects: ItemEffect[];
     rarity: "commun" | "rare" | "epic" | "légendaire" | "boss";
 }
@@ -69,6 +69,25 @@ export interface Skills {
     id: string;
     name: string;
     skillPoint?: number
+    effectType?: "damage" | "heal";
+    effects: ItemEffect[];
+}
+
+export interface Equipement {
+    id: string;
+    name : string;
+    description: string;
+    weight: number;
+    statsType?: "Attaque" | "Défense" | "Santé";
+    effects: ItemEffect[];
+    rarity: "commun" | "rare" | "epic" | "légendaire" | "boss";
+}
+
+export interface Consumable {
+    id: string;
+    name : string;
+    description: string;
+    weight: number;
     effectType?: "damage" | "heal";
     effects: ItemEffect[];
 }

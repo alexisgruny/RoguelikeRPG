@@ -57,6 +57,7 @@ export class itemService {
                     break;
                 case 'équipement':
                     // Gestion des équipements
+                    PlayerStatsService.addEquipementStats(selectedItem);
                     break;
             }
             HUD.updatePlayerStats(playerStats);

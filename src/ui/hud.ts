@@ -1,4 +1,4 @@
-import { Monster, Biome, Role, PlayerStats, Items } from '../types';
+import { Monster, Biome, Role, PlayerStats, Items, Consumable, Equipement } from '../types';
 import { RoleService } from '../components/role';
 import { PlayerStatsService } from '../systems/playerStatsManager'
 import { CombatManager } from 'systems/combatManager';
@@ -167,48 +167,121 @@ export class HUD {
         }
     }
 
-    public static skillMenu() {
+    public static menuHandler(type: 'skills' | 'equipements' | 'consumable') {
+        const buttonId = type === 'skills' ? 'skill-button'
+            : type === 'equipements' ? 'equipement-button'
+                : 'consumable-button';
 
-        document.getElementById('skill-button')?.addEventListener('click', () => {
+        const menuId = 'info-menu'; // Même div pour tous les types
+        const listId = 'info-list'; // Même liste pour tous les types
+        const backButtonId = 'back-to-main';
 
+        // Création de l'info-bulle (tooltip) sans les styles
+        const tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');  // On applique simplement la classe CSS
+        tooltip.style.display = 'none'; // Par défaut, caché
+        document.body.appendChild(tooltip);
+
+        document.getElementById(buttonId)?.addEventListener('click', () => {
             const mainMenu = document.getElementById('combat-actions');
-            const skillsMenu = document.getElementById('skill-menu'); // Assurez-vous d'utiliser le bon ID
-            const skillsList = document.getElementById('skills-list');
+            const sharedMenu = document.getElementById(menuId);
+            const sharedList = document.getElementById(listId);
 
-            if (mainMenu && skillsMenu && skillsList) {
-                // Cache le menu principal
+            if (mainMenu && sharedMenu && sharedList) {
                 mainMenu.style.display = 'none';
-                skillsMenu.style.display = 'block';
+                sharedMenu.style.display = 'block';
+                sharedList.innerHTML = '';
 
-                // Vide la liste des compétences à chaque fois avant d'ajouter les boutons
-                skillsList.innerHTML = '';
+                switch (type) {
+                    case ('skills'):
+                        PlayerStatsService.playerSkills.forEach((skill) => {
+                            const skillButton = document.createElement('button');
+                            skillButton.textContent = skill.name;
+                            skillButton.classList.add('skill-button');
 
-                // Boucle sur les compétences du joueur pour créer les boutons dynamiquement
-                PlayerStatsService.playerSkills.forEach((skill) => {
-                    const skillButton = document.createElement('button');
-                    skillButton.textContent = skill.name;
-                    skillButton.classList.add('skill-button'); // Ajoute une classe CSS si besoin
+                            // Affiche l'info-bulle lors du survol
+                            skillButton.addEventListener('mouseover', (e) => {
+                                let effectsText = skill.effects.map(effect =>
+                                    `Tier: ${effect.tier}, ${effect.explanation}`
+                                ).join('\n');
 
-                    // Ajoute un évènement pour chaque bouton
-                    skillButton.addEventListener('click', () => {
-                        const effect = skill.effects.find(e => e.tier === 1)
-                        alert(`Vous avez sélectionné la compétence: ${skill.name}\nDescription: ${effect?.explanation}`);
-                    });
+                                tooltip.textContent = effectsText;
+                                tooltip.style.left = `${e.pageX + 10}px`;
+                                tooltip.style.top = `${e.pageY + 10}px`;
+                                tooltip.style.display = 'block';
+                            });
 
-                    // Ajoute le bouton au conteneur de la liste
-                    skillsList.appendChild(skillButton);
-                });
+                            // Cache l'info-bulle lorsque la souris quitte
+                            skillButton.addEventListener('mouseout', () => {
+                                tooltip.style.display = 'none';
+                            });
+
+                            sharedList.appendChild(skillButton);
+                        });
+                        break;
+
+                    case ('equipements'):
+                        PlayerStatsService.playerEquipement.forEach((equipement) => {
+                            const equipementInfo = document.createElement('p');
+                            equipementInfo.textContent = equipement.name;
+                            equipementInfo.classList.add('equipement-text');
+
+                            // Affiche l'info-bulle lors du survol
+                            equipementInfo.addEventListener('mouseover', (e) => {
+                                let effectsText = equipement.effects.map(effect =>
+                                    `Tier: ${effect.tier}, ${effect.explanation}`
+                                ).join('\n');
+
+                                tooltip.textContent = effectsText;
+                                tooltip.style.left = `${e.pageX + 10}px`;
+                                tooltip.style.top = `${e.pageY + 10}px`;
+                                tooltip.style.display = 'block';
+                            });
+
+                            equipementInfo.addEventListener('mouseout', () => {
+                                tooltip.style.display = 'none';
+                            });
+
+                            sharedList.appendChild(equipementInfo);
+                        });
+                        break;
+
+                    case ('consumable'):
+                        PlayerStatsService.playerConsumable.forEach((consumable) => {
+                            const consumableInfo = document.createElement('button');
+                            consumableInfo.textContent = consumable.name;
+                            consumableInfo.classList.add('consumable-button');
+
+                            consumableInfo.addEventListener('mouseover', (e) => {
+                                let effectsText = consumable.effects.map(effect =>
+                                    `Tier: ${effect.tier}, ${effect.explanation}`
+                                ).join('\n');
+
+                                tooltip.textContent = effectsText;
+                                tooltip.style.left = `${e.pageX + 10}px`;
+                                tooltip.style.top = `${e.pageY + 10}px`;
+                                tooltip.style.display = 'block';
+                            });
+
+                            consumableInfo.addEventListener('mouseout', () => {
+                                tooltip.style.display = 'none';
+                            });
+
+                            sharedList.appendChild(consumableInfo);
+                        });
+                        break;
+                }
             }
         });
 
         // Retour au menu principal
-        document.getElementById('back-to-main')?.addEventListener('click', () => {
+        document.getElementById(backButtonId)?.addEventListener('click', () => {
             const mainMenu = document.getElementById('combat-actions');
-            const skillsMenu = document.getElementById('skill-menu');
+            const sharedMenu = document.getElementById(menuId);
 
-            if (mainMenu && skillsMenu) {
+            if (mainMenu && sharedMenu) {
                 mainMenu.style.display = 'block';
-                skillsMenu.style.display = 'none';
+                sharedMenu.style.display = 'none';
             }
         });
     }

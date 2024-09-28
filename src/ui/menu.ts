@@ -26,8 +26,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         combatSection.classList.add('hidden');
 
         // appel de la fonction d'affichage du menu de compétence
-        HUD.skillMenu();
-
+        HUD.menuHandler('skills');
+        HUD.menuHandler('equipements');
+        HUD.menuHandler('consumable')
+        
         // Afficher le menu des roles une fois que le joueur clique sur "Jouer"
         startButton.addEventListener('click', () => {
             startMenu.classList.add('hidden'); // Masquer le menu de démarrage
