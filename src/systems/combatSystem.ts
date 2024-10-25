@@ -1,9 +1,12 @@
-import { Monster, PlayerStats } from '../types';
+import { Monster, PlayerStats, Skills } from '../types';
 import { HUD } from '../ui/HUD';
 import { CombatManager } from './combatManager';
 import { PlayerStatsService } from './playerStatsManager';
 
 export class CombatSystem {
+
+    public static monster : Monster;
+
     public static playerAttack(monster: Monster): { damageToMonster: number, monsterDefeated: boolean } {
         let monsterDefeated = null
         const min = 1 - 0.2;
@@ -16,7 +19,51 @@ export class CombatSystem {
         HUD.updateMonsterStats(monster);
         monsterDefeated = monster.health <= 0;
 
+        
+
         return { damageToMonster, monsterDefeated };
+    }
+
+    public static applyPlayerSkill(skill: Skills): void {
+        const playerStats = PlayerStatsService.getPlayerStats();
+        const randomFactor = Math.random() * (1.2 - 0.8) + 0.8; // Variation aléatoire
+
+        switch (skill.effects) {
+            case 'damage':
+                let damage = skill.damage * playerStats.attack;
+                damage = Math.max(damage - monster.defense, 1);
+                const damageToMonster = Math.floor(damage * randomFactor);
+                this.monster.health -= damageToMonster;
+                HUD.logAction(`Vous utilisez ${skill.name} et infligez ${damageToMonster} de dégâts à ${monster.name}.`);
+                HUD.updateMonsterStats(monster);
+                break;
+
+            case 'heal':
+                const healValue = skill.healValue;
+                playerStats.health = Math.min(playerStats.health + healValue, playerStats.maxHealth);
+                HUD.logAction(`Vous utilisez ${skill.name} et vous soignez de ${healValue} points de vie.`);
+                HUD.updatePlayerStats(playerStats);
+                PlayerStatsService.updatePlayerHealth(healValue);
+                break;
+
+            case 'defense':
+                const defValue = skill.defenseValue;
+                playerStats.defense += defValue;
+                HUD.logAction(`Vous utilisez ${skill.name} et renforcez votre défense de ${defValue}.`);
+                HUD.updatePlayerStats(playerStats);
+                break;
+
+            case 'attack':
+                const atkValue = skill.attackValue;
+                playerStats.attack += atkValue;
+                HUD.logAction(`Vous utilisez ${skill.name} et augmentez votre attaque de ${atkValue}.`);
+                HUD.updatePlayerStats(playerStats);
+                break;
+
+            default:
+                console.log(`${skill.name} n'a pas d'effet spécifique.`);
+                break;
+        }
     }
 
     public static monsterAttack(monster: Monster): void {

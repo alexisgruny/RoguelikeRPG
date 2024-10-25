@@ -2,6 +2,7 @@ import { Monster, Biome, Role, PlayerStats, Items, Consumable, Equipement } from
 import { RoleService } from '../components/role';
 import { PlayerStatsService } from '../systems/playerStatsManager'
 import { CombatManager } from 'systems/combatManager';
+import { CombatSystem } from 'systems/combatSystem';
 
 export class HUD {
     // Fonction générique pour mettre à jour un élément HTML
@@ -198,6 +199,7 @@ export class HUD {
                             const skillButton = document.createElement('button');
                             skillButton.textContent = skill.name;
                             skillButton.classList.add('skill-button');
+                            skillButton.id = (skill.id);
 
                             // Affiche l'info-bulle lors du survol
                             skillButton.addEventListener('mouseover', (e) => {
@@ -214,6 +216,13 @@ export class HUD {
                             // Cache l'info-bulle lorsque la souris quitte
                             skillButton.addEventListener('mouseout', () => {
                                 tooltip.style.display = 'none';
+                            });
+
+                            // Ajoute un événement 'click' pour utiliser la compétence
+                            skillButton.addEventListener('click', () => {
+                                alert(`Vous avez utilisé la compétence : ${skill.name}`);
+                                // Appelle ici la fonction de gestion de la compétence du joueur
+                                CombatSystem.applyPlayerSkill(skill);
                             });
 
                             sharedList.appendChild(skillButton);

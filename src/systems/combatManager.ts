@@ -54,11 +54,23 @@ export class CombatManager {
     // Prépare le bouton d'attaque
     private static setupAttack(biome: Biome): void {
         const attackButton = document.getElementById('attack-button');
+        const skillButton = document.getElementById('info-list')
         if (attackButton) {
             attackButton.removeEventListener('click', this.handleAttackBound); // Retire l'ancien événement
             this.handleAttackBound = this.handlePlayerAttack.bind(this, biome);
             attackButton.addEventListener('click', this.handleAttackBound); // Associe l'événement
         }
+        if (skillButton) {
+            const skill = PlayerStatsService.playerSkills;
+            skillButton.addEventListener('click', (event) =>{
+            const skillActif = event?.target as HTMLElement;
+
+            if(skillActif && skillActif.tagName === 'BUTTON'){
+                const skillId = skillActif.getAttribute('data-id');
+                console.log('bouton cliqué ID : ', skillId);
+            }
+        });
+    }
     }
 
     // Gère l'attaque du joueur et met à jour le combat
