@@ -1,8 +1,8 @@
-import { Monster, Biome, Role, PlayerStats, Items, Consumable, Equipement } from '../types';
+import { Monster, Biome, Role, PlayerStats, Skill, Consumable, Equipement } from '../types';
 import { RoleService } from '../components/role';
 import { PlayerStatsService } from '../systems/playerStatsManager'
-import { CombatManager } from 'systems/combatManager';
-import { CombatSystem } from 'systems/combatSystem';
+import { CombatManager } from '../systems/combatManager';
+import { CombatSystem } from '../systems/combatSystem';
 
 export class HUD {
     // Fonction générique pour mettre à jour un élément HTML
@@ -115,7 +115,7 @@ export class HUD {
     }
 
     // Fonction pour créer une modale pour la sélection de d'objet
-    public static createItemSelectionModal(items: Items[], onSelect: (selectedItem: Items) => void) {
+    public static createEquipementSelectionModal(items: Items[], onSelect: (selectedItem: Items) => void) {
         let modalContainer = document.getElementById('item-modal-container') as HTMLDivElement;
         if (!modalContainer) {
             modalContainer = document.createElement('div');
@@ -222,7 +222,10 @@ export class HUD {
                             skillButton.addEventListener('click', () => {
                                 alert(`Vous avez utilisé la compétence : ${skill.name}`);
                                 // Appelle ici la fonction de gestion de la compétence du joueur
-                                CombatSystem.applyPlayerSkill(skill);
+                                const monster = CombatManager.currentMonster;
+                                if (monster) {
+                                    CombatSystem.applyPlayerSkill(skill, monster);
+                                }
                             });
 
                             sharedList.appendChild(skillButton);

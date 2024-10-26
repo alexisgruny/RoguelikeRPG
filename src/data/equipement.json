@@ -1,0 +1,111 @@
+[
+    {
+        "id": "cape_vent",
+        "name": "Cape du Vent",
+        "description": "Une cape légère qui semble se mouvoir avec le vent.",
+        "type": "équipement",
+        "weight": 3,
+        "statsType": "Défense",
+        "amount": 3,
+        "explanation": "Augmente la défense de +3.",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "armure_cuir",
+        "name": "Armure en Cuir",
+        "description": "Une armure légère faite de cuir résistant.",
+        "type": "équipement",
+        "weight": 5,
+        "statsType": "Défense",
+        "amount": 5,
+        "explanation": "Augmente la défense de +5.",
+        "rarity": "common"
+    },
+    {
+        "id": "amulette_vie",
+        "name": "Amulette de Vie",
+        "description": "Une amulette ancienne qui améliore la vitalité.",
+        "type": "équipement",
+        "weight": 1,
+        "amount": 50,
+        "explanation": "Augmente les points de vie de +50.",
+        "rarity": "rare"
+    },
+    {
+        "id": "bouclier_roche",
+        "name": "Bouclier de Roche",
+        "description": "Un bouclier massif taillé dans la pierre.",
+        "type": "équipement",
+        "weight": 6,
+        "statsType": "Défense",
+        "amount": 7,
+        "explanation": "Augmente la défense de +7.",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "bracelet_vitalité",
+        "name": "Bracelet de Vitalité",
+        "description": "Un bracelet qui améliore légèrement la santé.",
+        "type": "équipement",
+        "weight": 1.5,
+        "statsType": "Santé",
+        "amount": 30,
+        "explanation": "Augmente les points de vie de +30.",
+        "rarity": "common"
+    },
+    {
+        "id": "anneau_force",
+        "name": "Anneau de Force",
+        "description": "Un anneau qui renforce la puissance physique.",
+        "type": "équipement",
+        "weight": 1,
+        "statsType": "Attaque",
+        "amount": 5,
+        "explanation": "Augmente l'attaque de +5.",
+        "rarity": "rare"
+    },
+    {
+        "id": "gants_puissance",
+        "name": "Gants de Puissance",
+        "description": "Des gants qui amplifient la force du porteur.",
+        "type": "équipement",
+        "weight": 2.5,
+        "statsType": "Attaque",
+        "amount": 6,
+        "explanation": "Augmente l'attaque de +6.",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "ceinture_guerrier",
+        "name": "Ceinture du Guerrier",
+        "description": "Une ceinture qui confère la puissance des anciens guerriers.",
+        "type": "équipement",
+        "weight": 3,
+        "statsType": "Attaque",
+        "amount": 7,
+        "explanation": "Augmente l'attaque de +7.",
+        "rarity": "uncommon"
+    },
+    {
+        "id": "amulette_puissance",
+        "name": "Amulette de Puissance",
+        "description": "Une amulette qui confère une puissance brute.",
+        "type": "équipement",
+        "weight": 1.5,
+        "statsType": "Attaque",
+        "amount": 4,
+        "explanation": "Augmente l'attaque de +4.",
+        "rarity": "common"
+    },
+    {
+        "id": "bottes_frappe",
+        "name": "Bottes de Frappe",
+        "description": "Des bottes solides, idéales pour des attaques puissantes.",
+        "type": "équipement",
+        "weight": 2,
+        "statsType": "Attaque",
+        "amount": 3,
+        "explanation": "Augmente l'attaque de +3.",
+        "rarity": "common"
+    }
+]

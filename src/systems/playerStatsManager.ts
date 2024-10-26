@@ -1,10 +1,10 @@
 import { HUD } from '../ui/HUD';
 import { RoleService } from '../components/role';
-import { PlayerStats, Skills, Items, ItemEffect, Equipement, Consumable } from '../types';
+import { PlayerStats, Skill, Equipement, Consumable } from '../types';
 
 export class PlayerStatsService {
 
-    public static playerSkills: Skills[] = [];
+    public static playerSkills: Skill[] = [];
     public static playerEquipement: Equipement[] = [];
     public static playerConsumable: Consumable[] = []
 
@@ -96,93 +96,83 @@ export class PlayerStatsService {
         });
     }
 
-    public static addSkill(item: Items): void {
+    public static addSkill(skill: Skill): void {
 
-        // Vérifiez si l'item est de type compétence
-        if (item.type === 'compétence') {
-            const newSkill: Skills = {
-                id: item.id,
-                name: item.name,
-                skillPoint: item.skillPoint || 0,
-                effectType: item.effectType,
-                effects: item.effects.map(effect => ({
-                    tier: effect.tier,
-                    abilityName: effect.abilityName,
-                    damage: effect.damage,
-                    explanation: effect.explanation
-                }))
-            };
+        // Vérifiez si l'equipement est de type compétence
+        if (skill) {
+            const newSkill: Skill = {
+                id: skill.id,
+                name: skill.name,
+                skillPoint: skill.skillPoint || 0,
+                effectType: skill.effectType,
+                abilityName: skill.abilityName,
+                amount: skill.amount,
+                explanation: skill.explanation
+            }
 
             // Ajoutez la compétence au tableau des compétences du joueur
             this.playerSkills.push(newSkill);
         }
     }
 
-    public static addEquipementStats(item: Items): void {
+    public static addEquipementStats(equipement: Equipement): void {
         const playerStats: PlayerStats = this.playerStats
-        if (item.type === 'équipement') {
-            const NewEquipement: Equipement = {
-                id: item.id,
-                name: item.name,
-                description: item.description,
-                weight: item.weight,
-                rarity: item.rarity,
-                statsType: item.statsType,
-                effects: item.effects.map(effect => ({
-                    tier: effect.tier,
-                    amount: effect.amount,
-                    explanation: effect.explanation
-                }))
+        if (equipement) {
+            const newEquipement: Equipement = {
+                id: equipement.id,
+                name: equipement.name,
+                description: equipement.description,
+                weight: equipement.weight,
+                rarity: equipement.rarity,
+                statsType: equipement.statsType,
+                amount: equipement.amount,
+                explanation: equipement.explanation
             }
-            const tier = NewEquipement.effects.find(e => e.tier === 1)
-            switch (NewEquipement.statsType) {
+            switch (newEquipement.statsType) {
                 case ('Attaque'):
-                    if (tier?.amount) {
+                    if (newEquipement.amount) {
                         playerStats.attack = Number(playerStats.attack);
-                        playerStats.attack += tier?.amount;
+                        playerStats.attack += newEquipement.amount;
                     }
                     break;
                 case ('Défense'):
-                    if (tier?.amount) {
+                    if (newEquipement.amount) {
                         playerStats.defense = Number(playerStats.defense);
-                        playerStats.defense += tier?.amount
+                        playerStats.defense += newEquipement.amount
                     }
                     break;
                 case ('Santé'):
-                    if (tier?.amount) {
+                    if (newEquipement.amount) {
                         playerStats.maxHealth = Number(playerStats.maxHealth);
                         playerStats.health = Number(playerStats.health);
-                        playerStats.maxHealth += tier?.amount
-                        playerStats.health += tier?.amount
+                        playerStats.maxHealth += newEquipement.amount
+                        playerStats.health += newEquipement.amount
                     }
                     break;
                 default:
                     console.log("erreur dans l'ajout du nouvel équipement")
             };
-            this.playerEquipement.push(NewEquipement);
+            this.playerEquipement.push(newEquipement);
             HUD.updatePlayerStats(playerStats);
         }
 
     }
-    
-    public static addConsumable(item : Items): void{
+
+    public static addConsumable(consumable: Consumable): void {
         const NewConsumable: Consumable = {
-            id: item.id,
-            name: item.name,
-            description: item.description,
-            weight: item.weight,
-            effectType: item.effectType,
-            effects: item.effects.map(effect => ({
-                tier: effect.tier,
-                amount: effect.amount,
-                explanation: effect.explanation
-            }))
+            id: consumable.id,
+            name: consumable.name,
+            description: consumable.description,
+            weight: consumable.weight,
+            effectType: consumable.effectType,
+            amount: consumable.amount,
+            explanation: consumable.explanation
         }
         this.playerConsumable.push(NewConsumable)
     }
 
-    public static useConsumable(usedItem : Items){
-        
+    public static useConsumable(usedConsumable: Consumable) {
+
 
     }
 }

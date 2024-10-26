@@ -1,18 +1,18 @@
 import { HUD } from '../ui/HUD';
-import { Items, PlayerStats } from '../types';
+import { Equipement, PlayerStats } from '../types';
 import { PlayerStatsService } from '../systems/playerStatsManager';
 
-export class itemService {
-    // Charge les informations du fichier items.json
+export class EquipementService {
+    // Charge les informations du fichier Equipement.json
 
 
 
-    public static async loadItems(): Promise<Items[]> {
-        const response = await fetch('/data/items.json');
+    public static async loadEquipement(): Promise<Equipement[]> {
+        const response = await fetch('/data/equipement.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return await response.json() as Items[];
+        return await response.json() as Equipement[];
     }
 
     public static getDropChance(rarity: string, battleCount: number): number {
@@ -26,40 +26,28 @@ export class itemService {
         return rarityMultiplier[rarity] + (battleCount * 0.05);
     }
 
-    public static async chooseItems(battleCount: number) {
-        const droppedItems: Items[] = await this.loadItems();
-        const itemsToChooseFrom: Items[] = droppedItems.filter(item => {
+    public static async chooseEquipement(battleCount: number) {
+        const droppedEquipement: Equipement[] = await this.loadEquipement();
+        const EquipementToChooseFrom: Equipement[] = droppedEquipement.filter(item => {
             const dropChance = this.getDropChance(item.rarity, battleCount);
             return Math.random() < dropChance;
         });
 
         // Limiter à deux objets récupérables
-        const selectedItems: Items[] = [];
+        const selectedEquipement: Equipement[] = [];
         for (let i = 0; i < 2; i++) {
-            if (itemsToChooseFrom.length === 0) break;
-            const randomIndex = Math.floor(Math.random() * itemsToChooseFrom.length);
-            selectedItems.push(itemsToChooseFrom[randomIndex]);
-            itemsToChooseFrom.splice(randomIndex, 1);
+            if (EquipementToChooseFrom.length === 0) break;
+            const randomIndex = Math.floor(Math.random() * EquipementToChooseFrom.length);
+            selectedEquipement.push(EquipementToChooseFrom[randomIndex]);
+            EquipementToChooseFrom.splice(randomIndex, 1);
         }
 
         // Appel de la modal
-        HUD.createItemSelectionModal(selectedItems, (selectedItem: Items) => {
+        HUD.createEquipementSelectionModal(selectedEquipement, (selectedEquipement: Equipement) => {
             const playerStats = PlayerStatsService.playerStats;
-            const playerItems: Items[] = []
-            playerItems.push(selectedItem)
-            switch (selectedItem.type) {
-                case 'compétence':
-                    // Gestion des compétences
-                    PlayerStatsService.addSkill(selectedItem);
-                    break;
-                case 'consommable':
-                    // Gestion des consommables
-                    break;
-                case 'équipement':
-                    // Gestion des équipements
-                    PlayerStatsService.addEquipementStats(selectedItem);
-                    break;
-            }
+            const playerEquipement: Equipement[] = []
+            playerEquipement.push(selectedEquipement)
+            PlayerStatsService.addEquipementStats(selectedEquipement);
             HUD.updatePlayerStats(playerStats);
         });
     }

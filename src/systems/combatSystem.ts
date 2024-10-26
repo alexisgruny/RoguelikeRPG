@@ -1,11 +1,9 @@
-import { Monster, PlayerStats, Skills } from '../types';
+import { Monster, PlayerStats, Skill } from '../types';
 import { HUD } from '../ui/HUD';
 import { CombatManager } from './combatManager';
 import { PlayerStatsService } from './playerStatsManager';
 
 export class CombatSystem {
-
-    public static monster : Monster;
 
     public static playerAttack(monster: Monster): { damageToMonster: number, monsterDefeated: boolean } {
         let monsterDefeated = null
@@ -24,44 +22,32 @@ export class CombatSystem {
         return { damageToMonster, monsterDefeated };
     }
 
-    public static applyPlayerSkill(skill: Skills): void {
+    public static applyPlayerSkill(skill: Skill, monster: Monster): void {
         const playerStats = PlayerStatsService.getPlayerStats();
         const randomFactor = Math.random() * (1.2 - 0.8) + 0.8; // Variation aléatoire
 
-        switch (skill.effects) {
+        switch (skill.effectType) {
             case 'damage':
-                let damage = skill.damage * playerStats.attack;
-                damage = Math.max(damage - monster.defense, 1);
-                const damageToMonster = Math.floor(damage * randomFactor);
-                this.monster.health -= damageToMonster;
-                HUD.logAction(`Vous utilisez ${skill.name} et infligez ${damageToMonster} de dégâts à ${monster.name}.`);
-                HUD.updateMonsterStats(monster);
-                break;
+                // Parcourt tous les effets de la compétence pour appliquer les effets "damage"
+                        let damage = skill.amount * playerStats.attack;
+                        damage = Math.max(damage - monster.defense, 1);
+                        const damageToMonster = Math.floor(damage * randomFactor);
+                        monster.health -= damageToMonster;
+                        HUD.logAction(`Vous utilisez ${skill.name} et infligez ${damageToMonster} de dégâts à ${monster.name}.`);
+                        HUD.updateMonsterStats(monster);
 
+                break;
             case 'heal':
-                const healValue = skill.healValue;
-                playerStats.health = Math.min(playerStats.health + healValue, playerStats.maxHealth);
-                HUD.logAction(`Vous utilisez ${skill.name} et vous soignez de ${healValue} points de vie.`);
-                HUD.updatePlayerStats(playerStats);
-                PlayerStatsService.updatePlayerHealth(healValue);
+                // Parcourt tous les effets de la compétence pour appliquer les effets "heal"
+                        const healAmount = skill.amount; // ou une autre propriété si nécessaire
+                        playerStats.health = Math.min(playerStats.health + healAmount, playerStats.maxHealth);
+                        HUD.logAction(`Vous utilisez ${skill.name} et vous soignez de ${healAmount} points de vie.`);
+                        HUD.updatePlayerStats(playerStats);
                 break;
-
-            case 'defense':
-                const defValue = skill.defenseValue;
-                playerStats.defense += defValue;
-                HUD.logAction(`Vous utilisez ${skill.name} et renforcez votre défense de ${defValue}.`);
-                HUD.updatePlayerStats(playerStats);
-                break;
-
-            case 'attack':
-                const atkValue = skill.attackValue;
-                playerStats.attack += atkValue;
-                HUD.logAction(`Vous utilisez ${skill.name} et augmentez votre attaque de ${atkValue}.`);
-                HUD.updatePlayerStats(playerStats);
-                break;
-
+        
+            // Ajoute d'autres cas selon les types d'effets que tu veux traiter
             default:
-                console.log(`${skill.name} n'a pas d'effet spécifique.`);
+                HUD.logAction(`Effet de la compétence ${skill.name} non reconnu.`);
                 break;
         }
     }

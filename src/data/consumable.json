@@ -1,0 +1,38 @@
+[
+    {
+        "id": "potion_de_vie",
+        "name": "Potion de Vie",
+        "description": "Une potion qui restaure les points de vie.",
+        "weight": 1,
+        "effectType": "heal",
+        "amount": 50,
+        "explanation": "Restaure 50 points de vie lorsqu'elle est consommée."
+    },
+    {
+        "id": "potion_de_force",
+        "name": "Potion de Force",
+        "description": "Une potion qui augmente temporairement la force.",
+        "weight": 1.5,
+        "effectType": "damage",
+        "amount": 10,
+        "explanation": "Augmente les dégâts de 10 points pendant une courte durée."
+    },
+    {
+        "id": "baume_reconstituant",
+        "name": "Baume Reconstituant",
+        "description": "Un baume qui soigne les blessures superficielles.",
+        "weight": 0.5,
+        "effectType": "heal",
+        "amount": 20,
+        "explanation": "Restaure 20 points de vie instantanément."
+    },
+    {
+        "id": "poudre_explosive",
+        "name": "Poudre Explosive",
+        "description": "Une poudre volatile infligeant des dégâts aux ennemis.",
+        "weight": 0.3,
+        "effectType": "damage",
+        "amount": 30,
+        "explanation": "Inflige 30 points de dégâts à l'ennemi ciblé."
+    }
+]
