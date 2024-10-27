@@ -104,10 +104,13 @@ export class PlayerStatsService {
                 id: skill.id,
                 name: skill.name,
                 skillPoint: skill.skillPoint || 0,
+                description: skill.description,
+                weight: skill.weight,
                 effectType: skill.effectType,
                 abilityName: skill.abilityName,
                 amount: skill.amount,
-                explanation: skill.explanation
+                explanation: skill.explanation,
+                rarity: skill.rarity
             }
 
             // Ajoutez la compétence au tableau des compétences du joueur
@@ -124,11 +127,11 @@ export class PlayerStatsService {
                 description: equipement.description,
                 weight: equipement.weight,
                 rarity: equipement.rarity,
-                statsType: equipement.statsType,
+                effectType: equipement.effectType,
                 amount: equipement.amount,
                 explanation: equipement.explanation
             }
-            switch (newEquipement.statsType) {
+            switch (newEquipement.effectType) {
                 case ('Attaque'):
                     if (newEquipement.amount) {
                         playerStats.attack = Number(playerStats.attack);
@@ -166,7 +169,8 @@ export class PlayerStatsService {
             weight: consumable.weight,
             effectType: consumable.effectType,
             amount: consumable.amount,
-            explanation: consumable.explanation
+            explanation: consumable.explanation,
+            rarity: consumable.rarity
         }
         this.playerConsumable.push(NewConsumable)
     }

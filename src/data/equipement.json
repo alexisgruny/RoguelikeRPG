@@ -5,7 +5,7 @@
         "description": "Une cape légère qui semble se mouvoir avec le vent.",
         "type": "équipement",
         "weight": 3,
-        "statsType": "Défense",
+        "effectType": "Défense",
         "amount": 3,
         "explanation": "Augmente la défense de +3.",
         "rarity": "uncommon"
@@ -16,7 +16,7 @@
         "description": "Une armure légère faite de cuir résistant.",
         "type": "équipement",
         "weight": 5,
-        "statsType": "Défense",
+        "effectType": "Défense",
         "amount": 5,
         "explanation": "Augmente la défense de +5.",
         "rarity": "common"
@@ -27,6 +27,7 @@
         "description": "Une amulette ancienne qui améliore la vitalité.",
         "type": "équipement",
         "weight": 1,
+        "effectType": "Santé",
         "amount": 50,
         "explanation": "Augmente les points de vie de +50.",
         "rarity": "rare"
@@ -37,7 +38,7 @@
         "description": "Un bouclier massif taillé dans la pierre.",
         "type": "équipement",
         "weight": 6,
-        "statsType": "Défense",
+        "effectType": "Défense",
         "amount": 7,
         "explanation": "Augmente la défense de +7.",
         "rarity": "uncommon"
@@ -48,7 +49,7 @@
         "description": "Un bracelet qui améliore légèrement la santé.",
         "type": "équipement",
         "weight": 1.5,
-        "statsType": "Santé",
+        "effectType": "Santé",
         "amount": 30,
         "explanation": "Augmente les points de vie de +30.",
         "rarity": "common"
@@ -59,7 +60,7 @@
         "description": "Un anneau qui renforce la puissance physique.",
         "type": "équipement",
         "weight": 1,
-        "statsType": "Attaque",
+        "effectType": "Attaque",
         "amount": 5,
         "explanation": "Augmente l'attaque de +5.",
         "rarity": "rare"
@@ -70,7 +71,7 @@
         "description": "Des gants qui amplifient la force du porteur.",
         "type": "équipement",
         "weight": 2.5,
-        "statsType": "Attaque",
+        "effectType": "Attaque",
         "amount": 6,
         "explanation": "Augmente l'attaque de +6.",
         "rarity": "uncommon"
@@ -81,7 +82,7 @@
         "description": "Une ceinture qui confère la puissance des anciens guerriers.",
         "type": "équipement",
         "weight": 3,
-        "statsType": "Attaque",
+        "effectType": "Attaque",
         "amount": 7,
         "explanation": "Augmente l'attaque de +7.",
         "rarity": "uncommon"
@@ -92,7 +93,7 @@
         "description": "Une amulette qui confère une puissance brute.",
         "type": "équipement",
         "weight": 1.5,
-        "statsType": "Attaque",
+        "effectType": "Attaque",
         "amount": 4,
         "explanation": "Augmente l'attaque de +4.",
         "rarity": "common"
@@ -103,7 +104,7 @@
         "description": "Des bottes solides, idéales pour des attaques puissantes.",
         "type": "équipement",
         "weight": 2,
-        "statsType": "Attaque",
+        "effectType": "Attaque",
         "amount": 3,
         "explanation": "Augmente l'attaque de +3.",
         "rarity": "common"

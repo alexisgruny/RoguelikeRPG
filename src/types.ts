@@ -46,11 +46,14 @@ export interface PlayerStats {
 export interface Skill {
     id: string;
     name: string;
-    skillPoint?: number
-    effectType?: "damage" | "heal";
-    abilityName: string,
-    amount: number,
-    explanation: string,
+    skillPoint: number;
+    description: string;
+    weight: number;
+    effectType: "damage" | "heal";
+    abilityName: string;
+    amount: number;
+    explanation: string;
+    rarity: "commun" | "rare" | "epic" | "légendaire" | "boss";
 }
 
 export interface Equipement {
@@ -58,9 +61,9 @@ export interface Equipement {
     name : string;
     description: string;
     weight: number;
-    statsType?: "Attaque" | "Défense" | "Santé";
-    amount?: number;
-    explanation?: string;
+    effectType: "Attaque" | "Défense" | "Santé";
+    amount: number;
+    explanation: string;
     rarity: "commun" | "rare" | "epic" | "légendaire" | "boss";
 }
 
@@ -72,4 +75,5 @@ export interface Consumable {
     effectType: "damage" | "heal";
     amount: number;
     explanation: string;
+    rarity: "commun" | "rare" | "epic" | "légendaire" | "boss";
 }

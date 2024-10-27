@@ -6,7 +6,8 @@
         "weight": 1,
         "effectType": "heal",
         "amount": 50,
-        "explanation": "Restaure 50 points de vie lorsqu'elle est consommée."
+        "explanation": "Restaure 50 points de vie lorsqu'elle est consommée.",
+        "rarity": "rare"
     },
     {
         "id": "potion_de_force",
@@ -15,7 +16,8 @@
         "weight": 1.5,
         "effectType": "damage",
         "amount": 10,
-        "explanation": "Augmente les dégâts de 10 points pendant une courte durée."
+        "explanation": "Augmente les dégâts de 10 points pendant une courte durée.",
+        "rarity": "rare"
     },
     {
         "id": "baume_reconstituant",
@@ -24,7 +26,8 @@
         "weight": 0.5,
         "effectType": "heal",
         "amount": 20,
-        "explanation": "Restaure 20 points de vie instantanément."
+        "explanation": "Restaure 20 points de vie instantanément.",
+        "rarity": "rare"
     },
     {
         "id": "poudre_explosive",
@@ -33,6 +36,7 @@
         "weight": 0.3,
         "effectType": "damage",
         "amount": 30,
-        "explanation": "Inflige 30 points de dégâts à l'ennemi ciblé."
+        "explanation": "Inflige 30 points de dégâts à l'ennemi ciblé.",
+        "rarity": "rare"
     }
 ]

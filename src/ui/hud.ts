@@ -115,8 +115,8 @@ export class HUD {
     }
 
     // Fonction pour créer une modale pour la sélection de d'objet
-    public static createEquipementSelectionModal(items: Items[], onSelect: (selectedItem: Items) => void) {
-        let modalContainer = document.getElementById('item-modal-container') as HTMLDivElement;
+    public static createEquipementSelectionModal(item: (Equipement| Skill| Consumable)[], onSelect: (selectedItem: any) => void) {
+        let modalContainer = document.getElementById('Equipement-modal-container') as HTMLDivElement;
         if (!modalContainer) {
             modalContainer = document.createElement('div');
             modalContainer.id = 'item-modal-container';
@@ -125,14 +125,14 @@ export class HUD {
         }
 
         modalContainer.innerHTML = '';
-        items.forEach((item, index) => {
+        item.forEach((item, index) => {
             const modal = document.createElement('div');
             modal.classList.add('modal');
             modal.innerHTML = `
                 <div class="modal-content">
                     <h2>${item.name}</h2>
                     <p>${item.description}</p>
-                    <p>Type: ${item.type}</p>
+                    <p>${item.effectType} : ${item.amount}</p>
                     <p>Poid: ${item.weight}</p>
                     <button id="select-button-${index}">Sélectionner ${item.name}</button>
                 </div>`;
@@ -203,9 +203,7 @@ export class HUD {
 
                             // Affiche l'info-bulle lors du survol
                             skillButton.addEventListener('mouseover', (e) => {
-                                let effectsText = skill.effects.map(effect =>
-                                    `Tier: ${effect.tier}, ${effect.explanation}`
-                                ).join('\n');
+                                let effectsText =  `${skill.explanation}`;
 
                                 tooltip.textContent = effectsText;
                                 tooltip.style.left = `${e.pageX + 10}px`;
@@ -240,9 +238,7 @@ export class HUD {
 
                             // Affiche l'info-bulle lors du survol
                             equipementInfo.addEventListener('mouseover', (e) => {
-                                let effectsText = equipement.effects.map(effect =>
-                                    `Tier: ${effect.tier}, ${effect.explanation}`
-                                ).join('\n');
+                                let effectsText = `${equipement.explanation}`;
 
                                 tooltip.textContent = effectsText;
                                 tooltip.style.left = `${e.pageX + 10}px`;
@@ -265,9 +261,7 @@ export class HUD {
                             consumableInfo.classList.add('consumable-button');
 
                             consumableInfo.addEventListener('mouseover', (e) => {
-                                let effectsText = consumable.effects.map(effect =>
-                                    `Tier: ${effect.tier}, ${effect.explanation}`
-                                ).join('\n');
+                                let effectsText = `${consumable.explanation}`;
 
                                 tooltip.textContent = effectsText;
                                 tooltip.style.left = `${e.pageX + 10}px`;

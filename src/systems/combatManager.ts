@@ -5,7 +5,8 @@ import { MonsterService } from '../components/monsters';
 import { BiomeService } from '../components/biome';
 import { RoleService } from '../components/role';
 import { PlayerStatsService } from '../systems/playerStatsManager';
-import { EquipementService } from '../components/item';
+import { EquipementService } from '../components/equipement';
+import { ItemService } from '../systems/itemManager';
 
 
 export class CombatManager {
@@ -103,7 +104,7 @@ export class CombatManager {
         let eventType: 'end' | 'heal' | 'boss' | null = null;
         let isBossBattle = false;
         PlayerStatsService.addExperience();
-        EquipementService.chooseEquipement(this.victoryCount);
+        ItemService.chooseItem(this.victoryCount);
 
         // Utilisation d'un switch pour déterminer l'événement en fonction des victoires ou événements
         switch (true) {
