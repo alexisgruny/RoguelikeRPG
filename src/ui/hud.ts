@@ -71,6 +71,7 @@ export class HUD {
         const eventMessages: { [key: string]: { title: string; message: string } } = {
             victory: { title: 'Victoire!', message: 'Vous avez tué le monstre!' },
             defeat: { title: 'Défaite', message: 'Vous êtes mort.' },
+            item: { title: 'Objet', message: 'vous avez trouvé un objet magique!'},
             heal: { title: 'Repos', message: 'Vous faites un feu de camp.' },
             merchant: { title: 'Marchand', message: 'Vous rencontrez un marchand.' },
             boss: { title: 'Boss', message: 'Le boss vous attaque.' },
@@ -115,8 +116,8 @@ export class HUD {
     }
 
     // Fonction pour créer une modale pour la sélection de d'objet
-    public static createEquipementSelectionModal(item: (Equipement| Skill| Consumable)[], onSelect: (selectedItem: any) => void) {
-        let modalContainer = document.getElementById('Equipement-modal-container') as HTMLDivElement;
+    public static createEquipementSelectionModal(item: (Equipement | Skill | Consumable)[], onSelect: (selectedItem: any) => void) {
+        let modalContainer = document.getElementById('item-modal-container') as HTMLDivElement;
         if (!modalContainer) {
             modalContainer = document.createElement('div');
             modalContainer.id = 'item-modal-container';
@@ -131,6 +132,7 @@ export class HUD {
             modal.innerHTML = `
                 <div class="modal-content">
                     <h2>${item.name}</h2>
+                    <h3>${item.type}</h3>
                     <p>${item.description}</p>
                     <p>${item.effectType} : ${item.amount}</p>
                     <p>Poid: ${item.weight}</p>
@@ -203,7 +205,7 @@ export class HUD {
 
                             // Affiche l'info-bulle lors du survol
                             skillButton.addEventListener('mouseover', (e) => {
-                                let effectsText =  `${skill.explanation}`;
+                                let effectsText = `${skill.explanation}`;
 
                                 tooltip.textContent = effectsText;
                                 tooltip.style.left = `${e.pageX + 10}px`;
@@ -218,11 +220,12 @@ export class HUD {
 
                             // Ajoute un événement 'click' pour utiliser la compétence
                             skillButton.addEventListener('click', () => {
-                                alert(`Vous avez utilisé la compétence : ${skill.name}`);
                                 // Appelle ici la fonction de gestion de la compétence du joueur
                                 const monster = CombatManager.currentMonster;
                                 if (monster) {
                                     CombatSystem.applyPlayerSkill(skill, monster);
+                                    mainMenu.style.display = 'flex';
+                                    sharedMenu.style.display = 'none';
                                 }
                             });
 
@@ -286,7 +289,7 @@ export class HUD {
             const sharedMenu = document.getElementById(menuId);
 
             if (mainMenu && sharedMenu) {
-                mainMenu.style.display = 'block';
+                mainMenu.style.display = 'flex';
                 sharedMenu.style.display = 'none';
             }
         });

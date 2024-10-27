@@ -12,8 +12,7 @@ import { ItemService } from '../systems/itemManager';
 export class CombatManager {
     public static currentMonster: Monster | null = null;
     private static victoryCount: number = 0;
-    private static maxVictories: number = 10;
-    private static EvenementCount: number = 0;
+    private static biomeDoneCount: number = 0;
     private static handleAttackBound: (event: Event) => void; // Garde une référence à l'écouteur d'événements
 
     // Fonction principale pour démarrer le combat
@@ -63,15 +62,15 @@ export class CombatManager {
         }
         if (skillButton) {
             const skill = PlayerStatsService.playerSkills;
-            skillButton.addEventListener('click', (event) =>{
-            const skillActif = event?.target as HTMLElement;
+            skillButton.addEventListener('click', (event) => {
+                const skillActif = event?.target as HTMLElement;
 
-            if(skillActif && skillActif.tagName === 'BUTTON'){
-                const skillId = skillActif.getAttribute('data-id');
-                console.log('bouton cliqué ID : ', skillId);
-            }
-        });
-    }
+                if (skillActif && skillActif.tagName === 'BUTTON') {
+                    const skillId = skillActif.getAttribute('data-id');
+                    console.log('bouton cliqué ID : ', skillId);
+                }
+            });
+        }
     }
 
     // Gère l'attaque du joueur et met à jour le combat
@@ -86,7 +85,7 @@ export class CombatManager {
             this.handleVictory(biome);
             HUD.logAction(`${this.currentMonster.name} est MORT !`);
             this.currentMonster = null;
-            
+
         } else {
             this.handleMonsterAttack(biome);
         }
@@ -101,26 +100,44 @@ export class CombatManager {
     // Gère la victoire du joueur et enchaîne sur le prochain combat
     private static async handleVictory(biome: Biome): Promise<void> {
         this.victoryCount++;
-        let eventType: 'end' | 'heal' | 'boss' | null = null;
+        let eventType: 'end' | 'heal' | 'boss' | 'change biome' | 'item' | 'victory' |null = null;
         let isBossBattle = false;
         PlayerStatsService.addExperience();
-        ItemService.chooseItem(this.victoryCount);
 
         // Utilisation d'un switch pour déterminer l'événement en fonction des victoires ou événements
-        switch (true) {
-            case (this.victoryCount >= this.maxVictories):
-                eventType = 'end'; // Victoire finale
+        switch (this.victoryCount) {
+
+            case 1:
+                eventType = 'item'
+                ItemService.chooseItem(this.victoryCount);
                 break;
-            case (this.victoryCount === 9):
-                isBossBattle = true; // Le 10e combat est contre un boss
-                eventType = 'boss'; // Spécifie que c'est un combat de boss
+            case 3:
+                eventType = 'item'
+                ItemService.chooseItem(this.victoryCount);
                 break;
-            case (this.victoryCount === 5):
-                this.EvenementCount = 0;
+            case 5:
                 PlayerStatsService.campFire(); // Soin du joueur lors de l'événement du feu de camp
                 eventType = 'heal'; // Événement de guérison
                 break;
+            case 7:
+                eventType = 'item'
+                ItemService.chooseItem(this.victoryCount);
+                break;
+            case 9:
+                isBossBattle = true; // Le 10e combat est contre un boss
+                eventType = 'boss'; // Spécifie que c'est un combat de boss
+                break;
+            case 10:
+                if (this.biomeDoneCount === 5) {
+                    eventType = 'end';
+                } else {
+                    eventType = 'change biome'; // Victoire finale
+                    this.biomeDoneCount++;
+                }
+                break;
+
             default:
+                eventType = 'victory'
                 break;
         }
 

@@ -66,8 +66,21 @@ export class ItemService {
             const playerStats = PlayerStatsService.playerStats;
 
             // Ajouter l'item choisi au joueur
-            PlayerStatsService.addEquipementStats(chosenItem);
-            HUD.updatePlayerStats(playerStats);
+            switch(chosenItem.type){
+                case ('compétence'):
+                    PlayerStatsService.addSkill(chosenItem);
+                    break;
+                case ('équipement'):
+                    PlayerStatsService.addEquipementStats(chosenItem);
+                    HUD.updatePlayerStats(playerStats);
+                    break;
+                case ('consommable'):
+                    PlayerStatsService.addConsumable(chosenItem);
+                    break;
+                default :
+
+                break;
+            }
         });
     }
 }

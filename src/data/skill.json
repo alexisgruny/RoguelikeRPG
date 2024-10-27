@@ -8,7 +8,7 @@
         "weight": 1,
         "effectType": "damage",
         "abilityName": "Lancer de noix",
-        "damage": 1.1,
+        "amount": 1.1,
         "explanation": "Lancer de noix applique 110% des dommages à l'ennemi.",
         "rarity": "common"
     },
@@ -21,7 +21,7 @@
         "weight": 2,
         "effectType": "heal",
         "abilityName": "Soin léger",
-        "heal": 25,
+        "amount": 25,
         "explanation": "Restaure 25 points de vie.",
         "rarity": "rare"
     },
@@ -34,7 +34,7 @@
         "weight": 1.5,
         "effectType": "damage",
         "abilityName": "Flamme ardente",
-        "damage": 1.2,
+        "amount": 1.2,
         "explanation": "Inflige 120% des dommages à l'ennemi.",
         "rarity": "uncommon"
     },
@@ -47,7 +47,7 @@
         "weight": 1,
         "effectType": "heal",
         "abilityName": "Petite régénération",
-        "heal": 30,
+        "amount": 30,
         "explanation": "Régénère 30 points de vie.",
         "rarity": "common"
     }

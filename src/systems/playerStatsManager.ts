@@ -100,83 +100,45 @@ export class PlayerStatsService {
 
         // Vérifiez si l'equipement est de type compétence
         if (skill) {
-            const newSkill: Skill = {
-                id: skill.id,
-                name: skill.name,
-                skillPoint: skill.skillPoint || 0,
-                description: skill.description,
-                weight: skill.weight,
-                effectType: skill.effectType,
-                abilityName: skill.abilityName,
-                amount: skill.amount,
-                explanation: skill.explanation,
-                rarity: skill.rarity
-            }
-
             // Ajoutez la compétence au tableau des compétences du joueur
-            this.playerSkills.push(newSkill);
+            this.playerSkills.push(skill);
         }
     }
 
     public static addEquipementStats(equipement: Equipement): void {
         const playerStats: PlayerStats = this.playerStats
         if (equipement) {
-            const newEquipement: Equipement = {
-                id: equipement.id,
-                name: equipement.name,
-                description: equipement.description,
-                weight: equipement.weight,
-                rarity: equipement.rarity,
-                effectType: equipement.effectType,
-                amount: equipement.amount,
-                explanation: equipement.explanation
-            }
-            switch (newEquipement.effectType) {
+            switch (equipement.effectType) {
                 case ('Attaque'):
-                    if (newEquipement.amount) {
+                    if (equipement.amount) {
                         playerStats.attack = Number(playerStats.attack);
-                        playerStats.attack += newEquipement.amount;
+                        playerStats.attack += equipement.amount;
                     }
                     break;
                 case ('Défense'):
-                    if (newEquipement.amount) {
+                    if (equipement.amount) {
                         playerStats.defense = Number(playerStats.defense);
-                        playerStats.defense += newEquipement.amount
+                        playerStats.defense += equipement.amount
                     }
                     break;
                 case ('Santé'):
-                    if (newEquipement.amount) {
+                    if (equipement.amount) {
                         playerStats.maxHealth = Number(playerStats.maxHealth);
                         playerStats.health = Number(playerStats.health);
-                        playerStats.maxHealth += newEquipement.amount
-                        playerStats.health += newEquipement.amount
+                        playerStats.maxHealth += equipement.amount
+                        playerStats.health += equipement.amount
                     }
                     break;
                 default:
                     console.log("erreur dans l'ajout du nouvel équipement")
             };
-            this.playerEquipement.push(newEquipement);
+            this.playerEquipement.push(equipement);
             HUD.updatePlayerStats(playerStats);
         }
 
     }
 
     public static addConsumable(consumable: Consumable): void {
-        const NewConsumable: Consumable = {
-            id: consumable.id,
-            name: consumable.name,
-            description: consumable.description,
-            weight: consumable.weight,
-            effectType: consumable.effectType,
-            amount: consumable.amount,
-            explanation: consumable.explanation,
-            rarity: consumable.rarity
-        }
-        this.playerConsumable.push(NewConsumable)
-    }
-
-    public static useConsumable(usedConsumable: Consumable) {
-
-
+        this.playerConsumable.push(consumable)
     }
 }

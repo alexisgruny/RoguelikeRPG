@@ -6,7 +6,7 @@ export class SkillService {
 
 
     public static async loadSkill(): Promise<Skill[]> {
-        const response = await fetch('/data/equipement.json');
+        const response = await fetch('/data/skill.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

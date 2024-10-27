@@ -48,6 +48,7 @@ export interface Skill {
     name: string;
     skillPoint: number;
     description: string;
+    type: string;
     weight: number;
     effectType: "damage" | "heal";
     abilityName: string;
@@ -61,6 +62,7 @@ export interface Equipement {
     name : string;
     description: string;
     weight: number;
+    type: string;
     effectType: "Attaque" | "Défense" | "Santé";
     amount: number;
     explanation: string;
@@ -72,6 +74,7 @@ export interface Consumable {
     name : string;
     description: string;
     weight: number;
+    type: string;
     effectType: "damage" | "heal";
     amount: number;
     explanation: string;

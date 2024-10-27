@@ -6,7 +6,7 @@ export class ConsumableService {
 
 
     public static async loadConsumable(): Promise<Consumable[]> {
-        const response = await fetch('/data/equipement.json');
+        const response = await fetch('/data/consumable.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
