@@ -10,53 +10,57 @@ import { AppData } from "../data/appData";
 export class GameInitializer {
 
     public static currentMonster: Monster | null = null;
-    public static currentBiome: Biome ;
+    public static currentBiome: Biome;
     private static victoryCount: number = 0;
     private static biomeDoneCount: number = 0;
-    private static handleAttackBound: (event: Event) => void; // Garde une référence à l'écouteur d'événements
+    private static handleAttackBound: (event: Event) => void;
 
-    public static InitialyzeGame() {
+    public static initializeGame() {
         try {
-            Menu.playButton();
-        } catch {
-            console.log('error loading startup');
+            Menu.initialize();
+        } catch (error) {
+            console.error('Error loading startup:', error);
         }
     }
 
-    public static startNextCombat(currentBiome: Biome) {
+    public static startNextCombat(biome: Biome) {
         PlayerStatsService.initializePlayerStats();
-        this.currentBiome = currentBiome
-        const availableMonsters = MonsterService.getMonstersFromBiome(currentBiome);
-        this.currentMonster = MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
-        HUD.updateMonsterStats(this.currentMonster); // Met à jour les stats du monstre
-
-        this.setupAttack(); // Configure le bouton d'attaque
+        this.currentBiome = biome;
+        this.currentMonster = this.getRandomMonster(biome);
+        HUD.updateMonsterStats(this.currentMonster);
+        this.setupAttackButtons();
     }
 
-    // Prépare le bouton d'attaque
-    private static setupAttack(){
+    private static getRandomMonster(biome: Biome): Monster {
+        const availableMonsters = MonsterService.getMonstersFromBiome(biome);
+        return MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
+    }
+
+    private static setupAttackButtons() {
         const attackButton = document.getElementById('attack-button');
-        const skillButton = document.getElementById('info-list')
-        if (attackButton) {
-            attackButton.removeEventListener('click', this.handleAttackBound); // Retire l'ancien événement
-            this.handleAttackBound = this.handlePlayerAttack.bind(this);
-            attackButton.addEventListener('click', this.handleAttackBound); // Associe l'événement
-        }
-        if (skillButton) {
-            skillButton.addEventListener('click', (event) => {
-                const skillActif = event?.target as HTMLElement;
+        const skillButton = document.getElementById('info-list');
 
-                if (skillActif && skillActif.tagName === 'BUTTON') {
-                    const skillId = skillActif.getAttribute('data-id');
-                    console.log('bouton cliqué ID : ', skillId);
-                }
-            });
+        if (attackButton) {
+            attackButton.removeEventListener('click', this.handleAttackBound);
+            this.handleAttackBound = this.handlePlayerAttack.bind(this);
+            attackButton.addEventListener('click', this.handleAttackBound);
+        }
+
+        if (skillButton) {
+            skillButton.addEventListener('click', this.handleSkillButtonClick);
         }
     }
 
-    // Gère l'attaque du joueur et met à jour le combat
-    private static handlePlayerAttack(){
-        HUD.logRemove();
+    private static handleSkillButtonClick(event: Event) {
+        const skillElement = event.target as HTMLElement;
+        if (skillElement && skillElement.tagName === 'BUTTON') {
+            const skillId = skillElement.getAttribute('data-id');
+            console.log('Skill button clicked. ID:', skillId);
+        }
+    }
+
+    private static handlePlayerAttack() {
+        HUD.clearLogs();
         if (!this.currentMonster) return;
 
         const { damageToMonster, monsterDefeated } = CombatSystem.playerAttack(this.currentMonster);
@@ -64,83 +68,67 @@ export class GameInitializer {
 
         if (monsterDefeated) {
             this.handleVictory();
-            HUD.logAction(`${this.currentMonster.name} est MORT !`);
+            HUD.logAction(`${this.currentMonster.name} is DEAD!`);
             this.currentMonster = null;
-
         } else {
             this.handleMonsterAttack();
         }
     }
 
-    private static handleMonsterAttack(){
-        if (!this.currentMonster) return;
-        CombatSystem.monsterAttack(this.currentMonster);
+    private static handleMonsterAttack() {
+        if (this.currentMonster) {
+            CombatSystem.monsterAttack(this.currentMonster);
+        }
     }
 
-    // Gère la victoire du joueur et enchaîne sur le prochain combat
-    private static async handleVictory(){
+    private static async handleVictory() {
         this.victoryCount++;
-        let eventType: 'end' | 'heal' | 'boss' | 'change biome' | 'item' | 'victory' |null = null;
+        let eventType: 'end' | 'heal' | 'boss' | 'change biome' | 'item' | 'victory' | null = null;
         let isBossBattle = false;
+
         PlayerStatsService.addExperience();
 
-        // Utilisation d'un switch pour déterminer l'événement en fonction des victoires ou événements
         switch (this.victoryCount) {
-
             case 1:
-                eventType = 'item'
-                ItemService.chooseItem(this.victoryCount);
-                break;
             case 3:
-                eventType = 'item'
+            case 7:
+                eventType = 'item';
                 ItemService.chooseItem(this.victoryCount);
                 break;
             case 5:
-                PlayerStatsService.campFire(); // Soin du joueur lors de l'événement du feu de camp
-                eventType = 'heal'; // Événement de guérison
-                break;
-            case 7:
-                eventType = 'item'
-                ItemService.chooseItem(this.victoryCount);
+                eventType = 'heal';
+                PlayerStatsService.campFire();
                 break;
             case 9:
-                isBossBattle = true; // Le 10e combat est contre un boss
-                eventType = 'boss'; // Spécifie que c'est un combat de boss
+                eventType = 'boss';
+                isBossBattle = true;
                 break;
             case 10:
                 if (this.biomeDoneCount === 5) {
                     eventType = 'end';
                 } else {
-                    eventType = 'change biome'; // Victoire finale
+                    eventType = 'change biome';
                     this.biomeDoneCount++;
                     this.victoryCount = 0;
                 }
                 break;
-
             default:
-                eventType = 'victory'
+                eventType = 'victory';
                 break;
         }
 
         if (eventType) {
-            HUD.showEventModal(eventType); // Affiche le bon modal selon l'événement
+            HUD.showEventModal(eventType);
         }
 
-        // Sélection du prochain monstre : si c'est un combat de boss, on sélectionne un boss du biome
-        const monsters = AppData.monsters;
-        if (isBossBattle) {
-            this.startBossBattle(monsters); // Lance la bataille contre un boss
-        } else {
-            GameInitializer.startNextCombat(this.currentBiome); // Lance la prochaine bataille contre un monstre normal
-        }
+        isBossBattle ? this.startBossBattle() : this.startNextCombat(this.currentBiome);
     }
 
-    // Fonction pour lancer un combat contre un boss
-    private static startBossBattle(monsters: Monster[]): void {
-        const boss = MonsterService.selectBossFromBiome(monsters); // Sélectionne un boss du biome
+    private static startBossBattle() {
+        const boss = MonsterService.selectBossFromBiome(AppData.monsters);
         this.currentMonster = boss;
-        HUD.updateMonsterStats(this.currentMonster); // Met à jour les stats du boss
-        this.setupAttack(); // Configure le bouton d'attaque
+        HUD.updateMonsterStats(this.currentMonster);
+        this.setupAttackButtons();
     }
 
     public static chooseAbility(monster: Monster) {
@@ -148,11 +136,8 @@ export class GameInitializer {
         let cumulativeProb = 0;
         for (const ability of monster.abilities) {
             cumulativeProb += ability.probabilities;
-            if (roll <= cumulativeProb) {
-                return ability;
-            }
+            if (roll <= cumulativeProb) return ability;
         }
-        return null; // Aucun pouvoir choisi (cas rare)
+        return null;
     }
-
 }

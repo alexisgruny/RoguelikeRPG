@@ -4,100 +4,103 @@ import { PlayerStatsService } from '../service/playerManagerService';
 
 export class CombatSystem {
 
+    /**
+     * Calcule les dégâts infligés par le joueur au monstre et retourne le résultat.
+     * @param monster Le monstre attaqué
+     * @returns Un objet contenant les dégâts infligés et si le monstre est vaincu
+     */
     public static playerAttack(monster: Monster): { damageToMonster: number, monsterDefeated: boolean } {
-        console.log('proute');
-        let monsterDefeated = null
-        const min = 1 - 0.2;
-        const max = 1 + 0.2;
-        const randomFactor = Math.random() * (max - min) + min;
+        const randomFactor = Math.random() * 0.4 + 0.8; // Variation de 20% autour de la valeur de base
         const playerStats = PlayerStatsService.getPlayerStats();
-        const damage = Math.max(playerStats.attack - monster.defense, 1);
-        const damageToMonster = Math.floor(damage * randomFactor);
+        const baseDamage = Math.max(playerStats.attack - monster.defense, 1);
+        const damageToMonster = Math.floor(baseDamage * randomFactor);
+
         monster.health -= damageToMonster;
         HUD.updateMonsterStats(monster);
-        monsterDefeated = monster.health <= 0;
 
-        
-
+        const monsterDefeated = monster.health <= 0;
         return { damageToMonster, monsterDefeated };
     }
 
+    /**
+     * Applique une compétence du joueur au monstre ou au joueur en fonction du type d'effet de la compétence.
+     * @param skill La compétence utilisée
+     * @param monster Le monstre ciblé
+     */
     public static applyPlayerSkill(skill: Skill, monster: Monster): void {
         const playerStats = PlayerStatsService.getPlayerStats();
-        const randomFactor = Math.random() * (1.2 - 0.8) + 0.8; // Variation aléatoire
+        const randomFactor = Math.random() * 0.4 + 0.8; // Variation de 20%
 
         switch (skill.effectType) {
             case 'damage':
-                // Parcourt tous les effets de la compétence pour appliquer les effets "damage"
-                        let damage = skill.amount * playerStats.attack;
-                        damage = Math.max(damage - monster.defense, 1);
-                        const damageToMonster = Math.floor(damage * randomFactor);
-                        monster.health -= damageToMonster;
-                        HUD.logAction(`Vous utilisez ${skill.name} et infligez ${damageToMonster} de dégâts à ${monster.name}.`);
-                        HUD.updateMonsterStats(monster);
+                const baseDamage = skill.amount * playerStats.attack;
+                const damage = Math.max(baseDamage - monster.defense, 1);
+                const damageToMonster = Math.floor(damage * randomFactor);
 
+                monster.health -= damageToMonster;
+                HUD.logAction(`Vous utilisez ${skill.name} et infligez ${damageToMonster} de dégâts à ${monster.name}.`);
+                HUD.updateMonsterStats(monster);
                 break;
+
             case 'heal':
-                // Parcourt tous les effets de la compétence pour appliquer les effets "heal"
-                        const healAmount = skill.amount; // ou une autre propriété si nécessaire
-                        playerStats.health = Math.min(playerStats.health + healAmount, playerStats.maxHealth);
-                        HUD.logAction(`Vous utilisez ${skill.name} et vous soignez de ${healAmount} points de vie.`);
-                        HUD.updatePlayerStats(playerStats);
+                const healAmount = Math.min(skill.amount, playerStats.maxHealth - playerStats.health);
+                playerStats.health += healAmount;
+
+                HUD.logAction(`Vous utilisez ${skill.name} et vous soignez de ${healAmount} points de vie.`);
+                HUD.updatePlayerStats(playerStats);
                 break;
-        
-            // Ajoute d'autres cas selon les types d'effets que tu veux traiter
+
             default:
                 HUD.logAction(`Effet de la compétence ${skill.name} non reconnu.`);
                 break;
         }
     }
 
+    /**
+     * Effectue une attaque du monstre sur le joueur en choisissant une capacité basée sur les probabilités.
+     * @param monster Le monstre qui attaque
+     */
     public static monsterAttack(monster: Monster): void {
         const playerStats = PlayerStatsService.getPlayerStats();
-        const randomValue = Math.random();
-        let accumulatedProbability = 0;
-        const ability = monster.abilities.find(a => {
-            accumulatedProbability += a.probabilities;
-            return randomValue <= accumulatedProbability;
-        });
-        let playerDefeated = null
-        const min = 1 - 0.2;
-        const max = 1 + 0.2;
-        const randomFactor = Math.random() * (max - min) + min;
+        let randomValue = Math.random();
+        const ability = monster.abilities.find(a => (randomValue -= a.probabilities) <= 0);
 
         if (ability) {
-            // Switch sur le type d'effet de l'attaque (dommage, soin, etc.)
+            const randomFactor = Math.random() * 0.4 + 0.8;
             switch (ability.effect) {
                 case 'damage':
-                    let damage = ability.damage * monster.attack;
-                    damage = Math.max(damage - monster.defense, 1);
-                    const damageToPlayer = Math.floor(damage * randomFactor);
+                    const baseDamage = ability.damage ? ability.damage * monster.attack : 0;
+                    const damageToPlayer = Math.max(Math.floor(baseDamage * randomFactor) - playerStats.defense, 1);
+
                     playerStats.health -= damageToPlayer;
-                    HUD.logAction(`${monster.name} utilise ${ability.name} et vous inflige ${damage} de dégats`);
-                    playerDefeated = playerStats.health <= 0;
+                    HUD.logAction(`${monster.name} utilise ${ability.name} et vous inflige ${damageToPlayer} de dégâts.`);
                     PlayerStatsService.updatePlayerHealth(-damageToPlayer);
                     HUD.updatePlayerStats(playerStats);
-                    if (playerDefeated) HUD.showEventModal('defeat');
+
+                    if (playerStats.health <= 0) HUD.showEventModal('defeat');
                     break;
 
                 case 'heal':
-                    const healValue = Number(ability.healValue);
+                    const healValue = ability.healValue ?? 0;
                     monster.health = Math.min(monster.health + healValue, monster.maxHealth);
-                    HUD.logAction(`${monster.name} utilise ${ability.name} se soigne de ${healValue} points de vie!`);
+
+                    HUD.logAction(`${monster.name} utilise ${ability.name} et se soigne de ${healValue} points de vie!`);
                     HUD.updateMonsterStats(monster);
                     break;
 
                 case 'defense':
-                    const defValue = Number(ability.defenseValue);
+                    const defValue = ability.defenseValue ?? 0;
                     monster.defense += defValue;
-                    HUD.logAction(`${monster.name} utilise ${ability.name} et renforce sa défence de ${defValue} !`);
+
+                    HUD.logAction(`${monster.name} utilise ${ability.name} et renforce sa défense de ${defValue}!`);
                     HUD.updateMonsterStats(monster);
                     break;
 
                 case 'attack':
-                    const atkValue = Number(ability.attackValue);
+                    const atkValue = ability.attackValue ?? 0;
                     monster.attack += atkValue;
-                    HUD.logAction(`${monster.name} utilise ${ability.name} et renforce son attaque de ${atkValue} !`);
+
+                    HUD.logAction(`${monster.name} utilise ${ability.name} et renforce son attaque de ${atkValue}!`);
                     HUD.updateMonsterStats(monster);
                     break;
 

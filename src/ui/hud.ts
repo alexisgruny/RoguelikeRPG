@@ -1,6 +1,6 @@
 import { Monster, Biome, Role, PlayerStats, Skill, Consumable, Equipement } from '../types';
 import { RoleService } from '../service/roleService';
-import { PlayerStatsService } from '../service/playerManagerService'
+import { PlayerStatsService } from '../service/playerManagerService';
 import { CombatSystem } from '../systems/combatSystem';
 import { GameInitializer } from '../systems/gameSetup';
 
@@ -18,7 +18,7 @@ export class HUD {
         this.updateElementText('player-attack', `Attack: ${playerStats.attack}`);
         this.updateElementText('player-defense', `Defense: ${playerStats.defense}`);
         this.updateElementText('player-lvl', `Niveau: ${playerStats.level}`);
-        this.updateElementText('player-xp', `expérience: ${playerStats.experience}/${playerStats.experienceToNextLevel}`);
+        this.updateElementText('player-xp', `Expérience: ${playerStats.experience}/${playerStats.experienceToNextLevel}`);
     }
 
     // Mise à jour des stats du monstre à l'écran
@@ -29,70 +29,65 @@ export class HUD {
         this.updateElementText('monster-defense', `Défense: ${monster.defense}`);
     }
 
-    // affichage des log de combat
+    // Affichage et gestion des logs de combat
     public static logAction(action: string) {
         const logOutputElem = document.getElementById('log-output') as HTMLDivElement;
-        logOutputElem.textContent += action + "\n";
-        logOutputElem.scrollTop = logOutputElem.scrollHeight;
+        if (logOutputElem) {
+            logOutputElem.textContent += action + "\n";
+            logOutputElem.scrollTop = logOutputElem.scrollHeight;
+        }
     }
 
-    // reset les log de combat a chaque pression de l'attaque
-    public static logRemove() {
+    public static clearLogs() {
         const logRemover = document.getElementById('log-output') as HTMLDivElement;
-        logRemover.textContent = "";
-
+        if (logRemover) logRemover.textContent = "";
     }
 
     // Fonction générique pour afficher une modale avec un contenu personnalisé
     public static showModal(modalId: string, titleText: string, messageText: string, callback?: Function) {
         const modal = document.getElementById(modalId) as HTMLDivElement;
-        const title = modal.querySelector('#modal-title') as HTMLHeadingElement;
-        const message = modal.querySelector('#modal-message') as HTMLParagraphElement;
-        const closeButton = modal.querySelector('#close-modal-button') as HTMLButtonElement;
+        const title = modal?.querySelector('#modal-title') as HTMLHeadingElement;
+        const message = modal?.querySelector('#modal-message') as HTMLParagraphElement;
+        const closeButton = modal?.querySelector('#close-modal-button') as HTMLButtonElement;
 
-        title.textContent = titleText;
-        message.textContent = messageText;
+        if (modal && title && message && closeButton) {
+            title.textContent = titleText;
+            message.textContent = messageText;
 
-        // Ajouter un callback optionnel lors de la fermeture
-        if (callback) {
-            closeButton.addEventListener('click', () => {
-                callback();
-                this.hideEventModal();
-            });
-        } else {
-            closeButton.addEventListener('click', this.hideEventModal);
+            closeButton.onclick = () => {
+                callback && callback();
+                this.hideModal(modalId);
+            };
+
+            modal.style.display = 'flex'; // Affiche la modale
         }
-
-        modal.style.display = 'flex';  // Affiche la modal
     }
 
-    // Fonction générique pour les événements
+    // Affichage d'une modale d'événement
     public static showEventModal(eventType: string): void {
-        const eventMessages: { [key: string]: { title: string; message: string } } = {
+        const eventMessages = {
             victory: { title: 'Victoire!', message: 'Vous avez tué le monstre!' },
             defeat: { title: 'Défaite', message: 'Vous êtes mort.' },
-            item: { title: 'Objet', message: 'vous avez trouvé un objet magique!'},
+            item: { title: 'Objet', message: 'Vous avez trouvé un objet magique!' },
             heal: { title: 'Repos', message: 'Vous faites un feu de camp.' },
             merchant: { title: 'Marchand', message: 'Vous rencontrez un marchand.' },
             boss: { title: 'Boss', message: 'Le boss vous attaque.' },
-            end: { title: 'Fin', message: 'Vous avez fini le jeu' },
+            end: { title: 'Fin', message: 'Vous avez fini le jeu.' },
         };
-
-        const { title, message } = eventMessages[eventType] || { title: 'Événement', message: 'Événement inconnu' };
-        this.showModal('modal-victory-defeat', title, message);
+    
+        if (eventType in eventMessages) {
+            const { title, message } = eventMessages[eventType as keyof typeof eventMessages];
+            this.showModal('modal-victory-defeat', title, message);
+        } else {
+            this.showModal('modal-victory-defeat', 'Événement', 'Événement inconnu');
+        }
     }
 
-    // Fonction pour créer une modale pour la sélection de stats
-    public static createStatModal(stats: { name: string, bonus: number }[], onSelect: Function): void {
-        let modalContainer = document.getElementById('level-modal-container') as HTMLDivElement;
-        if (!modalContainer) {
-            modalContainer = document.createElement('div');
-            modalContainer.id = 'level-modal-container';
-            modalContainer.classList.add('modal-container');
-            document.body.appendChild(modalContainer);
-        }
+    // Fonction pour afficher une modale de sélection de stats
+    public static createStatModal(stats: { name: string, bonus: number }[], onSelect: (name: string, bonus: number) => void): void {
+        const modalContainer = this.createOrGetModalContainer('level-modal-container');
 
-        modalContainer.innerHTML = '';  // Clear previous modals
+        modalContainer.innerHTML = '';
         stats.forEach((stat, index) => {
             const modal = document.createElement('div');
             modal.classList.add('modal');
@@ -103,30 +98,23 @@ export class HUD {
                     <button id="select-button-${index}">Sélectionner</button>
                 </div>`;
 
-            const selectButton = modal.querySelector(`#select-button-${index}`);
-            if (selectButton) {
-                selectButton.addEventListener('click', () => {
-                    onSelect(stat.name, stat.bonus);
-                    HUD.hideLevelModal();  // Masquer toutes les modales après la sélection
-                });
-            }
-            modalContainer.style.display = 'flex';
+            modal.querySelector(`#select-button-${index}`)?.addEventListener('click', () => {
+                onSelect(stat.name, stat.bonus);
+                this.hideModal('level-modal-container');
+            });
+
             modalContainer.appendChild(modal);
         });
+
+        modalContainer.style.display = 'flex';
     }
 
-    // Fonction pour créer une modale pour la sélection de d'objet
-    public static createEquipementSelectionModal(item: (Equipement | Skill | Consumable)[], onSelect: (selectedItem: any) => void) {
-        let modalContainer = document.getElementById('item-modal-container') as HTMLDivElement;
-        if (!modalContainer) {
-            modalContainer = document.createElement('div');
-            modalContainer.id = 'item-modal-container';
-            modalContainer.classList.add('modal-container');
-            document.body.appendChild(modalContainer);
-        }
+    // Fonction pour afficher une modale de sélection d'objet
+    public static createEquipementSelectionModal(items: (Equipement | Skill | Consumable)[], onSelect: (selectedItem: any) => void) {
+        const modalContainer = this.createOrGetModalContainer('item-modal-container');
 
         modalContainer.innerHTML = '';
-        item.forEach((item, index) => {
+        items.forEach((item, index) => {
             const modal = document.createElement('div');
             modal.classList.add('modal');
             modal.innerHTML = `
@@ -139,51 +127,30 @@ export class HUD {
                     <button id="select-button-${index}">Sélectionner ${item.name}</button>
                 </div>`;
 
-            const selectButton = modal.querySelector(`#select-button-${index}`);
-            if (selectButton) {
-                selectButton.addEventListener('click', () => {
-                    onSelect(item);
-                    HUD.hideItemModal();  // Masquer toutes les modales après la sélection
-                });
-            }
-            modalContainer.style.display = 'flex';
+            modal.querySelector(`#select-button-${index}`)?.addEventListener('click', () => {
+                onSelect(item);
+                this.hideModal('item-modal-container');
+            });
+
             modalContainer.appendChild(modal);
         });
-    }
-    // Fonction pour cacher toutes les modales
-    public static hideItemModal() {
-        const itemModalContainer = document.getElementById('item-modal-container',);
-        if (itemModalContainer) {
-            itemModalContainer.style.display = 'none';
-        }
-    }
-    public static hideLevelModal() {
-        const levelModalContainer = document.getElementById('level-modal-container');
-        if (levelModalContainer) {
-            levelModalContainer.style.display = 'none';
-        }
-    }
-    public static hideEventModal() {
-        const eventModalContainer = document.getElementById('modal-victory-defeat');
-        if (eventModalContainer) {
-            eventModalContainer.style.display = 'none';
-        }
+
+        modalContainer.style.display = 'flex';
     }
 
+    // Fonction générique pour cacher une modale
+    private static hideModal(modalId: string) {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.style.display = 'none';
+    }
+
+    // Handler pour afficher les menus de compétences, équipements ou consommables
     public static menuHandler(type: 'skills' | 'equipements' | 'consumable') {
-        const buttonId = type === 'skills' ? 'skill-button'
-            : type === 'equipements' ? 'equipement-button'
-                : 'consumable-button';
-
-        const menuId = 'info-menu'; // Même div pour tous les types
-        const listId = 'info-list'; // Même liste pour tous les types
+        const buttonId = `${type}-button`;
+        const menuId = 'info-menu';
+        const listId = 'info-list';
         const backButtonId = 'back-to-main';
-
-        // Création de l'info-bulle (tooltip) sans les styles
-        const tooltip = document.createElement('div');
-        tooltip.classList.add('tooltip');  // On applique simplement la classe CSS
-        tooltip.style.display = 'none'; // Par défaut, caché
-        document.body.appendChild(tooltip);
+        const tooltip = this.createOrGetTooltip();
 
         document.getElementById(buttonId)?.addEventListener('click', () => {
             const mainMenu = document.getElementById('combat-actions');
@@ -195,95 +162,32 @@ export class HUD {
                 sharedMenu.style.display = 'block';
                 sharedList.innerHTML = '';
 
-                switch (type) {
-                    case ('skills'):
-                        PlayerStatsService.playerSkills.forEach((skill) => {
-                            const skillButton = document.createElement('button');
-                            skillButton.textContent = skill.name;
-                            skillButton.classList.add('skill-button');
-                            skillButton.id = (skill.id);
+                const items = this.getItemsByType(type);
+                items.forEach(item => {
+                    const itemButton = document.createElement('button');
+                    itemButton.textContent = item.name;
+                    itemButton.classList.add(`${type}-button`);
 
-                            // Affiche l'info-bulle lors du survol
-                            skillButton.addEventListener('mouseover', (e) => {
-                                let effectsText = `${skill.explanation}`;
+                    itemButton.addEventListener('mouseover', (e) => this.showTooltip(tooltip, item, e));
+                    itemButton.addEventListener('mouseout', () => (tooltip.style.display = 'none'));
 
-                                tooltip.textContent = effectsText;
-                                tooltip.style.left = `${e.pageX + 10}px`;
-                                tooltip.style.top = `${e.pageY + 10}px`;
-                                tooltip.style.display = 'block';
-                            });
-
-                            // Cache l'info-bulle lorsque la souris quitte
-                            skillButton.addEventListener('mouseout', () => {
-                                tooltip.style.display = 'none';
-                            });
-
-                            // Ajoute un événement 'click' pour utiliser la compétence
-                            skillButton.addEventListener('click', () => {
-                                // Appelle ici la fonction de gestion de la compétence du joueur
-                                const monster = GameInitializer.currentMonster;
-                                if (monster) {
-                                    CombatSystem.applyPlayerSkill(skill, monster);
-                                    mainMenu.style.display = 'flex';
-                                    sharedMenu.style.display = 'none';
-                                }
-                            });
-
-                            sharedList.appendChild(skillButton);
+                    if (type === 'skills') {
+                        itemButton.addEventListener('click', () => {
+                            const currentMonster = GameInitializer.currentMonster;
+                            if (currentMonster) { // Vérifie que currentMonster n'est pas null
+                                CombatSystem.applyPlayerSkill(item as Skill, currentMonster);
+                                mainMenu.style.display = 'flex';
+                                sharedMenu.style.display = 'none';
+                            } else {
+                                console.warn("Aucun monstre n'est actuellement sélectionné pour attaquer.");
+                            }
                         });
-                        break;
-
-                    case ('equipements'):
-                        PlayerStatsService.playerEquipement.forEach((equipement) => {
-                            const equipementInfo = document.createElement('p');
-                            equipementInfo.textContent = equipement.name;
-                            equipementInfo.classList.add('equipement-text');
-
-                            // Affiche l'info-bulle lors du survol
-                            equipementInfo.addEventListener('mouseover', (e) => {
-                                let effectsText = `${equipement.explanation}`;
-
-                                tooltip.textContent = effectsText;
-                                tooltip.style.left = `${e.pageX + 10}px`;
-                                tooltip.style.top = `${e.pageY + 10}px`;
-                                tooltip.style.display = 'block';
-                            });
-
-                            equipementInfo.addEventListener('mouseout', () => {
-                                tooltip.style.display = 'none';
-                            });
-
-                            sharedList.appendChild(equipementInfo);
-                        });
-                        break;
-
-                    case ('consumable'):
-                        PlayerStatsService.playerConsumable.forEach((consumable) => {
-                            const consumableInfo = document.createElement('button');
-                            consumableInfo.textContent = consumable.name;
-                            consumableInfo.classList.add('consumable-button');
-
-                            consumableInfo.addEventListener('mouseover', (e) => {
-                                let effectsText = `${consumable.explanation}`;
-
-                                tooltip.textContent = effectsText;
-                                tooltip.style.left = `${e.pageX + 10}px`;
-                                tooltip.style.top = `${e.pageY + 10}px`;
-                                tooltip.style.display = 'block';
-                            });
-
-                            consumableInfo.addEventListener('mouseout', () => {
-                                tooltip.style.display = 'none';
-                            });
-
-                            sharedList.appendChild(consumableInfo);
-                        });
-                        break;
-                }
+                    }
+                    sharedList.appendChild(itemButton);
+                });
             }
         });
 
-        // Retour au menu principal
         document.getElementById(backButtonId)?.addEventListener('click', () => {
             const mainMenu = document.getElementById('combat-actions');
             const sharedMenu = document.getElementById(menuId);
@@ -293,5 +197,46 @@ export class HUD {
                 sharedMenu.style.display = 'none';
             }
         });
+    }
+
+    // Helper pour créer ou récupérer un tooltip
+    private static createOrGetTooltip() {
+        let tooltip = document.querySelector('.tooltip') as HTMLDivElement;
+        if (!tooltip) {
+            tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.style.display = 'none';
+            document.body.appendChild(tooltip);
+        }
+        return tooltip;
+    }
+
+    private static showTooltip(tooltip: HTMLDivElement, item: any, e: MouseEvent) {
+        tooltip.textContent = item.explanation || `${item.effectType} : ${item.amount}`;
+        tooltip.style.left = `${e.pageX + 10}px`;
+        tooltip.style.top = `${e.pageY + 10}px`;
+        tooltip.style.display = 'block';
+    }
+
+    // Fonction générique pour récupérer des items selon le type
+    private static getItemsByType(type: 'skills' | 'equipements' | 'consumable') {
+        switch (type) {
+            case 'skills': return PlayerStatsService.playerSkills;
+            case 'equipements': return PlayerStatsService.playerEquipement;
+            case 'consumable': return PlayerStatsService.playerConsumable;
+            default: return [];
+        }
+    }
+
+    // Fonction pour créer ou récupérer un conteneur de modale
+    private static createOrGetModalContainer(id: string): HTMLDivElement {
+        let modalContainer = document.getElementById(id) as HTMLDivElement;
+        if (!modalContainer) {
+            modalContainer = document.createElement('div');
+            modalContainer.id = id;
+            modalContainer.style.display = 'none';
+            document.body.appendChild(modalContainer);
+        }
+        return modalContainer;
     }
 }

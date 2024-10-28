@@ -7,8 +7,8 @@ import { Menu } from './ui/menu';
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         await AppData.loadData();
-        Menu.subMenuSetup();
-        GameInitializer.InitialyzeGame();     
+        Menu.setupSubMenu();
+        GameInitializer.initializeGame();     
     }
     catch {
         console.error('error');
