@@ -1,5 +1,5 @@
 import { Monster, Biome, Role, PlayerStats, Skill, Consumable, Equipement } from '../types';
-import { RoleService } from '../components/role';
+import { RoleService } from '../service/roleService';
 import { PlayerStatsService } from '../systems/playerStatsManager'
 import { CombatManager } from '../systems/gameManager';
 import { CombatSystem } from '../systems/combatSystem';

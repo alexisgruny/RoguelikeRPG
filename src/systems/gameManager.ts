@@ -1,9 +1,9 @@
 import { Monster, Biome, PlayerStats } from '../types';
 import { CombatSystem } from './combatSystem';
 import { HUD } from '../ui/HUD';
-import { MonsterService } from '../components/monsters';
-import { BiomeService } from '../components/biome';
-import { RoleService } from '../components/role';
+import { MonsterService } from '../service/monsterService';
+import { BiomeService } from '../service/biomeService';
+import { RoleService } from '../service/roleService';
 import { PlayerStatsService } from './playerStatsManager';
 import { ItemService } from './itemManager';
 

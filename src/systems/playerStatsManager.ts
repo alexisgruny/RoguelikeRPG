@@ -1,5 +1,5 @@
 import { HUD } from '../ui/HUD';
-import { RoleService } from '../components/role';
+import { RoleService } from '../service/roleService';
 import { PlayerStats, Skill, Equipement, Consumable } from '../types';
 
 export class PlayerStatsService {
@@ -21,17 +21,17 @@ export class PlayerStatsService {
 
     // Initialise les stats du joueur en fonction de la classe sélectionnée
     public static initializePlayerStats(): void {
-        const selectedClass = RoleService.getSelectedRole();
-        if (!selectedClass) {
+        const role = RoleService.currentRole;
+        if (!role) {
             throw new Error('Aucune classe sélectionnée pour le joueur');
         }
 
         // Assigne les stats initiales de la classe sélectionnée
-        this.playerStats.name = selectedClass.name;
-        this.playerStats.health = selectedClass.health;
-        this.playerStats.maxHealth = selectedClass.health;
-        this.playerStats.attack = selectedClass.attack;
-        this.playerStats.defense = selectedClass.defense;
+        this.playerStats.name = role.name;
+        this.playerStats.health = role.health;
+        this.playerStats.maxHealth = role.health;
+        this.playerStats.attack = role.attack;
+        this.playerStats.defense = role.defense;
 
         // Mise à jour initiale du HUD
         HUD.updatePlayerStats(

@@ -1,8 +1,8 @@
 // Chargement des fonctions/roles depuis les autres fichiers
 import { Role, Monster, Biome } from '../types';
 import { CombatManager } from '../systems/gameManager';
-import { BiomeService } from '../components/biome';
-import { RoleService } from '../components/role';
+import { BiomeService } from '../service/biomeService';
+import { RoleService } from '../service/roleService';
 import { HUD } from './HUD';
 import { AppData } from '../data/appData';
 

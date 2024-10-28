@@ -1,7 +1,4 @@
-import { Biome, Role } from './types';
 import { Menu } from './ui/menu';
-import { BiomeService } from './components/biome';
-import { RoleService } from './components/role';
 import { AppData } from './data/appData';
 
 
