@@ -1,28 +1,11 @@
 import { Skill, Equipement, Consumable } from "types";
-import { SkillService } from "../components/skill";
-import { ConsumableService } from "../components/consumable";
-import { EquipementService } from "../components/equipement";
 import { PlayerStatsService } from "./playerStatsManager";
 import { HUD } from "../ui/HUD";
+import { AppData } from "../data/appData";
 
 export class ItemService {
-    // Déclaration des interfaces
-    private static equipement: Equipement[];
-    private static skill: Skill[];
-    private static consumable: Consumable[];
 
-    // Charge les items et les met dans un tableau 
-    private static async loadItems(): Promise<(Equipement | Skill | Consumable)[]> {
-        this.equipement = await EquipementService.loadEquipement();
-        this.skill = await SkillService.loadSkill();
-        this.consumable = await ConsumableService.loadConsumable();
-
-        // Combine les tableaux d'équipements, de compétences et de consommables en un seul tableau
-        const itemPull: (Equipement | Skill | Consumable)[] = [];
-        itemPull.push(...this.equipement, ...this.skill, ...this.consumable);
-        return itemPull;
-    }
-
+    private static item = AppData.items;
     // Donne une valeur de probabilité aux objets
     public static getDropChance(rarity: string, battleCount: number): number {
         const rarityMultiplier: Record<string, number> = {
@@ -36,7 +19,7 @@ export class ItemService {
 
     // Fonction de proposition et de choix d'équipement
     public static async chooseItem(battleCount: number) {
-        const itemPull = await ItemService.loadItems();
+        const itemPull = this.item;
 
         // Fonction de garde pour s'assurer que les items ont une propriété 'rarity'
         function hasRarity(item: any): item is { rarity: string } {

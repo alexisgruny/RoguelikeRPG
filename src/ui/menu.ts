@@ -1,19 +1,15 @@
 // Chargement des fonctions/roles depuis les autres fichiers
 import { Role, Monster, Biome } from '../types';
-import { CombatManager } from '../systems/combatManager';
+import { CombatManager } from '../systems/gameManager';
 import { BiomeService } from '../components/biome';
 import { RoleService } from '../components/role';
 import { HUD } from './HUD';
+import { AppData } from '../data/appData';
 
-// Fonction principale exécutée une fois le DOM chargé
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Charger les biomes et vérifier qu'il y en a suffisamment
-        const biomes = await BiomeService.loadBiomes();
 
-        // Charger les roles et vérifier qu'il y en a suffisamment
-        const roles = await RoleService.loadRoles();
+export class Menu {
 
+    public static setupMenu(){
         // Initialisation des éléments du DOM
         const startMenu = document.getElementById('start-menu')!;
         const startButton = document.getElementById('start-button') as HTMLButtonElement;
@@ -37,14 +33,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Construction dynamique des boutons de roles
-        roles.forEach(role => {
+        AppData.roles.forEach(role => {
             const button = document.createElement('button');
             button.textContent = role.name;
             button.id = role.name;
             
             // Lorsqu'une role est sélectionnée, cacher le menu des roles et afficher le menu des biomes
             button.addEventListener('click', () => {
-                RoleService.pickRole(roles, role.name); // Enregistrer la role choisie
+                RoleService.pickRole(AppData.roles, role.name); // Enregistrer la role choisie
                 roleMenu.classList.add('hidden'); // Masquer le menu des roles
                 biomeMenu.classList.remove('hidden'); // Afficher le menu des biomes
             });
@@ -53,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Sélection de deux biomes aléatoires et affichage des boutons correspondants
-        const [biome1, biome2] = getRandomBiomes(biomes, 2);
+        const [biome1, biome2] = getRandomBiomes(AppData.biomes, 2);
         biome1Button.textContent = biome1.name;
         biome2Button.textContent = biome2.name;
 
@@ -65,10 +61,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         biome2Button.addEventListener('click', async () => {
             startCombatForBiome(biomeMenu, combatSection, biome2.name);
         });
-    } catch (error) {
-        console.error('Erreur lors du chargement des biomes ou de la configuration des boutons:', error);
     }
-});
+}
+
 
 /**
  * Fonction pour démarrer le combat après la sélection d'un biome

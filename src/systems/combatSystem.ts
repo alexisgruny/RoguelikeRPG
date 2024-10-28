@@ -1,6 +1,6 @@
 import { Monster, PlayerStats, Skill } from '../types';
 import { HUD } from '../ui/HUD';
-import { CombatManager } from './combatManager';
+import { CombatManager } from './gameManager';
 import { PlayerStatsService } from './playerStatsManager';
 
 export class CombatSystem {

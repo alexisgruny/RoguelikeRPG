@@ -1,7 +1,7 @@
 import { Monster, Biome, Role, PlayerStats, Skill, Consumable, Equipement } from '../types';
 import { RoleService } from '../components/role';
 import { PlayerStatsService } from '../systems/playerStatsManager'
-import { CombatManager } from '../systems/combatManager';
+import { CombatManager } from '../systems/gameManager';
 import { CombatSystem } from '../systems/combatSystem';
 
 export class HUD {

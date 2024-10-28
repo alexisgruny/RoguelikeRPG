@@ -4,9 +4,8 @@ import { HUD } from '../ui/HUD';
 import { MonsterService } from '../components/monsters';
 import { BiomeService } from '../components/biome';
 import { RoleService } from '../components/role';
-import { PlayerStatsService } from '../systems/playerStatsManager';
-import { EquipementService } from '../components/equipement';
-import { ItemService } from '../systems/itemManager';
+import { PlayerStatsService } from './playerStatsManager';
+import { ItemService } from './itemManager';
 
 
 export class CombatManager {
@@ -14,6 +13,7 @@ export class CombatManager {
     private static victoryCount: number = 0;
     private static biomeDoneCount: number = 0;
     private static handleAttackBound: (event: Event) => void; // Garde une référence à l'écouteur d'événements
+    public static biome: Biome[];
 
     // Fonction principale pour démarrer le combat
     public static async InitialyzeGame(biomeName: string): Promise<void> {
@@ -133,6 +133,7 @@ export class CombatManager {
                 } else {
                     eventType = 'change biome'; // Victoire finale
                     this.biomeDoneCount++;
+                    this.victoryCount = 0;
                 }
                 break;
 
@@ -172,5 +173,9 @@ export class CombatManager {
             }
         }
         return null; // Aucun pouvoir choisi (cas rare)
+    }
+
+    public static changeBiome(biome: Biome){
+
     }
 }

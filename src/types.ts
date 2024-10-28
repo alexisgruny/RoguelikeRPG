@@ -6,7 +6,9 @@ export interface Role {
 }
 
 export interface Biome {
+    id: string;
     name: string;
+    description: string;
     monsters: string[];
 }
 
