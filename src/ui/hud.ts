@@ -1,8 +1,8 @@
 import { Monster, Biome, Role, PlayerStats, Skill, Consumable, Equipement } from '../types';
 import { RoleService } from '../service/roleService';
-import { PlayerStatsService } from '../systems/playerStatsManager'
-import { CombatManager } from '../systems/gameManager';
+import { PlayerStatsService } from '../service/playerManagerService'
 import { CombatSystem } from '../systems/combatSystem';
+import { GameInitializer } from '../systems/gameSetup';
 
 export class HUD {
     // Fonction générique pour mettre à jour un élément HTML
@@ -221,7 +221,7 @@ export class HUD {
                             // Ajoute un événement 'click' pour utiliser la compétence
                             skillButton.addEventListener('click', () => {
                                 // Appelle ici la fonction de gestion de la compétence du joueur
-                                const monster = CombatManager.currentMonster;
+                                const monster = GameInitializer.currentMonster;
                                 if (monster) {
                                     CombatSystem.applyPlayerSkill(skill, monster);
                                     mainMenu.style.display = 'flex';

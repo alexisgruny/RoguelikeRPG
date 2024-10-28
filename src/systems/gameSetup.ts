@@ -1,67 +1,48 @@
-import { Monster, Biome, PlayerStats } from '../types';
-import { CombatSystem } from './combatSystem';
-import { HUD } from '../ui/HUD';
-import { MonsterService } from '../service/monsterService';
-import { BiomeService } from '../service/biomeService';
-import { RoleService } from '../service/roleService';
-import { PlayerStatsService } from './playerStatsManager';
-import { ItemService } from './itemManager';
+import { Biome, Monster } from "types";
+import { Menu } from '../ui/menu';
+import { MonsterService } from "../service/monsterService";
+import { HUD } from "../ui/HUD";
+import { PlayerStatsService } from "../service/playerManagerService";
+import { CombatSystem } from "./combatSystem";
+import { ItemService } from "../service/itemService";
+import { AppData } from "../data/appData";
 
+export class GameInitializer {
 
-export class CombatManager {
     public static currentMonster: Monster | null = null;
+    public static currentBiome: Biome ;
     private static victoryCount: number = 0;
     private static biomeDoneCount: number = 0;
     private static handleAttackBound: (event: Event) => void; // Garde une référence à l'écouteur d'événements
-    public static biome: Biome[];
 
-    // Fonction principale pour démarrer le combat
-    public static async InitialyzeGame(biomeName: string): Promise<void> {
+    public static InitialyzeGame() {
         try {
-            const [biomes, monsters] = await Promise.all([BiomeService.loadBiomes(), MonsterService.loadMonsters()]);
-            const selectedBiome = BiomeService.findBiomeByName(biomes, biomeName);
-
-            if (!selectedBiome) throw new Error(`Biome '${biomeName}' non trouvé`);
-
-            PlayerStatsService.initializePlayerStats();
-            this.updateHUD();
-
-            // Lance la première bataille
-            this.startNextBattle(selectedBiome, monsters);
-        } catch (error) {
-            console.error('Failed to start combat:', error);
+            Menu.playButton();
+        } catch {
+            console.log('error loading startup');
         }
     }
 
-    // Met à jour le HUD avec les stats du joueur
-    private static updateHUD(): void {
-        const playerStats = PlayerStatsService.getPlayerStats();
-        HUD.updatePlayerStats(playerStats);
-    }
-
-    // Lance la prochaine bataille avec un monstre du biome
-    private static async startNextBattle(biome: Biome, monsters: Monster[]): Promise<void> {
-        const availableMonsters = MonsterService.getMonstersFromBiome(biome, monsters);
-        if (!availableMonsters.length) throw new Error(`Aucun monstre trouvé dans le biome '${biome.name}'`);
-
+    public static startNextCombat(currentBiome: Biome) {
+        PlayerStatsService.initializePlayerStats();
+        this.currentBiome = currentBiome
+        const availableMonsters = MonsterService.getMonstersFromBiome(currentBiome);
         this.currentMonster = MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
-        this.updateHUD(); // Met à jour les stats du joueur
         HUD.updateMonsterStats(this.currentMonster); // Met à jour les stats du monstre
 
-        this.setupAttack(biome); // Configure le bouton d'attaque
+        this.setupAttack(); // Configure le bouton d'attaque
     }
 
     // Prépare le bouton d'attaque
-    private static setupAttack(biome: Biome): void {
+    private static setupAttack(){
         const attackButton = document.getElementById('attack-button');
         const skillButton = document.getElementById('info-list')
         if (attackButton) {
             attackButton.removeEventListener('click', this.handleAttackBound); // Retire l'ancien événement
-            this.handleAttackBound = this.handlePlayerAttack.bind(this, biome);
+            this.handleAttackBound = this.handlePlayerAttack.bind(this);
             attackButton.addEventListener('click', this.handleAttackBound); // Associe l'événement
         }
         if (skillButton) {
-            const skill = PlayerStatsService.playerSkills;
             skillButton.addEventListener('click', (event) => {
                 const skillActif = event?.target as HTMLElement;
 
@@ -74,7 +55,7 @@ export class CombatManager {
     }
 
     // Gère l'attaque du joueur et met à jour le combat
-    private static handlePlayerAttack(biome: Biome): void {
+    private static handlePlayerAttack(){
         HUD.logRemove();
         if (!this.currentMonster) return;
 
@@ -82,23 +63,22 @@ export class CombatManager {
         HUD.logAction(`Player attacks ${this.currentMonster.name} for ${damageToMonster} damage!`);
 
         if (monsterDefeated) {
-            this.handleVictory(biome);
+            this.handleVictory();
             HUD.logAction(`${this.currentMonster.name} est MORT !`);
             this.currentMonster = null;
 
         } else {
-            this.handleMonsterAttack(biome);
+            this.handleMonsterAttack();
         }
     }
 
-    // Gère l'attaque du monstre contre le joueur
-    private static handleMonsterAttack(biome: Biome): void {
+    private static handleMonsterAttack(){
         if (!this.currentMonster) return;
         CombatSystem.monsterAttack(this.currentMonster);
     }
 
     // Gère la victoire du joueur et enchaîne sur le prochain combat
-    private static async handleVictory(biome: Biome): Promise<void> {
+    private static async handleVictory(){
         this.victoryCount++;
         let eventType: 'end' | 'heal' | 'boss' | 'change biome' | 'item' | 'victory' |null = null;
         let isBossBattle = false;
@@ -147,20 +127,20 @@ export class CombatManager {
         }
 
         // Sélection du prochain monstre : si c'est un combat de boss, on sélectionne un boss du biome
-        const monsters = await MonsterService.loadMonsters();
+        const monsters = AppData.monsters;
         if (isBossBattle) {
-            this.startBossBattle(biome, monsters); // Lance la bataille contre un boss
+            this.startBossBattle(monsters); // Lance la bataille contre un boss
         } else {
-            this.startNextBattle(biome, monsters); // Lance la prochaine bataille contre un monstre normal
+            GameInitializer.startNextCombat(this.currentBiome); // Lance la prochaine bataille contre un monstre normal
         }
     }
 
     // Fonction pour lancer un combat contre un boss
-    private static startBossBattle(biome: Biome, monsters: Monster[]): void {
-        const boss = MonsterService.selectBossFromBiome(biome, monsters); // Sélectionne un boss du biome
+    private static startBossBattle(monsters: Monster[]): void {
+        const boss = MonsterService.selectBossFromBiome(monsters); // Sélectionne un boss du biome
         this.currentMonster = boss;
         HUD.updateMonsterStats(this.currentMonster); // Met à jour les stats du boss
-        this.setupAttack(biome); // Configure le bouton d'attaque
+        this.setupAttack(); // Configure le bouton d'attaque
     }
 
     public static chooseAbility(monster: Monster) {
@@ -175,7 +155,4 @@ export class CombatManager {
         return null; // Aucun pouvoir choisi (cas rare)
     }
 
-    public static changeBiome(biome: Biome){
-
-    }
 }

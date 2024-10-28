@@ -1,11 +1,10 @@
 import { Skill, Equipement, Consumable } from "types";
-import { PlayerStatsService } from "./playerStatsManager";
+import { PlayerStatsService } from "./playerManagerService";
 import { HUD } from "../ui/HUD";
-import { AppData } from "../data/appData";
+import { AppData } from '../data/appData';
 
 export class ItemService {
 
-    private static item = AppData.items;
     // Donne une valeur de probabilité aux objets
     public static getDropChance(rarity: string, battleCount: number): number {
         const rarityMultiplier: Record<string, number> = {
@@ -19,7 +18,7 @@ export class ItemService {
 
     // Fonction de proposition et de choix d'équipement
     public static async chooseItem(battleCount: number) {
-        const itemPull = this.item;
+        const itemPull = AppData.items;
 
         // Fonction de garde pour s'assurer que les items ont une propriété 'rarity'
         function hasRarity(item: any): item is { rarity: string } {

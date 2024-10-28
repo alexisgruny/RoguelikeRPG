@@ -1,11 +1,11 @@
 import { Monster, PlayerStats, Skill } from '../types';
 import { HUD } from '../ui/HUD';
-import { CombatManager } from './gameManager';
-import { PlayerStatsService } from './playerStatsManager';
+import { PlayerStatsService } from '../service/playerManagerService';
 
 export class CombatSystem {
 
     public static playerAttack(monster: Monster): { damageToMonster: number, monsterDefeated: boolean } {
+        console.log('proute');
         let monsterDefeated = null
         const min = 1 - 0.2;
         const max = 1 + 0.2;

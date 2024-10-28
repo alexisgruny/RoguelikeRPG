@@ -1,5 +1,5 @@
 import { HUD } from '../ui/HUD';
-import { RoleService } from '../service/roleService';
+import { RoleService } from './roleService';
 import { PlayerStats, Skill, Equipement, Consumable } from '../types';
 
 export class PlayerStatsService {

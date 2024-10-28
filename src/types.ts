@@ -21,7 +21,7 @@ export interface Monster {
     defense: number;
     abilities: Ability[];
     loot: { item: string; chance: number }[];
-    boss?: boolean;
+    boss: boolean;
 }
 
 export interface Ability {

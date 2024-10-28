@@ -1,89 +1,79 @@
 // Chargement des fonctions/roles depuis les autres fichiers
 import { Role, Monster, Biome } from '../types';
-import { CombatManager } from '../systems/gameManager';
 import { BiomeService } from '../service/biomeService';
 import { RoleService } from '../service/roleService';
 import { HUD } from './HUD';
 import { AppData } from '../data/appData';
+import { GameInitializer } from '../systems/gameSetup';
 
 
 export class Menu {
 
-    public static setupMenu(){
-        // Initialisation des éléments du DOM
-        const startMenu = document.getElementById('start-menu')!;
-        const startButton = document.getElementById('start-button') as HTMLButtonElement;
-        const roleMenu = document.getElementById('role-menu')!;
-        const biomeMenu = document.getElementById('biome-menu')!;
-        const combatSection = document.getElementById('combat-section')!;
-        const biome1Button = document.getElementById('biome1-button') as HTMLButtonElement;
-        const biome2Button = document.getElementById('biome2-button') as HTMLButtonElement;
-        // Cacher la section de combat au départ
-        combatSection.classList.add('hidden');
+    private static startButton = document.getElementById('start-button') as HTMLButtonElement;
+    private static startMenu = document.getElementById('start-menu')!;
+    private static roleMenu = document.getElementById('role-menu')!;
+    private static biomeMenu = document.getElementById('biome-menu')!;
+    private static combatSection = document.getElementById('combat-section')!;
+    private static biome1Button = document.getElementById('biome1-button') as HTMLButtonElement;
+    private static biome2Button = document.getElementById('biome2-button') as HTMLButtonElement;
+    public static bannedBiome: Biome;
 
-        // appel de la fonction d'affichage du menu de compétence
-        HUD.menuHandler('skills');
-        HUD.menuHandler('equipements');
-        HUD.menuHandler('consumable')
-        
-        // Afficher le menu des roles une fois que le joueur clique sur "Jouer"
-        startButton.addEventListener('click', () => {
-            startMenu.classList.add('hidden'); // Masquer le menu de démarrage
-            roleMenu.classList.remove('hidden'); // Afficher le menu des roles
+    public static playButton() {
+        this.startButton.addEventListener('click', () => {
+            this.startMenu.classList.add('hidden'); // Masquer le menu de démarrage
+            this.roleMenu.classList.remove('hidden'); // Afficher le menu des roles
+            this.MenuRoleSelection();
         });
+
+    }
+
+    public static MenuRoleSelection() {
 
         // Construction dynamique des boutons de roles
         AppData.roles.forEach(role => {
             const button = document.createElement('button');
             button.textContent = role.name;
             button.id = role.name;
-            
+
             // Lorsqu'une role est sélectionnée, cacher le menu des roles et afficher le menu des biomes
             button.addEventListener('click', () => {
                 RoleService.pickRole(AppData.roles, role.name); // Enregistrer la role choisie
-                roleMenu.classList.add('hidden'); // Masquer le menu des roles
-                biomeMenu.classList.remove('hidden'); // Afficher le menu des biomes
+                this.roleMenu.classList.add('hidden'); // Masquer le menu des roles
+                this.biomeMenu.classList.remove('hidden'); // Afficher le menu des biomes
+                this.biomeSelectionMenu(); // Lance la sélection du biome
             });
 
-            roleMenu.appendChild(button); // Ajouter le bouton au menu des roles
-        });
-
-        // Sélection de deux biomes aléatoires et affichage des boutons correspondants
-        const [biome1, biome2] = getRandomBiomes(AppData.biomes, 2);
-        biome1Button.textContent = biome1.name;
-        biome2Button.textContent = biome2.name;
-
-        // Gestion du choix de biome et démarrage du combat
-        biome1Button.addEventListener('click', async () => {
-            startCombatForBiome(biomeMenu, combatSection, biome1.name);
-        });
-
-        biome2Button.addEventListener('click', async () => {
-            startCombatForBiome(biomeMenu, combatSection, biome2.name);
+            this.roleMenu.appendChild(button); // Ajouter le bouton au menu des roles
         });
     }
-}
 
+    public static biomeSelectionMenu() {
+        // Sélection de deux biomes aléatoires et affichage des boutons correspondants
+        const [biome1, biome2] = BiomeService.getRandomBiomes(AppData.biomes, 2);
+        this.biome1Button.textContent = biome1.name;
+        this.biome2Button.textContent = biome2.name;
 
-/**
- * Fonction pour démarrer le combat après la sélection d'un biome
- * @param biomeMenu - Élément DOM représentant le menu de biomes
- * @param combatSection - Élément DOM représentant la section de combat
- * @param biomeName - Nom du biome choisi
- */
-async function startCombatForBiome(biomeMenu: HTMLElement, combatSection: HTMLElement, biomeName: string) {
-    biomeMenu.classList.add('hidden'); // Masquer le menu des biomes
-    combatSection.classList.remove('hidden'); // Afficher la section de combat
-    await CombatManager.InitialyzeGame(biomeName); // Démarrer le combat dans le biome sélectionné
-}
+        // Gestion du choix de biome et démarrage du combat
+        this.biome1Button.addEventListener('click', async () => {
+            GameInitializer.startNextCombat(biome1);
+            this.bannedBiome = biome1;
+            this.combatSection.classList.remove('hidden');
+            this.biomeMenu.classList.add('hidden'); // Masquer le menu des biomes 
+        });
 
-/**
- * Fonction utilitaire pour sélectionner un nombre aléatoire de biomes
- * @param biomes - Liste de tous les biomes disponibles
- * @param count - Nombre de biomes à sélectionner
- * @returns Un tableau des biomes sélectionnés
- */
-function getRandomBiomes(biomes: Biome[], count: number): Biome[] {
-    const shuffled = [...biomes].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+        this.biome2Button.addEventListener('click', async () => {
+            GameInitializer.startNextCombat(biome2);
+            this.bannedBiome = biome2
+            this.combatSection.classList.remove('hidden'); 
+            this.biomeMenu.classList.add('hidden'); // Masquer le menu des biomes
+        });
+
+    }
+
+    public static subMenuSetup() {
+       // appel de la fonction d'affichage du menu de compétence
+        HUD.menuHandler('skills');
+        HUD.menuHandler('equipements');
+        HUD.menuHandler('consumable')
+    }
 }
