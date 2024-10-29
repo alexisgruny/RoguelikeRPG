@@ -34,9 +34,7 @@ export class PlayerStatsService {
         this.playerStats.defense = role.defense;
 
         // Mise à jour initiale du HUD
-        HUD.updatePlayerStats(
-            this.playerStats
-        );
+        HUD.updatePlayerStats(this.playerStats);
     }
 
     // Récupère les stats actuelles du joueur

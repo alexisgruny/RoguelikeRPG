@@ -15,6 +15,9 @@ export class Menu {
     private static combatSection = document.getElementById('combat-section')!;
     private static biome1Button = document.getElementById('biome1-button') as HTMLButtonElement;
     private static biome2Button = document.getElementById('biome2-button') as HTMLButtonElement;
+    private static skillButton = document.getElementById('skill-button') as HTMLButtonElement;
+    private static equipementButton = document.getElementById('consumable-button') as HTMLButtonElement;
+    private static consumableButton = document.getElementById('equipement-button') as HTMLButtonElement;
     public static bannedBiome: Biome;
 
     // Fonction pour démarrer le jeu en affichant le menu de sélection des rôles
@@ -50,8 +53,9 @@ export class Menu {
     }
 
     // Affiche le menu de sélection des biomes et configure les boutons pour les biomes
-    private static showBiomeMenu() {
+    public static showBiomeMenu() {
         this.toggleVisibility(this.roleMenu, false); // Masquer le menu des rôles
+        this.toggleVisibility(this.combatSection, false);
         this.toggleVisibility(this.biomeMenu, true); // Afficher le menu des biomes
         this.setupBiomeButtons();
     }
@@ -78,9 +82,17 @@ export class Menu {
 
     // Configure le sous-menu pour les compétences, équipements et consommables
     public static setupSubMenu() {
-        HUD.menuHandler('skills');
-        HUD.menuHandler('equipements');
-        HUD.menuHandler('consumable');
+        this.initializeMenu('skill');
+        this.initializeMenu('equipement');
+        this.initializeMenu('consumable');
+    }
+    
+    private static initializeMenu(type: 'skill' | 'equipement' | 'consumable') {
+        // Vérifie si l'écouteur d'événements existe déjà pour éviter les doublons
+        if (!document.getElementById(`${type}-button`)?.hasAttribute('data-initialized')) {
+            HUD.menuHandler(type);
+            document.getElementById(`${type}-button`)?.setAttribute('data-initialized', 'true'); // Marque le bouton comme initialisé
+        }
     }
 
     // Fonction utilitaire pour afficher ou masquer un élément

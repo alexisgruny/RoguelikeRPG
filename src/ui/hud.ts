@@ -22,11 +22,18 @@ export class HUD {
     }
 
     // Mise à jour des stats du monstre à l'écran
-    public static updateMonsterStats(monster: Monster) {
-        this.updateElementText('monster-name', monster.name);
-        this.updateElementText('monster-health', `Vie: ${monster.health}`);
-        this.updateElementText('monster-attack', `Attaque: ${monster.attack}`);
-        this.updateElementText('monster-defense', `Défense: ${monster.defense}`);
+    public static updateMonsterStats(monster: Monster | null) {
+        if (monster === null) {
+            this.updateElementText('monster-name', 'default');
+            this.updateElementText('monster-health', `Vie: `);
+            this.updateElementText('monster-attack', `Attaque: `);
+            this.updateElementText('monster-defense', `Défense: `); 
+        } else {
+            this.updateElementText('monster-name', monster.name);
+            this.updateElementText('monster-health', `Vie: ${monster.health}`);
+            this.updateElementText('monster-attack', `Attaque: ${monster.attack}`);
+            this.updateElementText('monster-defense', `Défense: ${monster.defense}`);
+        }
     }
 
     // Affichage et gestion des logs de combat
@@ -73,8 +80,9 @@ export class HUD {
             merchant: { title: 'Marchand', message: 'Vous rencontrez un marchand.' },
             boss: { title: 'Boss', message: 'Le boss vous attaque.' },
             end: { title: 'Fin', message: 'Vous avez fini le jeu.' },
+            biomeChange: { title: 'Changement de biome', message: 'Vous changez de biome'}
         };
-    
+
         if (eventType in eventMessages) {
             const { title, message } = eventMessages[eventType as keyof typeof eventMessages];
             this.showModal('modal-victory-defeat', title, message);
@@ -145,10 +153,11 @@ export class HUD {
     }
 
     // Handler pour afficher les menus de compétences, équipements ou consommables
-    public static menuHandler(type: 'skills' | 'equipements' | 'consumable') {
+    public static menuHandler(type: 'skill' | 'equipement' | 'consumable') {
         const buttonId = `${type}-button`;
         const menuId = 'info-menu';
         const listId = 'info-list';
+        const TitleId = 'info-title';
         const backButtonId = 'back-to-main';
         const tooltip = this.createOrGetTooltip();
 
@@ -156,8 +165,20 @@ export class HUD {
             const mainMenu = document.getElementById('combat-actions');
             const sharedMenu = document.getElementById(menuId);
             const sharedList = document.getElementById(listId);
+            const sharedTitle = document.getElementById(TitleId);
 
-            if (mainMenu && sharedMenu && sharedList) {
+            if (mainMenu && sharedMenu && sharedList && sharedTitle) {
+                switch (type) {
+                    case 'skill':
+                        sharedTitle.innerHTML = 'Compétences';
+                        break;
+                    case 'equipement':
+                        sharedTitle.innerHTML = 'Équipements';
+                        break;
+                    case 'consumable':
+                        sharedTitle.innerHTML = 'Consommables';
+                        break;
+                }
                 mainMenu.style.display = 'none';
                 sharedMenu.style.display = 'block';
                 sharedList.innerHTML = '';
@@ -171,7 +192,7 @@ export class HUD {
                     itemButton.addEventListener('mouseover', (e) => this.showTooltip(tooltip, item, e));
                     itemButton.addEventListener('mouseout', () => (tooltip.style.display = 'none'));
 
-                    if (type === 'skills') {
+                    if (type === 'skill') {
                         itemButton.addEventListener('click', () => {
                             const currentMonster = GameInitializer.currentMonster;
                             if (currentMonster) { // Vérifie que currentMonster n'est pas null
@@ -219,10 +240,10 @@ export class HUD {
     }
 
     // Fonction générique pour récupérer des items selon le type
-    private static getItemsByType(type: 'skills' | 'equipements' | 'consumable') {
+    private static getItemsByType(type: 'skill' | 'equipement' | 'consumable') {
         switch (type) {
-            case 'skills': return PlayerStatsService.playerSkills;
-            case 'equipements': return PlayerStatsService.playerEquipement;
+            case 'skill': return PlayerStatsService.playerSkills;
+            case 'equipement': return PlayerStatsService.playerEquipement;
             case 'consumable': return PlayerStatsService.playerConsumable;
             default: return [];
         }

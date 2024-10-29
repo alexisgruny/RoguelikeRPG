@@ -28,4 +28,16 @@ export class MonsterService {
         }
         return shuffledMonsters.slice(0, numberOfMonsters); // Prend les premiers éléments après le mélange
     }
+    
+    public static applyDifficultyScaling(monster: Monster, battleCount: number): Monster {
+        const difficultyFactor = 0.05; // Ajuste ce facteur pour moduler la difficulté
+        const scale = 1 + difficultyFactor * Math.sqrt(battleCount);
+    
+        return {
+            ...monster,
+            health: Number(Math.floor(monster.health * scale)),
+            attack: Number(Math.floor(monster.attack * scale)),
+            defense: Number(Math.floor(monster.defense * scale)),
+        };
+    }
 }

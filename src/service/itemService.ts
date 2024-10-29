@@ -48,7 +48,7 @@ export class ItemService {
             const playerStats = PlayerStatsService.playerStats;
 
             // Ajouter l'item choisi au joueur
-            switch(chosenItem.type){
+            switch (chosenItem.type) {
                 case ('compétence'):
                     PlayerStatsService.addSkill(chosenItem);
                     break;
@@ -59,9 +59,9 @@ export class ItemService {
                 case ('consommable'):
                     PlayerStatsService.addConsumable(chosenItem);
                     break;
-                default :
+                default:
 
-                break;
+                    break;
             }
         });
     }

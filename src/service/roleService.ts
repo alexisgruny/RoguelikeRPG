@@ -1,4 +1,5 @@
 import { Role } from '../types';
+import { PlayerStatsService } from './playerManagerService';
 
 export class RoleService {
     // Stocke le rôle sélectionné
@@ -11,5 +12,6 @@ export class RoleService {
             throw new Error(`Role '${roleName}' not found`);
         }
         this.currentRole = selectedRole;
+        PlayerStatsService.initializePlayerStats();
     }
 }

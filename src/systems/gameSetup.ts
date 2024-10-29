@@ -12,8 +12,9 @@ export class GameInitializer {
     public static currentMonster: Monster | null = null;
     public static currentBiome: Biome;
     private static victoryCount: number = 0;
+    private static combatCount: number = 0;
     private static biomeDoneCount: number = 0;
-    private static handleAttackBound: (event: Event) => void;
+    private static handleAttackBound: (event: Event) => void = () => { };
 
     public static initializeGame() {
         try {
@@ -24,16 +25,18 @@ export class GameInitializer {
     }
 
     public static startNextCombat(biome: Biome) {
-        PlayerStatsService.initializePlayerStats();
+        this.combatCount++;
         this.currentBiome = biome;
-        this.currentMonster = this.getRandomMonster(biome);
+        this.currentMonster = this.getRandomMonster();
+        this.currentMonster = MonsterService.applyDifficultyScaling(this.currentMonster, this.combatCount);
         HUD.updateMonsterStats(this.currentMonster);
         this.setupAttackButtons();
     }
 
-    private static getRandomMonster(biome: Biome): Monster {
-        const availableMonsters = MonsterService.getMonstersFromBiome(biome);
-        return MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
+    private static getRandomMonster(): Monster {
+        const availableMonsters = MonsterService.getMonstersFromBiome(this.currentBiome);
+        const randomMonster = MonsterService.selectRandomMonsters(availableMonsters, 1)[0];
+        return JSON.parse(JSON.stringify(randomMonster)); // Création d'un clone en profondeur
     }
 
     private static setupAttackButtons() {
@@ -41,13 +44,18 @@ export class GameInitializer {
         const skillButton = document.getElementById('info-list');
 
         if (attackButton) {
-            attackButton.removeEventListener('click', this.handleAttackBound);
+            // Supprime tout ancien écouteur pour éviter les doublons
+            if (this.handleAttackBound) {
+                attackButton.removeEventListener('click', this.handleAttackBound);
+            }
+            // Lie et ajoute un nouvel écouteur
             this.handleAttackBound = this.handlePlayerAttack.bind(this);
             attackButton.addEventListener('click', this.handleAttackBound);
         }
 
         if (skillButton) {
-            skillButton.addEventListener('click', this.handleSkillButtonClick);
+            skillButton.removeEventListener('click', this.handleSkillButtonClick);
+            skillButton.addEventListener('click', this.handleSkillButtonClick.bind(this));
         }
     }
 
@@ -62,28 +70,18 @@ export class GameInitializer {
     private static handlePlayerAttack() {
         HUD.clearLogs();
         if (!this.currentMonster) return;
-
-        const { damageToMonster, monsterDefeated } = CombatSystem.playerAttack(this.currentMonster);
-        HUD.logAction(`Player attacks ${this.currentMonster.name} for ${damageToMonster} damage!`);
-
-        if (monsterDefeated) {
-            this.handleVictory();
-            HUD.logAction(`${this.currentMonster.name} is DEAD!`);
-            this.currentMonster = null;
-        } else {
-            this.handleMonsterAttack();
-        }
+        CombatSystem.playerAttack(this.currentMonster);
     }
 
-    private static handleMonsterAttack() {
+    public static handleMonsterAttack() {
         if (this.currentMonster) {
             CombatSystem.monsterAttack(this.currentMonster);
         }
     }
 
-    private static async handleVictory() {
+    public static async handleVictory() {
         this.victoryCount++;
-        let eventType: 'end' | 'heal' | 'boss' | 'change biome' | 'item' | 'victory' | null = null;
+        let eventType: 'end' | 'heal' | 'boss' | 'biomeChange' | 'item' | 'victory' | null = null;
         let isBossBattle = false;
 
         PlayerStatsService.addExperience();
@@ -93,7 +91,7 @@ export class GameInitializer {
             case 3:
             case 7:
                 eventType = 'item';
-                ItemService.chooseItem(this.victoryCount);
+                await ItemService.chooseItem(this.victoryCount);
                 break;
             case 5:
                 eventType = 'heal';
@@ -107,9 +105,10 @@ export class GameInitializer {
                 if (this.biomeDoneCount === 5) {
                     eventType = 'end';
                 } else {
-                    eventType = 'change biome';
+                    eventType = 'biomeChange';
                     this.biomeDoneCount++;
                     this.victoryCount = 0;
+                    Menu.showBiomeMenu();
                 }
                 break;
             default:
@@ -118,17 +117,21 @@ export class GameInitializer {
         }
 
         if (eventType) {
-            HUD.showEventModal(eventType);
+           await HUD.showEventModal(eventType);
         }
-
-        isBossBattle ? this.startBossBattle() : this.startNextCombat(this.currentBiome);
+        // Condition pour choisir entre le combat contre un boss ou un monstre normal
+        if (isBossBattle) {
+            this.startBossBattle();
+        } else {
+            this.startNextCombat(this.currentBiome);
+        }
     }
 
     private static startBossBattle() {
         const boss = MonsterService.selectBossFromBiome(AppData.monsters);
         this.currentMonster = boss;
         HUD.updateMonsterStats(this.currentMonster);
-        this.setupAttackButtons();
+        this.setupAttackButtons(); // Réattacher les boutons
     }
 
     public static chooseAbility(monster: Monster) {

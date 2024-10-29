@@ -2,10 +2,10 @@
     {
         "id": "ecureuil",
         "name": "Ecureuil",
-        "health": 10,
-        "maxHealth": 10,
-        "attack": 5,
-        "defense": 2,
+        "health": 50,
+        "maxHealth": 50,
+        "attack": 10,
+        "defense": 1,
         "abilities": [
             {"name": "Lancer de gland", "damage": 1, "probabilities": 1, "effect": "damage"}
         ],
@@ -18,9 +18,9 @@
     {
         "id": "hibou",
         "name": "Hibou",
-        "health": 20,
-        "maxHealth": 20,
-        "attack": 4,
+        "health": 70,
+        "maxHealth": 70,
+        "attack": 5,
         "defense": 5,
         "abilities": [
             {"name": "Picotement", "damage": 1, "probabilities": 0.7, "effect": "damage"},
@@ -34,8 +34,8 @@
     {
         "id": "renard",
         "name": "Renard",
-        "health": 25,
-        "maxHealth": 25,
+        "health": 75,
+        "maxHealth": 75,
         "attack": 8,
         "defense": 3,
         "abilities": [
@@ -51,8 +51,8 @@
     {
         "id": "cerf",
         "name": "Cerf",
-        "health": 125,
-        "maxHealth": 125,
+        "health": 250,
+        "maxHealth": 250,
         "attack": 10,
         "defense": 8,
         "abilities": [
@@ -68,11 +68,14 @@
     {
         "id": "meduse",
         "name": "Meduse",
-        "health": 50,
-        "attack": 8,
+        "health": 70,
+        "maxHealth": 70,
+        "attack": 10,
         "defense": 1,
         "abilities": [
-            {"name": "choc", "damage": 1, "probabilities": 1}
+            {"name": "Griffure", "damage": 1.5, "probabilities": 0.2, "effect": "damage"},
+            {"name": "Charge", "damage": 1, "probabilities": 0.5, "effect": "damage"},
+            {"name": "Aiguisage", "damage": 0, "probabilities": 0.3, "effect": "attack", "attackValue": "3"}
         ],
         "loot": [
             {"item": "proute", "probabilities": 0.4}
@@ -82,11 +85,14 @@
     {
         "id": "crevette",
         "name": "Crevette",
-        "health": 30,
-        "attack": 5,
-        "defense": 6,
+        "health": 170,
+        "maxHealth": 170,
+        "attack": 3,
+        "defense": 12,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "probabilities": 1}
+            {"name": "Griffure", "damage": 1.5, "probabilities": 0.2, "effect": "damage"},
+            {"name": "Charge", "damage": 1, "probabilities": 0.5, "effect": "damage"},
+            {"name": "Aiguisage", "damage": 0, "probabilities": 0.3, "effect": "attack", "attackValue": "3"}
         ],
         "loot": [
             {"item": "Plume", "probabilities": 0.4}
@@ -96,11 +102,14 @@
     {
         "id": "crabe",
         "name": "Crabe",
-        "health": 50,
-        "attack": 10,
-        "defense": 20,
+        "health": 150,
+        "maxHealth": 150,
+        "attack": 3,
+        "defense": 15,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "probabilities": 1}
+            {"name": "Griffure", "damage": 1.5, "probabilities": 0.2, "effect": "damage"},
+            {"name": "Charge", "damage": 1, "probabilities": 0.5, "effect": "damage"},
+            {"name": "Aiguisage", "damage": 0, "probabilities": 0.3, "effect": "attack", "attackValue": "3"}
         ],
         "loot": [
             {"item": "Plume", "probabilities": 0.4}
@@ -110,11 +119,14 @@
     {
         "id": "caribou",
         "name": "Caribou",
-        "health": 40,
-        "attack": 8,
+        "health": 120,
+        "maxHealth": 120,
+        "attack": 5,
         "defense": 3,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "probabilities": 1}
+            {"name": "Griffure", "damage": 1.5, "probabilities": 0.2, "effect": "damage"},
+            {"name": "Charge", "damage": 1, "probabilities": 0.5, "effect": "damage"},
+            {"name": "Aiguisage", "damage": 0, "probabilities": 0.3, "effect": "attack", "attackValue": "3"}
         ],
         "loot": [
             {"item": "Plume", "probabilities": 0.4}
@@ -124,11 +136,14 @@
     {
         "id": "chevreuil",
         "name": "Chevreuil",
-        "health": 30,
-        "attack": 8,
+        "health": 100,
+        "maxHealth": 100,
+        "attack": 5,
         "defense": 5,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "probabilities": 1}
+            {"name": "Griffure", "damage": 1.5, "probabilities": 0.2, "effect": "damage"},
+            {"name": "Charge", "damage": 1, "probabilities": 0.5, "effect": "damage"},
+            {"name": "Aiguisage", "damage": 0, "probabilities": 0.3, "effect": "attack", "attackValue": "3"}
         ],
         "loot": [
             {"item": "Plume", "probabilities": 0.4}
@@ -138,11 +153,14 @@
     {
         "id": "ours",
         "name": "Ours",
-        "health": 250,
+        "health": 500,
+        "maxHealth": 500,
         "attack": 15,
         "defense": 0,
         "abilities": [
-            {"name": "Picotement", "damage": 1, "probabilities": 1}
+            {"name": "Griffure", "damage": 1.5, "probabilities": 0.2, "effect": "damage"},
+            {"name": "Charge", "damage": 1, "probabilities": 0.5, "effect": "damage"},
+            {"name": "Aiguisage", "damage": 0, "probabilities": 0.3, "effect": "attack", "attackValue": "3"}
         ],
         "loot": [
             {"item": "Plume", "probabilities": 0.4}
