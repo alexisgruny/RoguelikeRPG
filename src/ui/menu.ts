@@ -5,6 +5,7 @@ import { RoleService } from '../service/roleService';
 import { HUD } from './HUD';
 import { AppData } from '../data/appData';
 import { GameInitializer } from '../systems/gameSetup';
+import { changeBackgroundForBiome } from '../components/backgroundChangement';
 
 export class Menu {
     // Initialisation des éléments HTML
@@ -77,6 +78,7 @@ export class Menu {
             this.bannedBiome = biome;
             this.toggleVisibility(this.biomeMenu, false); // Masquer le menu des biomes
             this.toggleVisibility(this.combatSection, true); // Afficher la section de combat
+            changeBackgroundForBiome(biome.image);
         };
     }
 

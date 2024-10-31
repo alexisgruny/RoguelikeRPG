@@ -39,6 +39,7 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 { from: 'src/data', to: 'data' },  // Copier le dossier data dans dist
+                { from: 'assets', to: 'assets' }, // Copier le dossier assets dans dist
             ],
         }),
     ],

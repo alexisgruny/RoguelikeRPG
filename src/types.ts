@@ -10,6 +10,7 @@ export interface Biome {
     name: string;
     description: string;
     monsters: string[];
+    image?: string;
 }
 
 export interface Monster {
@@ -22,6 +23,7 @@ export interface Monster {
     abilities: Ability[];
     loot: { item: string; chance: number }[];
     boss: boolean;
+    image: string;
 }
 
 export interface Ability {

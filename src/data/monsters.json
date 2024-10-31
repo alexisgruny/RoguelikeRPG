@@ -13,7 +13,8 @@
             {"item": "gland", "probabilities": 0.3},
             {"item": "noix", "probabilities": 0.2}
         ],
-        "boss": false
+        "boss": false,
+        "image": "../assets/images/squirrel.png"
     },
     {
         "id": "hibou",
@@ -29,7 +30,7 @@
         "loot": [
             {"item": "plume", "probabilities": 0.3}
         ],
-        "boss": false
+        "boss": false 
     },
     {
         "id": "renard",
@@ -46,7 +47,8 @@
         "loot": [
             {"item": "griffe", "probabilities": 0.15}
         ],
-        "boss": false
+        "boss": false,
+        "image": "../assets/images/fox.png"
     },
     {
         "id": "cerf",
@@ -63,7 +65,8 @@
         "loot": [
             {"item": "boisCerf", "probabilities": 1}
         ],
-        "boss": true
+        "boss": true,
+        "image": "../assets/images/deer.png"
     },    
     {
         "id": "meduse",

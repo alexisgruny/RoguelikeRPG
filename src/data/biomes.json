@@ -9,7 +9,8 @@
             "Sanglier",
             "Renard",
             "Cerf"
-        ]
+        ],
+        "image": "assets/images/biomeForest.png"
     },
     {
         "id": "plage",
