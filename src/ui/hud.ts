@@ -26,8 +26,8 @@ export class HUD {
         this.updateElementText('player-role', playerStats.name);
         this.updateElementText('player-health', `Health: ${playerStats.health}/${playerStats.maxHealth}`);
         updateHealthBar('player-health-bar', playerStats.health, playerStats.maxHealth);
-        this.updateElementText('player-attack', `Attack: ${playerStats.attack}`);
-        this.updateElementText('player-defense', `Defense: ${playerStats.defense}`);
+        this.updateElementText('player-attack', `${playerStats.attack}`);
+        this.updateElementText('player-defense', `${playerStats.defense}`);
         this.updateElementText('player-lvl', `Niveau: ${playerStats.level}`);
         this.updateElementText('player-xp', `Expérience: ${playerStats.experience}/${playerStats.experienceToNextLevel}`);
         this.updateImage('player-image', `${playerStats.image}`)
@@ -42,10 +42,10 @@ export class HUD {
             this.updateElementText('monster-defense', `Défense: `);
         } else {
             this.updateElementText('monster-name', monster.name);
-            this.updateElementText('monster-health', `Vie: ${monster.health}`);
+            this.updateElementText('monster-health', `Vie: ${monster.health}/${monster.maxHealth}`);
             updateHealthBar('monster-health-bar', monster.health, monster.maxHealth);
-            this.updateElementText('monster-attack', `Attaque: ${monster.attack}`);
-            this.updateElementText('monster-defense', `Défense: ${monster.defense}`);
+            this.updateElementText('monster-attack', `${monster.attack}`);
+            this.updateElementText('monster-defense', `${monster.defense}`);
             this.updateImage('monster-image', `${monster.image}`)
         }
     }

@@ -10,7 +10,7 @@
             "Renard",
             "Cerf"
         ],
-        "image": "assets/images/biomeForest.png"
+        "image": "assets/biomes/biomeForest.png"
     },
     {
         "id": "plage",
@@ -22,7 +22,8 @@
             "Sanglier",
             "renard",
             "Crabe"
-        ]
+        ],
+        "image": "assets/biomes/beachBiome.jpg"
     },
     {
         "id": "montagne",
@@ -34,6 +35,7 @@
             "Sanglier",
             "renard",
             "Ours"
-        ]
+        ],
+        "image": "assets/biomes/mountainBiome.jpg"
     }
 ]

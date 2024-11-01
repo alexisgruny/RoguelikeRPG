@@ -14,7 +14,7 @@
             {"item": "noix", "probabilities": 0.2}
         ],
         "boss": false,
-        "image": "../assets/images/squirrel.png"
+        "image": "../assets/monsters/squirrel.png"
     },
     {
         "id": "hibou",
@@ -48,7 +48,7 @@
             {"item": "griffe", "probabilities": 0.15}
         ],
         "boss": false,
-        "image": "../assets/images/fox.png"
+        "image": "../assets/monsters/fox.png"
     },
     {
         "id": "cerf",
@@ -66,7 +66,7 @@
             {"item": "boisCerf", "probabilities": 1}
         ],
         "boss": true,
-        "image": "../assets/images/deer.png"
+        "image": "../assets/monsters/deer.png"
     },    
     {
         "id": "meduse",
