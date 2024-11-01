@@ -45,6 +45,7 @@ export interface PlayerStats {
     experience: number;
     level: number;
     experienceToNextLevel: number;
+    image?: string;
 }
 
 export interface Skill {

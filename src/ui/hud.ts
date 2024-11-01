@@ -3,22 +3,34 @@ import { RoleService } from '../service/roleService';
 import { PlayerStatsService } from '../service/playerManagerService';
 import { CombatSystem } from '../systems/combatSystem';
 import { GameInitializer } from '../systems/gameSetup';
+import { updateHealthBar } from '../components/healthBar';
 
 export class HUD {
     // Fonction générique pour mettre à jour un élément HTML
     private static updateElementText(elementId: string, text: string) {
-        const element = document.getElementById(elementId);
-        if (element) element.textContent = text;
+        const element = document.getElementById(elementId) as HTMLElement;
+        if (element) {
+            element.textContent = text;
+        }
+    }
+
+    private static updateImage(elementId: string, image: string) {
+        const imgElement = document.getElementById(elementId) as HTMLImageElement ;
+        if (imgElement) {
+            imgElement.src = image;
+        }
     }
 
     // Mise à jour des stats du joueur à l'écran
-    public static updatePlayerStats(playerStats: PlayerStats): void {
+    public static updatePlayerStats(playerStats: PlayerStats){
         this.updateElementText('player-role', playerStats.name);
         this.updateElementText('player-health', `Health: ${playerStats.health}/${playerStats.maxHealth}`);
+        updateHealthBar('player-health-bar', playerStats.health, playerStats.maxHealth);
         this.updateElementText('player-attack', `Attack: ${playerStats.attack}`);
         this.updateElementText('player-defense', `Defense: ${playerStats.defense}`);
         this.updateElementText('player-lvl', `Niveau: ${playerStats.level}`);
         this.updateElementText('player-xp', `Expérience: ${playerStats.experience}/${playerStats.experienceToNextLevel}`);
+        this.updateImage('player-image', `${playerStats.image}`)
     }
 
     // Mise à jour des stats du monstre à l'écran
@@ -27,12 +39,14 @@ export class HUD {
             this.updateElementText('monster-name', 'default');
             this.updateElementText('monster-health', `Vie: `);
             this.updateElementText('monster-attack', `Attaque: `);
-            this.updateElementText('monster-defense', `Défense: `); 
+            this.updateElementText('monster-defense', `Défense: `);
         } else {
             this.updateElementText('monster-name', monster.name);
             this.updateElementText('monster-health', `Vie: ${monster.health}`);
+            updateHealthBar('monster-health-bar', monster.health, monster.maxHealth);
             this.updateElementText('monster-attack', `Attaque: ${monster.attack}`);
             this.updateElementText('monster-defense', `Défense: ${monster.defense}`);
+            this.updateImage('monster-image', `${monster.image}`)
         }
     }
 
@@ -80,7 +94,7 @@ export class HUD {
             merchant: { title: 'Marchand', message: 'Vous rencontrez un marchand.' },
             boss: { title: 'Boss', message: 'Le boss vous attaque.' },
             end: { title: 'Fin', message: 'Vous avez fini le jeu.' },
-            biomeChange: { title: 'Changement de biome', message: 'Vous changez de biome'}
+            biomeChange: { title: 'Changement de biome', message: 'Vous changez de biome' }
         };
 
         if (eventType in eventMessages) {

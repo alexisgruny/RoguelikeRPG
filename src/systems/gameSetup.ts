@@ -105,7 +105,7 @@ export class GameInitializer {
                 if (this.biomeDoneCount === 5) {
                     eventType = 'end';
                 } else {
-                    eventType = 'biomeChange';
+                    eventType = 'biomeChange'; 
                     this.biomeDoneCount++;
                     this.victoryCount = 0;
                     Menu.showBiomeMenu();
