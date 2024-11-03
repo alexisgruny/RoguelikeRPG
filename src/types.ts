@@ -13,7 +13,7 @@ export interface Biome {
     name: string;
     description: string;
     monsters: string[];
-    image?: string;
+    image: string;
 }
 
 export interface Monster {

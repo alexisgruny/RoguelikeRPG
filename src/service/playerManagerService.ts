@@ -16,7 +16,8 @@ export class PlayerStatsService {
         defense: 10,
         experience: 0,
         level: 1,
-        experienceToNextLevel: 3
+        experienceToNextLevel: 3,
+        image: 'default'
     };
 
     // Initialise les stats du joueur en fonction de la classe sélectionnée
@@ -32,6 +33,7 @@ export class PlayerStatsService {
         this.playerStats.maxHealth = role.health;
         this.playerStats.attack = role.attack;
         this.playerStats.defense = role.defense;
+        this.playerStats.image = role.image;
 
         // Mise à jour initiale du HUD
         HUD.updatePlayerStats(this.playerStats);

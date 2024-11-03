@@ -14,11 +14,8 @@ export class Menu {
     private static roleMenu = document.getElementById('role-menu')!;
     private static biomeMenu = document.getElementById('biome-menu')!;
     private static combatSection = document.getElementById('combat-section')!;
-    private static biome1Button = document.getElementById('biome1-button') as HTMLButtonElement;
-    private static biome2Button = document.getElementById('biome2-button') as HTMLButtonElement;
-    private static skillButton = document.getElementById('skill-button') as HTMLButtonElement;
-    private static equipementButton = document.getElementById('consumable-button') as HTMLButtonElement;
-    private static consumableButton = document.getElementById('equipement-button') as HTMLButtonElement;
+    private static log = document.getElementById('combat-log')!;
+    private static combatAction = document.getElementById('combat-actions')!;
     public static bannedBiome: Biome;
 
     // Fonction pour démarrer le jeu en affichant le menu de sélection des rôles
@@ -42,8 +39,6 @@ export class Menu {
 
             // Crée un conteneur pour le bouton et l'image du rôle
             const roleContainer = document.createElement('div') as HTMLDivElement;
-            roleContainer.classList.add(`role${role.name}`); // Ajoute une classe pour le styliser avec le CSS
-
 
             const button = document.createElement('button');
             button.textContent = role.name;
@@ -59,9 +54,9 @@ export class Menu {
             imageElement.id = role.name;
             imageElement.src = role.image;
             imageElement.alt = `${role.name} Image`;
-
-            roleContainer.appendChild(button); // Ajoute le bouton au menu des rôles
+           
             roleContainer.appendChild(imageElement); // Ajoute l'image sous le bouton
+            roleContainer.appendChild(button); // Ajoute le bouton au menu des rôles
             this.roleMenu.appendChild(roleContainer); // Ajoute le conteneur du rôle au menu
         });
     }
@@ -74,25 +69,45 @@ export class Menu {
         this.setupBiomeButtons();
     }
 
-    // Configure deux boutons de sélection de biome de manière aléatoire
-    private static setupBiomeButtons() {
-        const [biome1, biome2] = BiomeService.getRandomBiomes(AppData.biomes, 2);
-
-        // Configure les boutons pour chaque biome
-        this.setupBiomeButton(this.biome1Button, biome1);
-        this.setupBiomeButton(this.biome2Button, biome2);
-    }
-
     // Configure un bouton pour lancer un combat dans le biome sélectionné
-    private static setupBiomeButton(button: HTMLButtonElement, biome: Biome) {
-        button.textContent = biome.name;
-        button.onclick = () => {
-            GameInitializer.startNextCombat(biome);
-            this.bannedBiome = biome;
-            this.toggleVisibility(this.biomeMenu, false); // Masquer le menu des biomes
-            this.toggleVisibility(this.combatSection, true); // Afficher la section de combat
-            changeBackgroundForBiome(biome.image);
-        };
+    private static setupBiomeButtons() {
+        
+        const biomes = AppData.biomes;
+        const randomBiome = BiomeService.getRandomBiomes(biomes, 3);
+
+        this.biomeMenu.innerHTML = ''; // Vide le contenu précédent pour éviter les doublons de boutons
+
+        randomBiome.forEach(biome => {
+
+            // Crée un conteneur pour le bouton et l'image du rôle
+            const biomeContainer = document.createElement('div') as HTMLDivElement;
+
+            const button = document.createElement('button');
+            button.textContent = biome.name;
+            button.id = biome.name;
+
+            // Ajoute un gestionnaire d'événement pour chaque bouton de rôle
+            button.addEventListener('click', () => {
+                GameInitializer.startNextCombat(biome);
+                this.bannedBiome = biome;
+                this.toggleVisibility(this.biomeMenu, false); // Masquer le menu des biomes
+                this.toggleVisibility(this.combatSection, true); // Afficher la section de combat
+                this.toggleVisibility(this.log, true); // Afficher la section de combat
+                this.toggleVisibility(this.combatAction, true); // Afficher la section de combat
+                changeBackgroundForBiome(biome.image);
+                this.setupSubMenu(); // Affiche le menu de sélection de biome
+            });
+
+            // Création de l'élément image pour chaque rôle
+            const imageElement = document.createElement('img');
+            imageElement.id = biome.name;
+            imageElement.src = biome.image;
+            imageElement.alt = `${biome.name} Image`;
+           
+            biomeContainer.appendChild(imageElement); // Ajoute l'image sous le bouton
+            biomeContainer.appendChild(button); // Ajoute le bouton au menu des rôles
+            this.biomeMenu.appendChild(biomeContainer); // Ajoute le conteneur du rôle au menu
+        });
     }
 
     // Configure le sous-menu pour les compétences, équipements et consommables

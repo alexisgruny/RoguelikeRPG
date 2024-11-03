@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roguelike Combat Interface</title>
     <link rel="stylesheet" href="style.css">
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&family=Tiny5&display=swap"
+        rel="stylesheet">
+
 </head>
 
 <body>
@@ -14,13 +21,7 @@
             <button id="start-button">JOUER</button>
         </div>
         <div id="role-menu" class="role-container hidden"></div>
-        <div id="biome-menu" class="menu-container hidden">
-            <h2>Choose a Biome</h2>
-            <button id="biome1-button"></button>
-            <button id="biome2-button"></button>
-            <p id='biome-name'></p>
-        </div>
-
+        <div id="biome-menu" class="menu-container hidden"></div>
         <div id="combat-section" class="combat-container hidden">
             <!-- Conteneur pour les informations du joueur et du monstre -->
             <div id="combat-info">
@@ -28,14 +29,25 @@
                 <div id="player-info">
                     <h2><span id="player-role"></span></h2>
                     <p><span id="player-lvl"></span></p>
-                    <p><span id="player-xp"></span></p>
                     <p><span id="player-health"></span></p>
                     <div class="health-bar">
                         <div id="player-health-bar" class="health-fill"></div>
                     </div>
-                    <p><img id="attack-image" src="../assets/ui/sword.png" alt=""><span id="player-attack"></span></p>
-                    <p><img id="defense-image" src="../assets/ui/shield.png" alt=""><span id="player-defense"></span></p>
-                    <img id="player-image" src="" alt="">
+                    <div class="atk-def">
+                        <p>
+                            <img id="attack-image" src="../assets/ui/sword.png" alt="">
+                            <span id="player-attack"></span>
+                        </p>
+                        <p>
+                            <img id="defense-image" src="../assets/ui/shield.png" alt="">
+                            <span id="player-defense"></span>
+                        </p>
+                    </div>
+                    <div id="player-visual">
+                        <img id="player-image" src="" alt="">
+                        <div class="effects-container"></div>
+                        <span id="damage-player-text"></span>
+                    </div>
                 </div>
 
                 <!-- Informations sur le monstre -->
@@ -45,20 +57,31 @@
                     <div class="health-bar">
                         <div id="monster-health-bar" class="health-fill"></div>
                     </div>
-                    <p><img id="attack-image" src="../assets/ui/sword.png" alt=""><span id="monster-attack"></span></p>
-                    <p><img id="defense-image" src="../assets/ui/shield.png" alt=""><span id="monster-defense"></span></p>
-                    <img id="monster-image" src="" alt="">
+                    <div class="atk-def">
+                        <p>
+                            <img id="attack-image" src="../assets/ui/sword.png" alt="">
+                            <span id="monster-attack"></span>
+                        </p>
+                        <p>
+                            <img id="defense-image" src="../assets/ui/shield.png" alt="">
+                            <span id="monster-defense"></span>
+                        </p>
+                    </div>
+                    <div id="monster-visual">
+                        <img id="monster-image" src="" alt="">
+                        <div class="effects-container"></div>
+                        <span id="damage-monster-text"></span>
+                    </div>
                 </div>
             </div>
-
             <!-- Journal de combat -->
-            <div id="combat-log">
+            <div id="combat-log" class="hidden">
                 <h3>Combat Log</h3>
                 <pre id="log-output"></pre>
             </div>
 
             <!-- Actions de combat -->
-            <div id="combat-actions">
+            <div id="combat-actions" class="hidden">
                 <button id="attack-button">Attack</button>
                 <button id="skill-button">Compétence</button>
                 <button id="consumable-button">Consommable</button>
@@ -69,6 +92,13 @@
                 <div id="info-list"></div>
                 <button id="back-to-main">Retour au menu principal</button>
             </div>
+        </div>
+        <div id="victory-screen" class="hidden">
+            <h1>VICTOIRE !</h1>
+            <div id="reward">
+
+            </div>
+            <button>Suivant</button>
         </div>
         <!-- Modal de victoire ou défaite -->
         <div id="modal-victory-defeat" class="modal hidden">
@@ -82,6 +112,7 @@
 
     <!-- Inclusion des fichiers JavaScript -->
     <script src="dist/bundle.js" type="module"></script>
+
     <!-- Point d'entrée principal -->
 </body>
 

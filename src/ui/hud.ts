@@ -4,6 +4,7 @@ import { PlayerStatsService } from '../service/playerManagerService';
 import { CombatSystem } from '../systems/combatSystem';
 import { GameInitializer } from '../systems/gameSetup';
 import { updateHealthBar } from '../components/healthBar';
+import { particuleEffect } from '../components/particuleEffect';
 
 export class HUD {
     // Fonction générique pour mettre à jour un élément HTML
@@ -15,14 +16,14 @@ export class HUD {
     }
 
     private static updateImage(elementId: string, image: string) {
-        const imgElement = document.getElementById(elementId) as HTMLImageElement ;
+        const imgElement = document.getElementById(elementId) as HTMLImageElement;
         if (imgElement) {
             imgElement.src = image;
         }
     }
 
     // Mise à jour des stats du joueur à l'écran
-    public static updatePlayerStats(playerStats: PlayerStats){
+    public static updatePlayerStats(playerStats: PlayerStats) {
         this.updateElementText('player-role', playerStats.name);
         this.updateElementText('player-health', `Health: ${playerStats.health}/${playerStats.maxHealth}`);
         updateHealthBar('player-health-bar', playerStats.health, playerStats.maxHealth);
@@ -62,6 +63,36 @@ export class HUD {
     public static clearLogs() {
         const logRemover = document.getElementById('log-output') as HTMLDivElement;
         if (logRemover) logRemover.textContent = "";
+    }
+
+    public static showFlashAndDamage(playerMonster: string, damage: number) {
+        const flash = document.createElement('div');
+        flash.classList.add('flash-effect');
+    
+        let targetElement: HTMLElement | null = null;
+        let damageText: HTMLElement | null = null;
+    
+        if (playerMonster === 'player') {
+            targetElement = document.querySelector('#player-visual .effects-container');
+            damageText = document.getElementById('damage-player-text');
+        } else if (playerMonster === 'monster') {
+            targetElement = document.querySelector('#monster-visual .effects-container');
+            damageText = document.getElementById('damage-monster-text');
+        }
+    
+        if (targetElement && damageText) {
+            targetElement.appendChild(flash);
+            damageText.textContent = `-${damage}`;
+            damageText.style.opacity = '1';
+    
+            particuleEffect(targetElement);  // Animation de particules
+            setTimeout(() => {
+                flash.remove();
+                if (damageText) {  // Vérification pour s'assurer que damageText n'est pas null
+                    damageText.style.opacity = '0';
+                }
+            }, 500);
+        }
     }
 
     // Fonction générique pour afficher une modale avec un contenu personnalisé

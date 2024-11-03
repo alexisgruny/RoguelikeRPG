@@ -17,6 +17,7 @@ export class CombatSystem {
         const damageToMonster = Math.floor(baseDamage * randomFactor);
         monster.health -= damageToMonster;
         HUD.logAction(`Vous attaquez et infligé ${damageToMonster} de dégâts.`)
+        HUD.showFlashAndDamage('player', damageToMonster);
         HUD.updateMonsterStats(monster);
         if (monster.health <= 0) {
             this.MonsterDefeated(monster);
@@ -83,6 +84,7 @@ export class CombatSystem {
                     const damageToPlayer = Math.max(Math.floor(baseDamage * randomFactor) - playerStats.defense, 1);
                     playerStats.health -= damageToPlayer;
                     HUD.logAction(`${monster.name} utilise ${ability.name} et vous inflige ${damageToPlayer} de dégâts.`);
+                    HUD.showFlashAndDamage('monster', damageToPlayer);
                     PlayerStatsService.updatePlayerHealth(-damageToPlayer);
                     HUD.updatePlayerStats(playerStats);
 
