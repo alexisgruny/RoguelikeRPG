@@ -1,8 +1,11 @@
 export interface Role {
+    id: string,
     name: string;
     health: number;
     attack: number;
     defense: number;
+    skillPoint: Number;
+    image: string;
 }
 
 export interface Biome {
