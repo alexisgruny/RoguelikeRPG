@@ -4,7 +4,6 @@ import { PlayerStatsService } from '../service/playerManagerService';
 import { CombatSystem } from '../systems/combatSystem';
 import { GameInitializer } from '../systems/gameSetup';
 import { updateHealthBar } from '../components/healthBar';
-import { particuleEffect } from '../components/particuleEffect';
 
 export class HUD {
     // Fonction générique pour mettre à jour un élément HTML
@@ -66,28 +65,21 @@ export class HUD {
     }
 
     public static showFlashAndDamage(playerMonster: string, damage: number) {
-        const flash = document.createElement('div');
-        flash.classList.add('flash-effect');
-    
         let targetElement: HTMLElement | null = null;
         let damageText: HTMLElement | null = null;
-    
+
         if (playerMonster === 'player') {
-            targetElement = document.querySelector('#player-visual .effects-container');
+            targetElement = document.querySelector('#player-visual');
             damageText = document.getElementById('damage-player-text');
         } else if (playerMonster === 'monster') {
-            targetElement = document.querySelector('#monster-visual .effects-container');
+            targetElement = document.querySelector('#monster-visual');
             damageText = document.getElementById('damage-monster-text');
         }
-    
+
         if (targetElement && damageText) {
-            targetElement.appendChild(flash);
             damageText.textContent = `-${damage}`;
             damageText.style.opacity = '1';
-    
-            particuleEffect(targetElement);  // Animation de particules
             setTimeout(() => {
-                flash.remove();
                 if (damageText) {  // Vérification pour s'assurer que damageText n'est pas null
                     damageText.style.opacity = '0';
                 }
