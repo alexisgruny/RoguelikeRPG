@@ -65,27 +65,33 @@ export class HUD {
     }
 
     public static showFlashAndDamage(playerMonster: string, damage: number) {
-        let targetElement: HTMLElement | null = null;
-        let damageText: HTMLElement | null = null;
+    let targetElement: HTMLElement | null = null;
+    let damageText: HTMLElement | null = null;
 
-        if (playerMonster === 'player') {
-            targetElement = document.querySelector('#player-visual');
-            damageText = document.getElementById('damage-player-text');
-        } else if (playerMonster === 'monster') {
-            targetElement = document.querySelector('#monster-visual');
-            damageText = document.getElementById('damage-monster-text');
-        }
-
-        if (targetElement && damageText) {
-            damageText.textContent = `-${damage}`;
-            damageText.style.opacity = '1';
-            setTimeout(() => {
-                if (damageText) {  // Vérification pour s'assurer que damageText n'est pas null
-                    damageText.style.opacity = '0';
-                }
-            }, 500);
-        }
+    if (playerMonster === 'player') {
+        targetElement = document.querySelector('#player-visual');
+        damageText = document.getElementById('damage-player-text');
+    } else if (playerMonster === 'monster') {
+        targetElement = document.querySelector('#monster-visual');
+        damageText = document.getElementById('damage-monster-text');
     }
+
+    if (targetElement && damageText) {
+        // Réinitialise l'animation en supprimant puis en ajoutant la classe
+        damageText.classList.remove('damage-animation');
+        void damageText.offsetWidth; // Force le reflow pour réinitialiser l'animation
+        damageText.classList.add('damage-animation');
+
+        // Affiche le texte des dégâts et le rend visible
+        damageText.style.opacity = '1';
+        damageText.textContent = `-${damage}`;
+
+        // Cache le texte après l'animation (optionnel)
+        setTimeout(() => {
+            damageText!.style.opacity = '0';
+        }, 2000); // 2 secondes pour correspondre à la durée de l'animation
+    }
+}
 
     // Fonction générique pour afficher une modale avec un contenu personnalisé
     public static showModal(modalId: string, titleText: string, messageText: string, callback?: Function) {
