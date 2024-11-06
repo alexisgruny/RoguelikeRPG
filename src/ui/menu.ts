@@ -1,5 +1,5 @@
 // Importation des modules nécessaires
-import { Role, Biome } from '../types';
+import { Biome, Equipement, Consumable, Skill } from '../types';
 import { BiomeService } from '../service/biomeService';
 import { RoleService } from '../service/roleService';
 import { HUD } from './HUD';
@@ -16,6 +16,7 @@ export class Menu {
     private static combatSection = document.getElementById('combat-section')!;
     private static log = document.getElementById('combat-log')!;
     private static combatAction = document.getElementById('combat-actions')!;
+    private static eventScreen = document.getElementById('event-screen')!;
     public static bannedBiome: Biome;
 
     // Fonction pour démarrer le jeu en affichant le menu de sélection des rôles
@@ -54,7 +55,7 @@ export class Menu {
             imageElement.id = role.name;
             imageElement.src = role.image;
             imageElement.alt = `${role.name} Image`;
-           
+
             roleContainer.appendChild(imageElement); // Ajoute l'image sous le bouton
             roleContainer.appendChild(button); // Ajoute le bouton au menu des rôles
             this.roleMenu.appendChild(roleContainer); // Ajoute le conteneur du rôle au menu
@@ -71,7 +72,7 @@ export class Menu {
 
     // Configure un bouton pour lancer un combat dans le biome sélectionné
     private static setupBiomeButtons() {
-        
+
         const biomes = AppData.biomes;
         const randomBiome = BiomeService.getRandomBiomes(biomes, 3);
 
@@ -103,10 +104,57 @@ export class Menu {
             imageElement.id = biome.name;
             imageElement.src = biome.image;
             imageElement.alt = `${biome.name} Image`;
-           
+
             biomeContainer.appendChild(imageElement); // Ajoute l'image sous le bouton
             biomeContainer.appendChild(button); // Ajoute le bouton au menu des rôles
             this.biomeMenu.appendChild(biomeContainer); // Ajoute le conteneur du rôle au menu
+        });
+    }
+
+    public static ItemSelectionMenu(items: (Equipement | Skill | Consumable)[], onSelect: (selectedItem: any) => void) {
+        // Activer l'affichage du menu de sélection d'items
+        this.toggleVisibility(this.eventScreen, true);
+        this.toggleVisibility(this.combatSection, false);
+        this.toggleVisibility(this.log, false);
+        this.toggleVisibility(this.combatAction, false);
+        // Sélectionne le conteneur principal
+        const container = document.getElementById("event-screen");
+        if (!container) return;
+
+        // Efface le contenu précédent du conteneur pour éviter des duplications
+        container.innerHTML = '';
+        const victory = document.createElement("h1");
+        victory.textContent = "Victory !";
+        container.appendChild(victory);
+
+        // Boucle pour chaque item du tableau
+        items.forEach(item => {
+
+            // Création des éléments de la div item
+            const itemDiv = document.createElement("div");
+            itemDiv.classList.add('item-selection', `item-div-${item.id}`);
+            
+            // Création et configuration des éléments enfant
+            const title = document.createElement("h3");
+            title.textContent = item.name;
+
+            const description = document.createElement("p");
+            description.textContent = item.description;
+
+            const stats = document.createElement("p");
+            stats.textContent = `${item.amount}`; // Affichage de l'attribut `amount`
+
+            const selectButton = document.createElement("button");
+            selectButton.textContent = `Sélectionner ${item.name}`;
+
+            // Gestionnaire de clic pour le bouton de sélection
+            selectButton.addEventListener("click", () => onSelect(item));
+
+            // Ajout des éléments enfant à la div item
+            itemDiv.append(title, description, stats, selectButton);
+
+            // Ajoute la div de l'item au conteneur principal
+            container.appendChild(itemDiv);            
         });
     }
 
@@ -128,6 +176,12 @@ export class Menu {
     // Fonction utilitaire pour afficher ou masquer un élément
     private static toggleVisibility(element: HTMLElement, visible: boolean) {
         element.classList.toggle('hidden', !visible);
+    }
+    public static showCombatHUD() {
+        this.toggleVisibility(this.eventScreen, false);
+        this.toggleVisibility(this.combatSection, true);
+        this.toggleVisibility(this.log, true);
+        this.toggleVisibility(this.combatAction, true);
     }
 }
 

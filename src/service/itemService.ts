@@ -2,6 +2,7 @@ import { Skill, Equipement, Consumable } from "types";
 import { PlayerStatsService } from "./playerManagerService";
 import { HUD } from "../ui/HUD";
 import { AppData } from '../data/appData';
+import { Menu } from "../ui/menu";
 
 export class ItemService {
 
@@ -42,9 +43,8 @@ export class ItemService {
             selectedItem.push(itemToChooseFrom[randomIndex]);
             itemToChooseFrom.splice(randomIndex, 1); // Supprime l'item sélectionné de la liste
         }
-
         // Appel de la modale pour sélectionner l'équipement
-        HUD.createEquipementSelectionModal(selectedItem, (chosenItem) => {
+        Menu.ItemSelectionMenu(selectedItem, (chosenItem) => {
             const playerStats = PlayerStatsService.playerStats;
 
             // Ajouter l'item choisi au joueur
@@ -55,6 +55,7 @@ export class ItemService {
                 case ('équipement'):
                     PlayerStatsService.addEquipementStats(chosenItem);
                     HUD.updatePlayerStats(playerStats);
+                   
                     break;
                 case ('consommable'):
                     PlayerStatsService.addConsumable(chosenItem);
@@ -63,6 +64,7 @@ export class ItemService {
 
                     break;
             }
+            Menu.showCombatHUD()
         });
     }
 }
