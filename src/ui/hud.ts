@@ -74,7 +74,8 @@ export class HUD {
             // Cache le texte après l'animation (optionnel)
             setTimeout(() => {
                 damageText!.style.opacity = '0';
-            }, 2000); // 2 secondes pour correspondre à la durée de l'animation
+                damageText!.innerHTML = '';
+            }, 2000); 
         }
     }
     

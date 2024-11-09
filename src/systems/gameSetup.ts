@@ -81,7 +81,7 @@ export class GameInitializer {
 
     public static async handleVictory() {
         this.victoryCount++;
-        let eventType: 'end' | 'heal' | 'boss' | 'biomeChange' | 'item' | 'victory' | null = null;
+        let eventType: 'end' | 'heal' | 'boss' | 'biomeChange' | 'item' | 'victory' | 'stats' | null = null;
         let isBossBattle = false;
 
         PlayerStatsService.addExperience();
@@ -93,6 +93,13 @@ export class GameInitializer {
                 eventType = 'item';
                 await ItemService.chooseItem(this.victoryCount);
                 break;
+            case 2:
+            case 4:
+            case 6:
+            case 8:
+                eventType = 'stats'  ;
+                await PlayerStatsService.statsSelection()
+                break; 
             case 5:
                 eventType = 'heal';
                 PlayerStatsService.campFire();

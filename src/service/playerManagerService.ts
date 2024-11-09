@@ -64,13 +64,34 @@ export class PlayerStatsService {
             playerStats.experience -= playerStats.experienceToNextLevel;
             playerStats.level += 1;
             // Afficher les modales pour le choix de la statistique
-            this.levelUp(this.playerStats);
+            const lvlUpStats = this.levelUp();
         }
     }
 
+    private static levelUp(): { stat: string, bonus: number } {
+        const stats = ['points de vie', 'attaque', 'défense'];
+        const randomStat = stats[Math.floor(Math.random() * stats.length)];  
+        let bonus: number;
 
+        switch (randomStat) {
+            case 'points de vie':
+                bonus = Math.floor(Math.random() * 20) + 10; // HP reçoit un bonus entre 10 et 30
+                break;
+            case 'attaque':
+                bonus = Math.floor(Math.random() * 5) + 1; // Attaque reçoit un bonus entre 1 et 5
+                break;
+            case 'défense':
+                bonus = Math.floor(Math.random() * 5) + 1; // Défense reçoit un bonus entre 1 et 5
+                break;
+            default:
+                bonus = 0;
+        }
+
+        return { stat: randomStat, bonus: bonus };
+    }
     // Fonction pour créer la modale de montée de niveau
-    public static levelUp(playerStats: PlayerStats): void {
+    public static statsSelection(): void {
+        const playerStats = this.playerStats;
         const stats = [
             { name: 'Attaque', bonus: Math.floor(Math.random() * 5) + 1 },
             { name: 'Défense', bonus: Math.floor(Math.random() * 5) + 1 },

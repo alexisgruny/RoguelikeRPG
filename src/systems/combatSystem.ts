@@ -5,11 +5,6 @@ import { GameInitializer } from './gameSetup';
 
 export class CombatSystem {
 
-    /**
-     * Calcule les dégâts infligés par le joueur au monstre et retourne le résultat.
-     * @param monster Le monstre attaqué
-     * @returns Un objet contenant les dégâts infligés et si le monstre est vaincu
-     */
     public static playerAttack(monster: Monster) {
         const randomFactor = Math.random() * 0.4 + 0.8; // Variation de 20% autour de la valeur de base
         const playerStats = PlayerStatsService.getPlayerStats();
@@ -26,11 +21,6 @@ export class CombatSystem {
 
     }
 
-    /**
-     * Applique une compétence du joueur au monstre ou au joueur en fonction du type d'effet de la compétence.
-     * @param skill La compétence utilisée
-     * @param monster Le monstre ciblé
-     */
     public static applyPlayerSkill(skill: Skill, monster: Monster): void {
         const playerStats = PlayerStatsService.getPlayerStats();
         const randomFactor = Math.random() * 0.4 + 0.8; // Variation de 20%
@@ -61,10 +51,6 @@ export class CombatSystem {
         }
     }
 
-    /**
-     * Effectue une attaque du monstre sur le joueur en choisissant une capacité basée sur les probabilités.
-     * @param monster Le monstre qui attaque
-     */
     public static monsterAttack(monster: Monster): void {
         const playerStats = PlayerStatsService.getPlayerStats();
         let randomValue = Math.random();
