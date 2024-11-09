@@ -89,7 +89,7 @@ export class CombatSystem {
                     HUD.updatePlayerStats(playerStats);
 
                     if (playerStats.health <= 0) {
-                        HUD.showEventModal('defeat');
+                    
                     }
                     break;
 

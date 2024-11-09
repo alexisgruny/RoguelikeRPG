@@ -65,136 +65,34 @@ export class HUD {
     }
 
     public static showFlashAndDamage(playerMonster: string, damage: number) {
-    let targetElement: HTMLElement | null = null;
-    let damageText: HTMLElement | null = null;
+        let targetElement: HTMLElement | null = null;
+        let damageText: HTMLElement | null = null;
 
-    if (playerMonster === 'player') {
-        targetElement = document.querySelector('#player-visual');
-        damageText = document.getElementById('damage-player-text');
-    } else if (playerMonster === 'monster') {
-        targetElement = document.querySelector('#monster-visual');
-        damageText = document.getElementById('damage-monster-text');
-    }
+        if (playerMonster === 'player') {
+            targetElement = document.querySelector('#player-visual');
+            damageText = document.getElementById('damage-player-text');
+        } else if (playerMonster === 'monster') {
+            targetElement = document.querySelector('#monster-visual');
+            damageText = document.getElementById('damage-monster-text');
+        }
 
-    if (targetElement && damageText) {
-        // Réinitialise l'animation en supprimant puis en ajoutant la classe
-        damageText.classList.remove('damage-animation');
-        void damageText.offsetWidth; // Force le reflow pour réinitialiser l'animation
-        damageText.classList.add('damage-animation');
+        if (targetElement && damageText) {
+            // Réinitialise l'animation en supprimant puis en ajoutant la classe
+            damageText.classList.remove('damage-animation');
+            void damageText.offsetWidth; // Force le reflow pour réinitialiser l'animation
+            damageText.classList.add('damage-animation');
 
-        // Affiche le texte des dégâts et le rend visible
-        damageText.style.opacity = '1';
-        damageText.textContent = `-${damage}`;
+            // Affiche le texte des dégâts et le rend visible
+            damageText.style.opacity = '1';
+            damageText.textContent = `-${damage}`;
 
-        // Cache le texte après l'animation (optionnel)
-        setTimeout(() => {
-            damageText!.style.opacity = '0';
-        }, 2000); // 2 secondes pour correspondre à la durée de l'animation
-    }
-}
-
-    // Fonction générique pour afficher une modale avec un contenu personnalisé
-    public static showModal(modalId: string, titleText: string, messageText: string, callback?: Function) {
-        const modal = document.getElementById(modalId) as HTMLDivElement;
-        const title = modal?.querySelector('#modal-title') as HTMLHeadingElement;
-        const message = modal?.querySelector('#modal-message') as HTMLParagraphElement;
-        const closeButton = modal?.querySelector('#close-modal-button') as HTMLButtonElement;
-
-        if (modal && title && message && closeButton) {
-            title.textContent = titleText;
-            message.textContent = messageText;
-
-            closeButton.onclick = () => {
-                callback && callback();
-                this.hideModal(modalId);
-            };
-
-            modal.style.display = 'flex'; // Affiche la modale
+            // Cache le texte après l'animation (optionnel)
+            setTimeout(() => {
+                damageText!.style.opacity = '0';
+            }, 2000); // 2 secondes pour correspondre à la durée de l'animation
         }
     }
-
-    // Affichage d'une modale d'événement
-    public static showEventModal(eventType: string): void {
-        const eventMessages = {
-            victory: { title: 'Victoire!', message: 'Vous avez tué le monstre!' },
-            defeat: { title: 'Défaite', message: 'Vous êtes mort.' },
-            item: { title: 'Objet', message: 'Vous avez trouvé un objet magique!' },
-            heal: { title: 'Repos', message: 'Vous faites un feu de camp.' },
-            merchant: { title: 'Marchand', message: 'Vous rencontrez un marchand.' },
-            boss: { title: 'Boss', message: 'Le boss vous attaque.' },
-            end: { title: 'Fin', message: 'Vous avez fini le jeu.' },
-            biomeChange: { title: 'Changement de biome', message: 'Vous changez de biome' }
-        };
-
-        if (eventType in eventMessages) {
-            const { title, message } = eventMessages[eventType as keyof typeof eventMessages];
-            this.showModal('modal-victory-defeat', title, message);
-        } else {
-            this.showModal('modal-victory-defeat', 'Événement', 'Événement inconnu');
-        }
-    }
-
-    // Fonction pour afficher une modale de sélection de stats
-    public static createStatModal(stats: { name: string, bonus: number }[], onSelect: (name: string, bonus: number) => void): void {
-        const modalContainer = this.createOrGetModalContainer('level-modal-container');
-
-        modalContainer.innerHTML = '';
-        stats.forEach((stat, index) => {
-            const modal = document.createElement('div');
-            modal.classList.add('modal');
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h2>${stat.name}</h2>
-                    <p>Augmentation: ${stat.bonus}</p>
-                    <button id="select-button-${index}">Sélectionner</button>
-                </div>`;
-
-            modal.querySelector(`#select-button-${index}`)?.addEventListener('click', () => {
-                onSelect(stat.name, stat.bonus);
-                this.hideModal('level-modal-container');
-            });
-
-            modalContainer.appendChild(modal);
-        });
-
-        modalContainer.style.display = 'flex';
-    }
-
-    // Fonction pour afficher une modale de sélection d'objet
-    public static createEquipementSelectionModal(items: (Equipement | Skill | Consumable)[], onSelect: (selectedItem: any) => void) {
-        const modalContainer = this.createOrGetModalContainer('item-modal-container');
-
-        modalContainer.innerHTML = '';
-        items.forEach((item, index) => {
-            const modal = document.createElement('div');
-            modal.classList.add('modal');
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h2>${item.name}</h2>
-                    <h3>${item.type}</h3>
-                    <p>${item.description}</p>
-                    <p>${item.effectType} : ${item.amount}</p>
-                    <p>Poid: ${item.weight}</p>
-                    <button id="select-button-${index}">Sélectionner ${item.name}</button>
-                </div>`;
-
-            modal.querySelector(`#select-button-${index}`)?.addEventListener('click', () => {
-                onSelect(item);
-                this.hideModal('item-modal-container');
-            });
-
-            modalContainer.appendChild(modal);
-        });
-
-        modalContainer.style.display = 'flex';
-    }
-
-    // Fonction générique pour cacher une modale
-    private static hideModal(modalId: string) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.style.display = 'none';
-    }
-
+    
     // Handler pour afficher les menus de compétences, équipements ou consommables
     public static menuHandler(type: 'skill' | 'equipement' | 'consumable') {
         const buttonId = `${type}-button`;
@@ -302,5 +200,14 @@ export class HUD {
             document.body.appendChild(modalContainer);
         }
         return modalContainer;
+    }
+
+    public static changeLevelDisplay() {
+        const count = GameInitializer.combatCount;
+        const biome = GameInitializer.currentBiome.name;
+        const title = document.getElementById('biome-level-display');
+        if (title) {
+            title.innerHTML = `${biome} ${count}`;
+        }
     }
 }

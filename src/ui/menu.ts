@@ -14,7 +14,6 @@ export class Menu {
     private static roleMenu = document.getElementById('role-menu')!;
     private static biomeMenu = document.getElementById('biome-menu')!;
     private static combatSection = document.getElementById('combat-section')!;
-    private static log = document.getElementById('combat-log')!;
     private static combatAction = document.getElementById('combat-actions')!;
     private static eventScreen = document.getElementById('event-screen')!;
     public static bannedBiome: Biome;
@@ -93,7 +92,6 @@ export class Menu {
                 this.bannedBiome = biome;
                 this.toggleVisibility(this.biomeMenu, false); // Masquer le menu des biomes
                 this.toggleVisibility(this.combatSection, true); // Afficher la section de combat
-                this.toggleVisibility(this.log, true); // Afficher la section de combat
                 this.toggleVisibility(this.combatAction, true); // Afficher la section de combat
                 changeBackgroundForBiome(biome.image);
                 this.setupSubMenu(); // Affiche le menu de sélection de biome
@@ -115,24 +113,20 @@ export class Menu {
         // Activer l'affichage du menu de sélection d'items
         this.toggleVisibility(this.eventScreen, true);
         this.toggleVisibility(this.combatSection, false);
-        this.toggleVisibility(this.log, false);
         this.toggleVisibility(this.combatAction, false);
         // Sélectionne le conteneur principal
-        const container = document.getElementById("event-screen");
+        const container = document.getElementById("item-selection");
         if (!container) return;
 
         // Efface le contenu précédent du conteneur pour éviter des duplications
         container.innerHTML = '';
-        const victory = document.createElement("h1");
-        victory.textContent = "Victory !";
-        container.appendChild(victory);
 
         // Boucle pour chaque item du tableau
         items.forEach(item => {
 
             // Création des éléments de la div item
             const itemDiv = document.createElement("div");
-            itemDiv.classList.add('item-selection', `item-div-${item.id}`);
+            itemDiv.classList.add('item-card', `item-div-${item.id}`);
             
             // Création et configuration des éléments enfant
             const title = document.createElement("h3");
@@ -158,6 +152,63 @@ export class Menu {
         });
     }
 
+    public static victoryMenu(){
+
+        const victoryDiv = document.getElementById('victory-screen');
+        
+
+    }
+
+    public static statsSelectionMenu( stats: { name: string; bonus: number }[],onSelect: (selectedStat: string, bonusValue: number) => void) {
+        // Sélectionne le conteneur où les options seront ajoutées
+        const container = document.getElementById("stats-selection");
+    
+        // S'assure que le conteneur existe
+        if (!container) {
+            console.error("Erreur : le conteneur 'level-up-menu' est introuvable dans le DOM.");
+            return;
+        }
+    
+        // Vide le contenu précédent du conteneur
+        container.innerHTML = '';
+    
+        // Pour chaque statistique, crée une option de sélection
+        stats.forEach(stat => {
+            // Crée la div pour chaque option
+            const statDiv = document.createElement("div");
+            statDiv.classList.add("stat-option");
+    
+            // Titre de la statistique
+            const title = document.createElement("h3");
+            title.textContent = stat.name;
+    
+            // Description avec le bonus de la statistique
+            const description = document.createElement("p");
+            description.textContent = `+${stat.bonus} ${stat.name}`;
+    
+            // Bouton de sélection
+            const selectButton = document.createElement("button");
+            selectButton.textContent = `Choisir ${stat.name}`;
+    
+            // Ajoute un écouteur d'événement au bouton pour gérer le choix de la statistique
+            selectButton.addEventListener("click", () => {
+                onSelect(stat.name, stat.bonus); // Appelle le callback avec le nom et le bonus
+                container.innerHTML = ''; // Vide le menu après la sélection
+            });
+    
+            // Ajoute le titre, la description et le bouton à la div
+            statDiv.appendChild(title);
+            statDiv.appendChild(description);
+            statDiv.appendChild(selectButton);
+    
+            // Ajoute la div au conteneur principal
+            container.appendChild(statDiv);
+        });
+    
+        // Affiche le conteneur de sélection des stats (s'il est masqué)
+        container.style.display = 'block';
+    }
+
     // Configure le sous-menu pour les compétences, équipements et consommables
     public static setupSubMenu() {
         this.initializeMenu('skill');
@@ -180,7 +231,6 @@ export class Menu {
     public static showCombatHUD() {
         this.toggleVisibility(this.eventScreen, false);
         this.toggleVisibility(this.combatSection, true);
-        this.toggleVisibility(this.log, true);
         this.toggleVisibility(this.combatAction, true);
     }
 }

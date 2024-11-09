@@ -1,6 +1,7 @@
 import { HUD } from '../ui/HUD';
 import { RoleService } from './roleService';
 import { PlayerStats, Skill, Equipement, Consumable } from '../types';
+import { Menu } from '../ui/menu';
 
 export class PlayerStatsService {
 
@@ -76,7 +77,7 @@ export class PlayerStatsService {
             { name: 'Points de vie', bonus: Math.floor(Math.random() * 20) + 10 }
         ];
 
-        HUD.createStatModal(stats, (selectedStat: string, bonusValue: number) => {
+        Menu.statsSelectionMenu(stats, (selectedStat: string, bonusValue: number) => {
             switch (selectedStat) {
                 case 'Attaque':
                     playerStats.attack = Number(playerStats.attack);

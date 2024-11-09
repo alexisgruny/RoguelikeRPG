@@ -12,7 +12,7 @@ export class GameInitializer {
     public static currentMonster: Monster | null = null;
     public static currentBiome: Biome;
     private static victoryCount: number = 0;
-    private static combatCount: number = 0;
+    public static combatCount: number = 0;
     private static biomeDoneCount: number = 0;
     private static handleAttackBound: (event: Event) => void = () => { };
 
@@ -30,6 +30,7 @@ export class GameInitializer {
         this.currentMonster = this.getRandomMonster();
         this.currentMonster = MonsterService.applyDifficultyScaling(this.currentMonster, this.combatCount);
         HUD.updateMonsterStats(this.currentMonster);
+        HUD.changeLevelDisplay();
         this.setupAttackButtons();
     }
 
@@ -117,7 +118,6 @@ export class GameInitializer {
         }
 
         if (eventType) {
-           await HUD.showEventModal(eventType);
         }
         // Condition pour choisir entre le combat contre un boss ou un monstre normal
         if (isBossBattle) {

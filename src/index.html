@@ -20,10 +20,12 @@
         <div id="start-menu" class="start-container">
             <button id="start-button">JOUER</button>
         </div>
+        
         <div id="role-menu" class="role-container hidden"></div>
         <div id="biome-menu" class="menu-container hidden"></div>
         <div id="combat-section" class="combat-container hidden">
             <!-- Conteneur pour les informations du joueur et du monstre -->
+            <p id="biome-level-display"></p>
             <div id="combat-info">
                 <!-- Informations sur le joueur -->
                 <div id="player-info">
@@ -66,16 +68,11 @@
                             <span id="monster-defense"></span>
                         </p>
                     </div>
-                    <div id="monster-visual" class="effects-container">
+                    <div id="monster-visual">
                         <img id="monster-image" src="" alt="">
                         <p id="damage-monster-text"></p>
                     </div>
                 </div>
-            </div>
-            <!-- Journal de combat -->
-            <div id="combat-log" class="hidden">
-                <h3>Combat Log</h3>
-                <pre id="log-output"></pre>
             </div>
 
             <!-- Actions de combat -->
@@ -92,7 +89,15 @@
             </div>
         </div>
         <!-- Screen de victoire-->
-        <div id="event-screen" class="hidden"></div>
+        <div id="event-screen" class="hidden">
+            <div id="victoy-screen">
+                <h3>Victory !</h3>
+            </div>
+            <div id="item-selection"></div>
+            <div id="stats-selection"></div>
+            <div id="event-selection"></div>
+            <div id="event-action"></div>
+        </div>
         <!-- Modal de victoire ou défaite -->
         <div id="modal-victory-defeat" class="modal hidden">
             <div class="modal-content">
