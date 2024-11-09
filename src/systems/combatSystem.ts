@@ -16,8 +16,7 @@ export class CombatSystem {
         const baseDamage = Math.max(playerStats.attack - monster.defense, 1);
         const damageToMonster = Math.floor(baseDamage * randomFactor);
         monster.health -= damageToMonster;
-        HUD.logAction(`Vous attaquez et infligé ${damageToMonster} de dégâts.`)
-        HUD.showFlashAndDamage('monster', damageToMonster);
+        HUD.showDamage('monster', damageToMonster);
         HUD.updateMonsterStats(monster);
         if (monster.health <= 0) {
             this.MonsterDefeated(monster);
@@ -33,7 +32,6 @@ export class CombatSystem {
      * @param monster Le monstre ciblé
      */
     public static applyPlayerSkill(skill: Skill, monster: Monster): void {
-        HUD.clearLogs();
         const playerStats = PlayerStatsService.getPlayerStats();
         const randomFactor = Math.random() * 0.4 + 0.8; // Variation de 20%
 
@@ -43,7 +41,6 @@ export class CombatSystem {
                 const damage = Math.max(baseDamage - monster.defense, 1);
                 const damageToMonster = Math.floor(damage * randomFactor);
                 monster.health -= damageToMonster;
-                HUD.logAction(`Vous utilisez ${skill.name} et infligez ${damageToMonster} de dégâts à ${monster.name}.`);
                 HUD.updateMonsterStats(monster);
                 if (monster.health <= 0) {
                     this.MonsterDefeated(monster);
@@ -56,13 +53,10 @@ export class CombatSystem {
             case 'heal':
                 const healAmount = Math.min(skill.amount, playerStats.maxHealth - playerStats.health);
                 playerStats.health += healAmount;
-
-                HUD.logAction(`Vous utilisez ${skill.name} et vous soignez de ${healAmount} points de vie.`);
                 HUD.updatePlayerStats(playerStats);
                 break;
 
             default:
-                HUD.logAction(`Effet de la compétence ${skill.name} non reconnu.`);
                 break;
         }
     }
@@ -83,8 +77,7 @@ export class CombatSystem {
                     const baseDamage = ability.damage ? ability.damage * monster.attack : 0;
                     const damageToPlayer = Math.max(Math.floor(baseDamage * randomFactor) - playerStats.defense, 1);
                     playerStats.health -= damageToPlayer;
-                    HUD.logAction(`${monster.name} utilise ${ability.name} et vous inflige ${damageToPlayer} de dégâts.`);
-                    HUD.showFlashAndDamage('player', damageToPlayer);
+                    HUD.showDamage('player', damageToPlayer);
                     PlayerStatsService.updatePlayerHealth(-damageToPlayer);
                     HUD.updatePlayerStats(playerStats);
 
@@ -96,8 +89,6 @@ export class CombatSystem {
                 case 'heal':
                     const healValue = ability.healValue ?? 0;
                     monster.health = Math.min(monster.health + healValue, monster.maxHealth);
-
-                    HUD.logAction(`${monster.name} utilise ${ability.name} et se soigne de ${healValue} points de vie!`);
                     HUD.updateMonsterStats(monster);
                     break;
 
@@ -105,8 +96,6 @@ export class CombatSystem {
                     const defValue = Number(ability.defenseValue ?? 0);
                     monster.defense = Number(monster.defense); // Conversion en nombre
                     monster.defense += defValue;
-
-                    HUD.logAction(`${monster.name} utilise ${ability.name} et renforce sa défense de ${defValue}!`);
                     HUD.updateMonsterStats(monster);
                     break;
 
@@ -114,8 +103,6 @@ export class CombatSystem {
                     const atkValue = Number(ability.attackValue ?? 0);
                     monster.attack = Number(monster.attack);
                     monster.attack += atkValue;
-
-                    HUD.logAction(`${monster.name} utilise ${ability.name} et renforce son attaque de ${atkValue}!`);
                     HUD.updateMonsterStats(monster);
                     break;
 
@@ -129,7 +116,6 @@ export class CombatSystem {
     private static MonsterDefeated(monster: Monster) {
         GameInitializer.handleVictory();
         if (monster) {
-            HUD.logAction(`${monster.name} is DEAD!`);
             GameInitializer.currentMonster = null; // Réinitialisation de currentMonster
         }
     }

@@ -69,7 +69,6 @@ export class GameInitializer {
     }
 
     private static handlePlayerAttack() {
-        HUD.clearLogs();
         if (!this.currentMonster) return;
         CombatSystem.playerAttack(this.currentMonster);
     }

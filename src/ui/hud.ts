@@ -50,24 +50,9 @@ export class HUD {
         }
     }
 
-    // Affichage et gestion des logs de combat
-    public static logAction(action: string) {
-        const logOutputElem = document.getElementById('log-output') as HTMLDivElement;
-        if (logOutputElem) {
-            logOutputElem.textContent += action + "\n";
-            logOutputElem.scrollTop = logOutputElem.scrollHeight;
-        }
-    }
-
-    public static clearLogs() {
-        const logRemover = document.getElementById('log-output') as HTMLDivElement;
-        if (logRemover) logRemover.textContent = "";
-    }
-
-    public static showFlashAndDamage(playerMonster: string, damage: number) {
+    public static showDamage(playerMonster: string, damage: number) {
         let targetElement: HTMLElement | null = null;
         let damageText: HTMLElement | null = null;
-
         if (playerMonster === 'player') {
             targetElement = document.querySelector('#player-visual');
             damageText = document.getElementById('damage-player-text');
